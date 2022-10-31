@@ -15,7 +15,7 @@ namespace EletricGo.Domain.Deliveries
 
         public async Task<List<DeliveryDto>> GetAllAsync()
         {
-            var list = await this._repo.GetAllAsync();
+            var list = await this._repo.GetAll();
 
             List<DeliveryDto> DeliverieslistDto = list.ConvertAll<DeliveryDto>(delivery =>
                 new DeliveryDto(delivery.Id.AsGuid(), delivery.DeliveryDate, delivery.DeliveryWeight, delivery.FinalStorageId, delivery.TimeToLoad, delivery.TimeToUnload, delivery.Products));
@@ -25,10 +25,8 @@ namespace EletricGo.Domain.Deliveries
 
         public async Task<DeliveryDto> GetByIdAsync(DeliveryId id)
         {
-            var delivery = await this._repo.GetByIdAsync(id);
-
-            if (delivery == null)
-                return null;
+            var deliveries = await this._repo.GetById(id);
+            var delivery = deliveries[0];
 
             return new DeliveryDto(delivery.Id.AsGuid(), delivery.DeliveryDate, delivery.DeliveryWeight, delivery.FinalStorageId, delivery.TimeToLoad, delivery.TimeToUnload, delivery.Products);
         }

@@ -18,7 +18,7 @@ namespace EletricGo.Infrastructure.Storages
         {
             var query = _context.Set<Storage>();
             query.Include(storage => storage.Location).ThenInclude(location => location.Address).ThenInclude(address => address.City).ToList();
-
+            query.Include(storage => storage.ChargingSystems).ToList();
             return query.Any() ? query.ToList() : new List<Storage>();
         }
 
@@ -26,6 +26,7 @@ namespace EletricGo.Infrastructure.Storages
         {
             var query = _context.Set<Storage>();
             query.Where(x => id == x.Id).Include(storage => storage.Location).ThenInclude(location => location.Address).ThenInclude(address => address.City).ToList();
+            query.Include(storage => storage.ChargingSystems).ToList();
 
             return query.Any() ? query.ToList() : new List<Storage>();
         }

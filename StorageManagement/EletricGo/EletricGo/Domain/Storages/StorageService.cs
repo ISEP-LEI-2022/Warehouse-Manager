@@ -19,7 +19,7 @@ namespace EletricGo.Domain.Storages
             var list = await this._repo.GetAll();
 
             List<StorageDto> StorageslistDto = list.ConvertAll<StorageDto>(storage =>
-                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location));
+                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems));
 
             return StorageslistDto;
         }
@@ -29,7 +29,7 @@ namespace EletricGo.Domain.Storages
               var storage = await this._repo.GetById(id);
 
             List<StorageDto> StorageslistDto = storage.ConvertAll<StorageDto>(storage =>
-                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location));
+                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems));
 
             return StorageslistDto[0];
         }
@@ -42,7 +42,7 @@ namespace EletricGo.Domain.Storages
 
              await this._unitOfWork.CommitAsync();
 
-            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location);
+            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems);
         }
 
         public async Task<StorageDto> UpdateAsync(StorageDto dto)
@@ -58,7 +58,7 @@ namespace EletricGo.Domain.Storages
 
             await this._unitOfWork.CommitAsync();
 
-            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location);
+            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems);
         }
     }
 }
