@@ -13,5 +13,17 @@ namespace EletricGo.Domain.Storages
             Number = number;
             Name = name;
         }
+
+        public void changeNumber(int number)
+        {
+            Number = number;
+        }
+
+        public void changeName(string name)
+        {
+            Name = name;
+        }
+
+
     }
 }

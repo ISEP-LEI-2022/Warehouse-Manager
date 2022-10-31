@@ -55,6 +55,7 @@ namespace EletricGo.Domain.Storages
 
             // change all fields
             storage.changeDesignation(dto.Designation);
+            storage.changeLocation(dto.Location);
 
             await this._unitOfWork.CommitAsync();
 

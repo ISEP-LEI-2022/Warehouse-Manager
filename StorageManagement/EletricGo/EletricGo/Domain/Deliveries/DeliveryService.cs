@@ -1,4 +1,5 @@
 ﻿using EletricGo.Domain.Shared;
+using EletricGo.Domain.Storages;
 
 namespace EletricGo.Domain.Deliveries
 {
@@ -40,6 +41,25 @@ namespace EletricGo.Domain.Deliveries
             await this._unitOfWork.CommitAsync();
 
             return new DeliveryDto(delivery.Id.AsGuid(), delivery.DeliveryDate, delivery.DeliveryWeight, delivery.FinalStorageId, delivery.TimeToLoad, delivery.TimeToUnload, delivery.Products);
+        }
+
+        public async Task<DeliveryDto> UpdateAsync(DeliveryDto dto)
+        {
+            var queryResult = await this._repo.GetById(new DeliveryId(dto.Id));
+            var delivery = queryResult[0];
+
+            if (delivery == null)
+                return null;
+
+            // change all fields
+            delivery.changeDeliveryDate(dto.DeliveryDate);
+            delivery.changeDeliveryWeight(dto.DeliveryWeight);
+            delivery.changeTimeToLoad(dto.TimeToLoad);
+            delivery.changeTimeToUnload(dto.TimeToUnload);
+
+            await this._unitOfWork.CommitAsync();
+
+            return new DeliveryDto(delivery.Id.AsGuid(),delivery.DeliveryDate,delivery.DeliveryWeight,delivery.FinalStorageId,delivery.TimeToLoad,delivery.TimeToUnload, delivery.Products);
         }
     }
 }

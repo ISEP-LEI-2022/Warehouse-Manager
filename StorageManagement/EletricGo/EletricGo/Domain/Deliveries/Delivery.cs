@@ -30,5 +30,25 @@ namespace EletricGo.Domain.Deliveries {
 
             }
         }
+
+        public void changeDeliveryDate(DateTime deliveryDate)
+        {
+            DeliveryDate = deliveryDate;
+        }
+
+        public void changeDeliveryWeight(double deliveryWeight)
+        {
+            DeliveryWeight = deliveryWeight;
+        }
+
+        public void changeTimeToUnload(double timeToUnload)
+        {
+            TimeToUnload = timeToUnload;
+        }
+
+        public void changeTimeToLoad(double timeToLoad)
+        {
+            TimeToLoad = timeToLoad;
+        }
     }
 }

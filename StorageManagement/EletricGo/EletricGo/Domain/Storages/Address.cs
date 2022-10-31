@@ -1,4 +1,5 @@
 ﻿using EletricGo.Domain.Shared;
+using System.Xml.Linq;
 
 
 namespace EletricGo.Domain.Storages
@@ -25,5 +26,34 @@ namespace EletricGo.Domain.Storages
         {
 
         }
+
+
+        public void changeStreet(string street)
+        {
+            Street = street;
+        }
+
+        public void changeDoor(string door)
+        {
+            Door = door;
+        }
+
+        public void changeFloor(string floor)
+        {
+            Floor = floor;
+        }
+
+        public void changePostalCode(string postalCode)
+        {
+            PostalCode = postalCode;
+        }
+
+        public void changeCity(City city)
+        {
+            City.changeNumber(city.Number);
+            City.changeName(city.Name);
+        }
+
+
     }
 }

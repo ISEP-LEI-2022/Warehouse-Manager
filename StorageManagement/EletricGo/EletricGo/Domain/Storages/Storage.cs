@@ -30,5 +30,13 @@ namespace EletricGo.Domain.Storages
             this.Designation = designation;
         }
 
+        public void changeLocation(Location location)
+        {
+            Location.changeLatitude(location.Latitude);
+            Location.changeLongitude(location.Longitude);
+            Location.changeAltitude(location.Altitude);
+            Location.changeAddress(location.Address);
+        }
+
     }
 }
