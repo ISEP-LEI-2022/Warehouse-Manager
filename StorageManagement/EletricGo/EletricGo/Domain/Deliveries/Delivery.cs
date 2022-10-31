@@ -22,7 +22,7 @@ namespace EletricGo.Domain.Deliveries {
             this.TimeToLoad = timeToLoad;
             this.TimeToUnload = timeToUnload;
             //FinalStorage = new StorageId(Guid.NewGuid());
-            FinalStorageId = new Storage(stor.Designation, stor.Location);
+            FinalStorageId = new Storage(stor.Designation, stor.Location, stor.ChargingSystems);
             Products = new List<Product>();
             for (int i = 0; i < products.Count; i++)
             {

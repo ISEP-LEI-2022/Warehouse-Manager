@@ -36,7 +36,7 @@ namespace EletricGo.Domain.Storages
 
         public async Task<StorageDto> AddAsync(CreatingStorageDto dto)
         {
-            var storage = new Storage(dto.Designation, dto.Location);
+            var storage = new Storage(dto.Designation, dto.Location, dto.ChargingSystems);
 
              await this._repo.AddAsync(storage);
 

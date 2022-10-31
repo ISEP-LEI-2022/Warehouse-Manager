@@ -6,14 +6,22 @@ namespace EletricGo.Domain.Storages
     {
         public string Designation { get; set; }
         public Location Location { get;  set; }
+
+        public List<ChargingSystem> ChargingSystems { get; set; }
         public bool Active { get; private set; }
 
-        public Storage(string designation, Location loc)
+        public Storage(string designation, Location loc, List<ChargingSystem> chargingSystems)
         {
             this.Id = new StorageId(Guid.NewGuid());
             this.Designation = designation;
             this.Active = true;
             Location = new Location(loc.Latitude, loc.Longitude, loc.Altitude, loc.Address);
+            ChargingSystems = new List<ChargingSystem>();
+            for(int i = 0; i < chargingSystems.Count; i++)
+            {
+                var chargingSystem = new ChargingSystem(chargingSystems[i].ChargingTime);
+                ChargingSystems.Add(chargingSystem);
+            }
         }
         public Storage() { }
 
