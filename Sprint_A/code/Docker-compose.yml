@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  logistics-api:
+    container_name: logistics-api
+    build:
+      context: ./logistics
+      target: dev
+    command: npm start
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./logistics/database:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
