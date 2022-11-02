@@ -2,9 +2,9 @@ import mongoose from 'mongoose'
 
 interface ITruck {
   registration: string;
-  tare: Number;
-  capacity: Number;
-  autonomy: Number;
+  tare: number;
+  capacity: number;
+  autonomy: number;
 }
 
 interface truckModelInterface extends mongoose.Model<TruckDoc> {
@@ -13,9 +13,9 @@ interface truckModelInterface extends mongoose.Model<TruckDoc> {
 
 interface TruckDoc extends mongoose.Document {
   registration: string;
-  tare: Number;
-  capacity: Number;
-  autonomy: Number;
+  tare: number;
+  capacity: number;
+  autonomy: number;
 }
 
 const truckSchema = new mongoose.Schema({
