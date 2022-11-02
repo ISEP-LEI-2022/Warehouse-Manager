@@ -5,8 +5,7 @@ services:
     image: logistics-api:dev
     build:
       context: ./logistics
-      target: dev
-    command: npm run start
+      dockerfile: Dockerfile.dev
     volumes:
       - ./logistics:/logistics
     networks:
