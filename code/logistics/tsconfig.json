@@ -12,6 +12,6 @@
       "test/*": ["test/*"]
     }
   },
-  "include": [ "src/**/*"],
-  "exclude" : ["src/**/*.test.ts"]
+  "include": [ "app.ts", "infrastructure/repositories"],
+  "exclude" : ["application/**/*.test.ts","node_modules", "build"]
 }
