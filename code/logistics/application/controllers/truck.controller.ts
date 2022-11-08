@@ -1,6 +1,6 @@
 import { Get, Route, Tags,  Post, Body, Path } from "tsoa";
-import { ITruck } from '../models/truck/itruck'
-import { getTrucks, createTruck, getTruck } from "../repositories/truck.repository";
+import { ITruckSchema } from '../../infrastructure/schemas/truck/itruckSchema'
+import { getTrucks, createTruck, getTruck } from "../../infrastructure/repositories/truck/truck.repository";
 
 
 
@@ -8,17 +8,17 @@ import { getTrucks, createTruck, getTruck } from "../repositories/truck.reposito
 @Tags("Truck")
 export default class TruckController {
 @Get("/")
-public async getTrucks(): Promise<Array<ITruck>> {
+public async getTrucks(): Promise<Array<ITruckSchema>> {
     return getTrucks()
 }
 
 @Post("/")
-public async createTruck(@Body() body: ITruck): Promise<ITruck> {
+public async createTruck(@Body() body: ITruckSchema): Promise<ITruckSchema> {
     return createTruck(body)
 }
 
 @Get("/:registration")
-public async getTruck(@Path() registration: string): Promise<ITruck | null> {
+public async getTruck(@Path() registration: string): Promise<ITruckSchema | null> {
     return getTruck(String(registration))
 }
 }

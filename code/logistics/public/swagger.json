@@ -18,7 +18,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ITruck": {
+			"ITruckSchema": {
 				"properties": {
 					"registration": {
 						"type": "string"
@@ -90,7 +90,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/ITruck"
+										"$ref": "#/components/schemas/ITruckSchema"
 									},
 									"type": "array"
 								}
@@ -112,7 +112,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ITruck"
+									"$ref": "#/components/schemas/ITruckSchema"
 								}
 							}
 						}
@@ -128,7 +128,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/ITruck"
+								"$ref": "#/components/schemas/ITruckSchema"
 							}
 						}
 					}
@@ -146,7 +146,7 @@
 								"schema": {
 									"allOf": [
 										{
-											"$ref": "#/components/schemas/ITruck"
+											"$ref": "#/components/schemas/ITruckSchema"
 										}
 									],
 									"nullable": true
