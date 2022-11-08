@@ -23,8 +23,6 @@ app.use(
 );
 app.use(Router);
 
-console.log(env.database)
-
 //ToDo: move this out
 //----------------MONGO--------------------------
 const options = {
@@ -35,9 +33,8 @@ const options = {
   family: 4 // Use IPv4, skip trying IPv6
 };
 
-let server = 'localhost'
-if(env.database) server = env.database
-const url = `mongodb://${server}:27017/logistics`
+let url = 'mongodb://localhost:27017/logistics'
+if(env.database) url = env.database
 mongoose.connect(url, options).then(
   () => { console.log(`Connected to database! - ${url}`) },
   err => { console.log('Unable to connect to the database') }

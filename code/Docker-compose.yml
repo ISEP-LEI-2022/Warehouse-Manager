@@ -9,7 +9,7 @@ services:
     volumes:
       - ./logistics:/logistics
     environment:
-      - database=mongodb
+      - database=mongodb://mongodb:27017/logistics
     networks:
       - mynet
     ports:
