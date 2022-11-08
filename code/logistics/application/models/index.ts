@@ -1,3 +1,3 @@
-import {Truck} from './truck'
+import {Truck} from './truck/truck'
 
 export {Truck}

@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./logistics:/logistics
+    environment:
+      - database=mongodb
     networks:
       - mynet
     ports:
@@ -16,7 +18,8 @@ services:
       - mongodb
 
   mongodb:
-    image : mongo
+    image: mongo
+    hostname: mongodb
     volumes:
       - ./volumes/mongodb:/data/db
     networks:

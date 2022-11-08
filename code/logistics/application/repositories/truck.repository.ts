@@ -1,4 +1,5 @@
-import {Truck, ITruck} from '../models'
+import {Truck} from '../models/truck/truck'
+import { ITruck } from '../models/truck/itruck'
 
 
 export const getTrucks  = async () :Promise<Array<ITruck>> => {

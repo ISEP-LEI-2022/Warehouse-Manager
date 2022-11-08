@@ -17,6 +17,33 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ITruck": {
+				"properties": {
+					"registration": {
+						"type": "string"
+					},
+					"tare": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"autonomy": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"registration",
+					"tare",
+					"capacity",
+					"autonomy"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -46,8 +73,102 @@
 						}
 					}
 				},
+				"tags": [
+					"Ping"
+				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/trucks": {
+			"get": {
+				"operationId": "GetTrucks",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ITruck"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Truck"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateTruck",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITruck"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Truck"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ITruck"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/trucks/{registration}": {
+			"get": {
+				"operationId": "GetTruck",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/ITruck"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Truck"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "registration",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},

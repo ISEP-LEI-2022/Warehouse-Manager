@@ -1,5 +1,5 @@
 import { Get, Route, Tags,  Post, Body, Path } from "tsoa";
-import { ITruck } from '../models'
+import { ITruck } from '../models/truck/itruck'
 import { getTrucks, createTruck, getTruck } from "../repositories/truck.repository";
 
 
@@ -18,7 +18,7 @@ public async createTruck(@Body() body: ITruck): Promise<ITruck> {
 }
 
 @Get("/:registration")
-public async getTruck(@Path() id: string): Promise<ITruck | null> {
-    return getTruck(String(id))
+public async getTruck(@Path() registration: string): Promise<ITruck | null> {
+    return getTruck(String(registration))
 }
 }

@@ -1,11 +1,5 @@
 import mongoose from 'mongoose'
-
-interface ITruck {
-  registration: string;
-  tare: number;
-  capacity: number;
-  autonomy: number;
-}
+import {ITruck} from "./itruck";
 
 
 interface truckModelInterface extends mongoose.Model<TruckDoc> {
@@ -51,4 +45,4 @@ Truck.build({
   autonomy: 0,
 })
 
-export { Truck, TruckEntity }
+export { Truck, ITruck }
