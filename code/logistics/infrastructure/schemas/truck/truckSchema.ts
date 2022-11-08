@@ -1,14 +1,8 @@
 import mongoose from 'mongoose'
-
-interface ITruck {
-  registration: string;
-  tare: number;
-  capacity: number;
-  autonomy: number;
-}
+import { ITruckSchema } from './itruckSchema'
 
 interface truckModelInterface extends mongoose.Model<TruckDoc> {
-  build(attr: ITruck): TruckDoc
+  build(attr: ITruckSchema): TruckDoc
 }
 
 interface TruckDoc extends mongoose.Document {
@@ -37,17 +31,17 @@ registration: {
   }
 })
 
-truckSchema.statics.build = (attr: ITruck) => {
-  return new Truck(attr)
+truckSchema.statics.build = (attr: ITruckSchema) => {
+  return new TruckSchema(attr)
 }
 
-const Truck = mongoose.model<TruckDoc, truckModelInterface>('Truck', truckSchema)
+const TruckSchema = mongoose.model<TruckDoc, truckModelInterface>('Truck', truckSchema)
 
-Truck.build({
+TruckSchema.build({
   registration: '00-00-00',
   tare: 0,
   capacity: 0,
   autonomy: 0,
 })
 
-export { Truck }
+export { TruckSchema }
