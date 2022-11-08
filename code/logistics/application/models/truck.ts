@@ -7,6 +7,7 @@ interface ITruck {
   autonomy: number;
 }
 
+
 interface truckModelInterface extends mongoose.Model<TruckDoc> {
   build(attr: ITruck): TruckDoc
 }
@@ -50,4 +51,4 @@ Truck.build({
   autonomy: 0,
 })
 
-export { Truck }
+export { Truck, TruckEntity }
