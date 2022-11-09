@@ -7,11 +7,12 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
     "baseUrl": "./",
     "paths": {
       "test/*": ["test/*"]
     }
   },
-  "include": [ "app.ts", "infrastructure/repositories"],
-  "exclude" : ["application/**/*.test.ts","node_modules", "build"]
+  "include": [ "src/**/*"],
+  "exclude" : ["tests","node_modules", "build"]
 }
