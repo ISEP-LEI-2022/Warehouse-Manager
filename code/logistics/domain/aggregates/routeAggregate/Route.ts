@@ -10,7 +10,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import Entity from "../../Entity";
 
 export default class Route implements AggregateRoot<string> {
-  private id: RouteIdentifier;
+  private idRoute: RouteIdentifier;
   private idStartProp: WarehouseIdentifier;
   private idEndProp: WarehouseIdentifier;
   private distanceProp: Distance;
@@ -19,7 +19,7 @@ export default class Route implements AggregateRoot<string> {
   private extraChargingTimeProp: Duration;
 
   constructor(
-    id: string,
+    idRoute: string,
     idStart: string,
     idEnd: string,
     distance: number,
@@ -29,7 +29,7 @@ export default class Route implements AggregateRoot<string> {
   ) {
     const error = businessRuleErrorFactory();
     try {
-      this.id = new RouteIdentifier(id);
+      this.idRoute = new RouteIdentifier(idRoute);
       this.idStartProp = new WarehouseIdentifier(idStart);
       this.idEndProp = new WarehouseIdentifier(idEnd);
       this.distanceProp = new Distance(distance);
@@ -43,11 +43,11 @@ export default class Route implements AggregateRoot<string> {
   }
 
   get identifier() {
-    return this.id;
+    return this.idRoute;
   }
 
   sameAs(ent2: Entity<string>): boolean {
-    return this.id.equals(ent2.identifier);
+    return this.idRoute.equals(ent2.identifier);
   }
   
   get idStart() {

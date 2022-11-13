@@ -4,8 +4,10 @@ import mongoose from 'mongoose'
 const routeSchema = new mongoose.Schema({
     idRoute:{
         type: String,
+        index: true,
         required: true,
         unique: true,
+        dropDups: true
     },
     idStart:{
         type: String,
