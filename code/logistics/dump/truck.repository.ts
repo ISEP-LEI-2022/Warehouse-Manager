@@ -1,5 +1,5 @@
-import { ITruckSchema } from '../../schemas/truck/itruckSchema'
-import { TruckSchema } from '../../schemas/truck/truckSchema'
+import { ITruckSchema } from '../src/infrastructure/schemas/truck/itruckSchema'
+import { TruckSchema } from '../src/infrastructure/schemas/truck/truckSchema'
 
 
 export const getTrucks  = async () :Promise<Array<ITruckSchema>> => {

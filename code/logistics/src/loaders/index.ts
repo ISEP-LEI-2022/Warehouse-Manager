@@ -1,7 +1,8 @@
 import { Application } from "express";
 import mongoose from "mongoose";
 import config from "../config";
-import { routeMongoose } from "../infrastructure/schemas/routeSchema";
+import { RouteMongoose } from "../infrastructure/schemas/RouteSchema";
+import { TruckMongoose } from "../infrastructure/schemas/TruckSchema";
 import dependencyInjector from "./dependencyInjector";
 import expressLoader from "./express";
 
@@ -12,48 +13,79 @@ async function appLoader({
   expressApp: Application;
   mongoDB_HOST: string;
 }): Promise<void> {
-  await mongoose.connect(mongoDB_HOST);
-  console.log("MongoDB connected");
+  const options = {
+    autoIndex: true, // Build indexes
+    maxPoolSize: 10, // Maintain up to 10 socket connections
+    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+    family: 4 // Use IPv4, skip trying IPv6
+  };
+
+  await mongoose.connect(mongoDB_HOST, options).then(
+    () => { console.log(`Connected to database! - ${mongoDB_HOST}`) },
+    err => {
+      console.log('Unable to connect to the database. Exiting..')
+      process.exit()
+    }
+  );
 
   /*
    * Schemas
    */
-  const routeSchema = {
-    name: "routeSchema",
-    model: routeMongoose,
+  const RouteSchema = {
+    name: "RouteSchema",
+    model: RouteMongoose,
+  };
+  const TruckSchema = {
+    name: "TruckSchema",
+    model: TruckMongoose,
   };
 
   /*
    * Controllers
    */
-  const routeController = {
-    name: config.controllers.routeController.name,
-    path: config.controllers.routeController.path,
+  const RouteController = {
+    name: config.controllers.RouteController.name,
+    path: config.controllers.RouteController.path,
+  };
+  const TruckController = {
+    name: config.controllers.TruckController.name,
+    path: config.controllers.TruckController.path,
   };
 
   /*
    * Services
    */
-  const routeService = {
-    name: config.services.routeService.name,
-    path: config.services.routeService.path,
+  const RouteService = {
+    name: config.services.RouteService.name,
+    path: config.services.RouteService.path,
   };
-
+  const TruckService = {
+    name: config.services.TruckService.name,
+    path: config.services.TruckService.path,
+  };
   /*
    * Repositories
    */
-  const routeRepository = {
-    name: config.repositories.routeRepository.name,
-    path: config.repositories.routeRepository.path,
+  const RouteRepository = {
+    name: config.repositories.RouteRepository.name,
+    path: config.repositories.RouteRepository.path,
+  };
+  const TruckRepository = {
+    name: config.repositories.TruckRepository.name,
+    path: config.repositories.TruckRepository.path,
   };
 
   dependencyInjector({
-    models: [routeSchema],
-    controllers: [routeController],
-    services: [routeService],
-    repositories: [routeRepository],
+    models: [RouteSchema, TruckSchema],
+    controllers: [RouteController, TruckController],
+    services: [RouteService, TruckService],
+    repositories: [RouteRepository, TruckRepository],
   });
 
   expressLoader(expressApp);
-  
+  console.log("Config worked");
+
 }
+
+export default appLoader;

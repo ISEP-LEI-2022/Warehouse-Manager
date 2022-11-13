@@ -1,15 +1,10 @@
 import express from "express";
-import PingController from "../controllers/ping.controller";
-import TruckRouter from "./truck.router";
+import TruckRouter from "./TruckRouter";
+import RouteRouter from "./RouteRouter";
 
 const router = express.Router();
 
-router.get("/ping", async (_req, res) => {
-  const controller = new PingController();
-  const response = await controller.getMessage();
-  return res.send(response);
-});
-
+router.use("/routes", RouteRouter)
 router.use("/trucks", TruckRouter)
 
 export default router;

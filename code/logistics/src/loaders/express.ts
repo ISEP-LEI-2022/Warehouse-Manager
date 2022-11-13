@@ -1,10 +1,13 @@
 import express from "express";
-import routeRoute from "../application/routes/routeRouter";
+import RouteRoute from "../application/routes/RouteRouter";
+import TruckRoute from "../application/routes/TruckRouter";
+import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
 import cors from "cors";
 
 function expressLoader(app: express.Application) {
   app.get("/", (req, res) => {
-    res.send("I'm alive!");
+    res.send("working!");
   });
 
   app.use(
@@ -14,8 +17,22 @@ function expressLoader(app: express.Application) {
     })
   );
 
-  app.use("/route", routeRoute);
+  app.use(express.json());
+  app.use(morgan("tiny"));
+  app.use(express.static("public"));
+  app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(undefined, {
+      swaggerOptions: {
+        url: "/swagger.json",
+      },
+    })
+  );
+
+  app.use("/route", RouteRoute);
+  app.use("/trucks", TruckRoute);
 
 }
 
-export = expressLoader;
+export default expressLoader;

@@ -2,16 +2,23 @@ import mongoose from 'mongoose'
 
 
 const routeSchema = new mongoose.Schema({
+    idRoute:{
+        type: String,
+        index: true,
+        required: true,
+        unique: true,
+        dropDups: true
+    },
     idStart:{
         type: String,
         required: true,
-        unique: true,
+        unique: false,
         min:1,
     },
     idEnd:{
         type: String,
         required: true,
-        unique: true,
+        unique: false,
         min:1,
     },
     distance:{
@@ -22,20 +29,20 @@ const routeSchema = new mongoose.Schema({
     timeRequired:{
         type: Number,
         required: true,
-        min:1,
+        min:0,
     },
     energyConsumed:{
         type: Number,
         required: true,
-        min:1,
+        min:0,
     },
     extraChargingTime:{
         type: Number,
-        required:false,
-        min:1,
+        required:true,
+        min:0,
     },
 });
 
-const routeMongoose = mongoose.model('Route', routeSchema);
+const RouteMongoose = mongoose.model('Route', routeSchema);
 
-export { routeMongoose }
+export {RouteMongoose};

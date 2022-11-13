@@ -29,7 +29,9 @@ export default ({
 
   controllers.forEach((c) => {
     let controllerClass = require(c.path).default;
+
     let controllerInstance = Container.get(controllerClass);
+
     Container.set(c.name, controllerInstance);
   });
 };

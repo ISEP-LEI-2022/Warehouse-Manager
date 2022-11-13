@@ -3,7 +3,7 @@ import EntityIdentifier from "./value-objects/interfaces/EntityIdentifier";
 /**
  * Interface for basic methods of an entity
  */
-export default interface entity<T> {
+export default interface Entity<T> {
   identifier: EntityIdentifier<T>;
 
   /**

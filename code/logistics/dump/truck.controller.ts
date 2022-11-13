@@ -1,6 +1,6 @@
 import { Get, Route, Tags,  Post, Body, Path } from "tsoa";
-import { ITruckSchema } from '../../infrastructure/schemas/truck/itruckSchema'
-import { getTrucks, createTruck, getTruck } from "../../infrastructure/repositories/truck/truck.repository";
+import { ITruckSchema } from '../src/infrastructure/schemas/truck/itruckSchema'
+import { getTrucks, createTruck, getTruck } from "../src/infrastructure/repositories/truck/truck.repository";
 
 
 

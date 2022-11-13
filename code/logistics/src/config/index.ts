@@ -3,9 +3,13 @@ export default {
    * Service configs
    */
   services: {
-    routeService: {
-      name: "routeService",
-      path: "../domain/services/routeService",
+    RouteService: {
+      name: "RouteService",
+      path: "../domain/services/route/RouteService",
+    },
+    TruckService: {
+      name: "TruckService",
+      path: "../domain/services/truck/TruckService",
     },
   },
 
@@ -13,9 +17,13 @@ export default {
    * Repository configs
    */
   repositories: {
-    routeRepository: {
-      name: "routeRepository",
-      path: "../infrastructure/repositories/routeRepository",
+    RouteRepository: {
+      name: "RouteRepository",
+      path: "../infrastructure/repositories/route/RouteRepository",
+    },
+    TruckRepository: {
+      name: "TruckRepository",
+      path: "../infrastructure/repositories/truck/TruckRepository",
     },
   },
 
@@ -23,9 +31,13 @@ export default {
    * Controller configs
    */
   controllers: {
-    routeController: {
-      name: "routeController",
-      path: "../application/controllers/routeController",
+    RouteController: {
+      name: "RouteController",
+      path: "../application/controllers/route/RouteController",
+    },
+    TruckController: {
+      name: "TruckController",
+      path: "../application/controllers/truck/TruckController",
     },
   },
 };
