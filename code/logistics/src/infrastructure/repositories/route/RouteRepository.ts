@@ -2,7 +2,7 @@ import mongoose, {
   ClientSession
 } from "mongoose";
 import { Service } from "typedi";
-import IRouteRepository from "./IRouteRepository";
+import IRepository from "../IRepository";
 import { Route } from "../../../domain/aggregates";
 import {
   getDataErrorFactory,
@@ -10,12 +10,11 @@ import {
 } from "../../../domain/utils/Err";
 import RouteMap from "../../mappers/RouteMap";
 import { RouteMongoose } from "../../schemas/RouteSchema";
-import RouteDTO from "domain/dto/RouteDTO";
-import Entity from "domain/Entity";
+import Entity from "../../../domain/Entity";
 
 
 @Service()
-export default class RouteRepository implements IRouteRepository<string> {
+export default class RouteRepository implements IRepository<string> {
   private session: ClientSession | null;
   constructor() {}
 
