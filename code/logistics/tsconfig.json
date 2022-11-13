@@ -10,6 +10,7 @@
     "strictPropertyInitialization": false,
     "noImplicitAny": false,
     "baseUrl": "./",
+    "resolveJsonModule": true,
     "paths": {
       "test/*": ["test/*"]
     }

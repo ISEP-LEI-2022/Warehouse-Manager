@@ -1,13 +1,12 @@
 import express from "express";
-import RouteRoute from "../application/routes/RouteRouter";
-import TruckRoute from "../application/routes/TruckRouter";
+import Routes from "../application/routes";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import cors from "cors";
 
 function expressLoader(app: express.Application) {
   app.get("/", (req, res) => {
-    res.send("working!");
+    res.send("Welcome to the Logistics API!");
   });
 
   app.use(
@@ -30,8 +29,7 @@ function expressLoader(app: express.Application) {
     })
   );
 
-  app.use("/route", RouteRoute);
-  app.use("/trucks", TruckRoute);
+  app.use(Routes);
 
 }
 

@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import { env } from 'node:process';
 import appLoader from "./loaders";
+import "reflect-metadata";
 
 async function startApp() {
   const PORT = process.env.PORT || 3000;

@@ -53,7 +53,7 @@ export default class RouteMap{
 
 
     public static toJSONArray(routeList: RouteDTO[]): expectedJSON[]{
-        const routeListDTO = [];
+        const routeListDTO : expectedJSON[] = [];
         for(const route of routeList){
             routeListDTO.push(RouteMap.toJSON(route));
         }

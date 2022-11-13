@@ -24,5 +24,27 @@ router.post("/", async (req: Request, res: Response) => {
     }
     });
 
+    router.get("/", async (req: Request, res: Response) => {
+        try {
+        const getTruckInstance = <ITruckController>(
+            container.get(config.controllers.TruckController.name)
+        );
+        if (Object.keys(req.query).length === 0) {
+            const listRoutes = await getTruckInstance.getTrucks();
+            res.status(200).json(listRoutes);
+        } else {
+            const route = await getTruckInstance.getTruckByRegistration(
+            req.query.registration as string
+            );
+            res.status(200).json(route);
+        }
+        } catch (err) {
+        if (err instanceof Err) {
+            res.status(err.code).send(err.object());
+        } else {
+            res.status(500).send("Unexpected Error" + err);
+        }
+        }
+    });
 
 export default router;

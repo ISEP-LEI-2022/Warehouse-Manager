@@ -1,6 +1,6 @@
 {
   "watch": [
-    "application",
+    "src",
     ".env"
   ],
   "ext": "js,ts,json",

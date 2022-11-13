@@ -6,7 +6,7 @@ import { IRouteController } from "../controllers/route/IRouteController";
 
 const router = express.Router();
 
-router.post("/create", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   try {
     const createRouteInstance = <IRouteController>(
       container.get(config.controllers.RouteController.name)
@@ -24,7 +24,7 @@ router.post("/create", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/get", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const getRouteInstance = <IRouteController>(
       container.get(config.controllers.RouteController.name)

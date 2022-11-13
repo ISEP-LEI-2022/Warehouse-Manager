@@ -84,7 +84,7 @@ async function appLoader({
   });
 
   expressLoader(expressApp);
-  console.log("Config worked");
+  console.log("Configurations loaded successfully.");
 
 }
 

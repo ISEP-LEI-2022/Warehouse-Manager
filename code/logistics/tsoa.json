@@ -5,5 +5,9 @@
       "outputDirectory": "public",
       "specVersion": 3
     },
+    "routes": {
+      "routesDir": "public",
+      "middleware": "express"
+    },
     "ignore": ["**/node_modules/**"]
   }
