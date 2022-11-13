@@ -11,3 +11,12 @@
 > To Keep the API documented, on the controllers use decorators @Route(<endpoint>) and @Get("/") [POST/PUT/PATH/DELETE]
 >
 > To check linting run: npm run lint
+
+
+
+## To Run logistics API tests directly on Docker Container:
+
+`Warehouse-Manager/code:` `docker-compose -f Docker-compose.yml run --rm --service-ports logistics-api sh -c "npm test"`
+
+## To Run tests on CMD
+`Warehouse-Manager/code/logistics:` `npm test`
