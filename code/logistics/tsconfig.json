@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false,  /* Enable strict checking of property initialization in classes. */        /* Enables experimental support for emitting type metadata for decorators. */
+    "strictPropertyInitialization": false,  /* Enable strict checking of property initialization in classes. */ 
     "baseUrl": "./",
     "paths": {
       "test/*": ["test/*"]

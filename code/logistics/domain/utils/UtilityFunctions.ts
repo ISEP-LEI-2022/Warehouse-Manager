@@ -29,17 +29,12 @@ export function isValidNumber(number: number): boolean {
 }
 
 
-export function validateRequestParams(request:object, requiredParams:object) : boolean{
+export function validateRequestParams(request:object, requiredParams:string[]) : boolean{
   const keys = Object.keys(request);
-  const paramKeys = Object.keys(requiredParams);
-  for (const param of paramKeys) {
+  for (const param of requiredParams) {
     if (!keys.includes(param)) {
       return false;
     }
   }
-  return (
-    keys.filter((value) => {
-      return paramKeys.includes(value);
-    }).length === 0
-  )
+  return true;
 }

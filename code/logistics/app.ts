@@ -13,7 +13,7 @@ async function startApp() {
   const app = express();
   await appLoader({
     expressApp: app as express.Application,
-    mongoDB_HOST: "mongodb://localhost:27017/logistics",
+    mongoDB_HOST: "mongodb://mongodb:27017/logistics",
   });
 
   app.listen(3000, () => {

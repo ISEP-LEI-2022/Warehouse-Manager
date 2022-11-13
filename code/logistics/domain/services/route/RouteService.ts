@@ -2,13 +2,13 @@ import { ClientSession } from "mongoose";
 import { Inject, Service } from "typedi";
 import config from "../../../config";
 import IRouteService from "./IRouteService";
-import IRouteRepository from "../../../infrastructure/repositories/routeRepository/IRouteRepository";
+import IRouteRepository from "../../../infrastructure/repositories/route/IRouteRepository";
 import RouteDTO from "../../dto/RouteDTO";
 import { businessRuleErrorFactory } from "../../utils/Err";
 import RouteMap from "../../../infrastructure/mappers/RouteMap";
 
-@Service("CreateRouteService")
-export default class CreateRouteService implements IRouteService {
+@Service()
+export default class RouteService implements IRouteService {
   private session: ClientSession | null;
 
   constructor(
@@ -19,6 +19,7 @@ export default class CreateRouteService implements IRouteService {
   }
 
   async createRoute(routeDTO: RouteDTO): Promise<RouteDTO> {
+    console.log(routeDTO.idRoute);
     const error = businessRuleErrorFactory();
 
     try {

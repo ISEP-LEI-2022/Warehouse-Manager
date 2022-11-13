@@ -14,7 +14,7 @@ export default class RouteIdentifier implements EntityIdentifier<string> {
     isValidStringIdentifier(identifier)
       ? (this.identifier = identifier)
       : error.addError("Invalid identifier");
-    if (error.hasErrors()) throw error;
+      if (error.hasErrors()) throw error;
   }
 
   /**

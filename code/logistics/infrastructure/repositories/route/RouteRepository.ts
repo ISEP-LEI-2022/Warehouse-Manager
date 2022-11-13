@@ -1,13 +1,13 @@
-import mongoose, { ClientSession, Error, Types }from "mongoose";
+import mongoose, { ClientSession}from "mongoose";
 import { Service } from "typedi";
-import iRouteRepository from "./IRouteRepository";
+import IRouteRepository from "./IRouteRepository";
 import {Route} from "../../../domain/aggregates";
-import { Err, persistanceErrorFactory } from "domain/utils/Err";
+import { persistanceErrorFactory } from "../../../domain/utils/Err";
 import RouteMap from "../../mappers/RouteMap";
 import {RouteMongoose} from "../../schemas/RouteSchema";
 
-@Service("routeRepository")
-export default class RouteRepository implements iRouteRepository<string> {
+@Service()
+export default class RouteRepository implements IRouteRepository<string> {
     private session: ClientSession | null;
     constructor() {}
 

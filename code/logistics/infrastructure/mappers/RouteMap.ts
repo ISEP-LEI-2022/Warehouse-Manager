@@ -4,7 +4,7 @@ import {Route} from "../../domain/aggregates";
 export default class RouteMap{
     public static toDTO(route: Route): RouteDTO {
         return {
-            id: route.identifier.value(),
+            idRoute: route.identifier.value(),
             idStart: route.idStart.value(),
             idEnd: route.idEnd.value(),
             distance: route.distance.value(),
@@ -28,7 +28,7 @@ export default class RouteMap{
     
     public static toDomain(routeDTO: RouteDTO): Route{
         return new Route(
-            routeDTO.id,
+            routeDTO.idRoute,
             routeDTO.idStart,
             routeDTO.idEnd,
             routeDTO.distance,
@@ -40,7 +40,7 @@ export default class RouteMap{
 
     public static toJSON(routeDTO: RouteDTO): object{
         return  {
-            routeid: routeDTO.id,
+            routeid: routeDTO.idRoute,
             idstart: routeDTO.idStart,
             idend: routeDTO.idEnd,
             distance: routeDTO.distance,

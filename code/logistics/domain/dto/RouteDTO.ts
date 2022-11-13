@@ -1,5 +1,5 @@
 export default interface RouteDTO {
-    id: string,
+    idRoute: string,
     idStart: string,
     idEnd: string,
     distance: number,

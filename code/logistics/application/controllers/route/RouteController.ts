@@ -1,4 +1,4 @@
-import { Inject } from 'typedi';
+import { Inject, Service } from 'typedi';
 import config from '../../../config';
 import IRouteService from '../../../domain/services/route/IRouteService';
 import { validateRequestParams } from '../../../domain/utils/UtilityFunctions';
@@ -7,6 +7,7 @@ import {badRequestErrorFactory} from "../../../domain/utils/Err";
 import RouteDTO from '../../../domain/dto/RouteDTO';
 import RouteMap from '../../../infrastructure/mappers/RouteMap';
 
+@Service()
 export default class RouteController implements IRouteController {
   constructor(
     @Inject(config.services.RouteService.name)
@@ -14,14 +15,14 @@ export default class RouteController implements IRouteController {
   ) {}
   
   async createRoute(body: object): Promise<any> {
-    if (!validateRequestParams(body, ['idStart', 'idEnd', 'distance', 'timeRequired', 'energyConsumed', 'extraChargingTime'])) {
+    if (!validateRequestParams(body, ['idRoute','idStart', 'idEnd', 'distance', 'timeRequired', 'energyConsumed', 'extraChargingTime'])) {
         const error = badRequestErrorFactory()
         error.addError('Invalid request body')
         throw error
     }
 
     const routeDTO = await this.routeService.createRoute(body as RouteDTO);
-    return RouteMap.toDomain
+    return RouteMap.toJSON(routeDTO);
 
   }
 }

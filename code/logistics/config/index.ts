@@ -5,7 +5,7 @@ export default {
   services: {
     RouteService: {
       name: "RouteService",
-      path: "../domain/services/RouteService",
+      path: "../domain/services/route/RouteService",
     },
   },
 
@@ -15,7 +15,7 @@ export default {
   repositories: {
     RouteRepository: {
       name: "RouteRepository",
-      path: "../infrastructure/repositories/RouteRepository",
+      path: "../infrastructure/repositories/route/RouteRepository",
     },
   },
 
@@ -25,7 +25,7 @@ export default {
   controllers: {
     RouteController: {
       name: "RouteController",
-      path: "../application/controllers/RouteController",
+      path: "../application/controllers/route/RouteController",
     },
   },
 };
