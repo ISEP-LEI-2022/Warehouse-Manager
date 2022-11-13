@@ -1,7 +1,6 @@
-import RouteDTO from "domain/dto/RouteDTO";
-import Entity from "domain/Entity";
+import Entity from "../../domain/Entity";
 import mongoose, { ClientSession } from "mongoose";
-import Repository from "../Repository";
+import Repository from "./Repository";
 
 export default interface IRepository<T> extends Repository<T> {
     defineSession(session: ClientSession): void;

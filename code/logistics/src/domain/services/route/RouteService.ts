@@ -53,7 +53,7 @@ export default class RouteService implements IRouteService {
       const route = await this.routeRepository.getData() as Route[];
       return convertToObjDTO(route);
     } catch (err) {
-      error.addError(err);
+      error.addError(String(err));
       throw error;
     }
   }

@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 import Entity from "../../domain/Entity";
 /**
  * Interface defines basic methods for all repositories.

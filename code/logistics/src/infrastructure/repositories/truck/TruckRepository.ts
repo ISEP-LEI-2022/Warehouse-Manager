@@ -2,9 +2,10 @@ import mongoose, { ClientSession}from "mongoose";
 import { Service } from "typedi";
 import IRepository from "../IRepository";
 import { Truck } from "../../../domain/aggregates";
-import { persistanceErrorFactory } from "../../../domain/utils/Err";
+import { getDataErrorFactory, persistanceErrorFactory } from "../../../domain/utils/Err";
 import TruckMap from "../../mappers/TruckMap";
 import { TruckMongoose } from "../../schemas/TruckSchema";
+import Entity from "src/domain/Entity";
 
 @Service()
 export default class TruckRepository implements IRepository<string> {
@@ -45,4 +46,40 @@ export default class TruckRepository implements IRepository<string> {
             return await !!TruckMongoose.exists({id: identifier});
         }
     }
+
+    async getData(): Promise<Entity<string>[]> {
+        const error = getDataErrorFactory();
+        let data: mongoose.Document[] = [];
+        try {
+        data = await TruckMongoose.find().session(this.session);
+        return convertToObject(data);
+
+    } catch (err) {
+        error.addError("Error searching data");
+        throw error;
+    }
+    }
+
+    async getDataById(registration: string): Promise<Entity<string>[]> {
+    const error = getDataErrorFactory();
+    let data: mongoose.Document[] = [];
+    try {
+        data = await TruckMongoose.find({registration: registration}).session(this.session);
+        return convertToObject(data);
+
+    } catch (err) {
+        error.addError("Error searching data");
+        throw error;
+    }
+    }
+}
+
+function convertToObject(list: mongoose.Document[]): Truck[] {
+    let truckList: Truck[] = [];
+    for (const li of list){
+        var jsonData:any = li.toJSON();
+
+        truckList = [...truckList, TruckMap.toDomain(jsonData)];
+    }
+    return truckList;
 }

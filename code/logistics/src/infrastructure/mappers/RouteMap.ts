@@ -1,6 +1,6 @@
 import RouteDTO from "../../domain/dto/RouteDTO";
 import {Route} from "../../domain/aggregates";
-import { expectedJSON } from "application/controllers/route/IRouteController";
+import { expectedJSON } from "../../application/controllers/route/IRouteController";
 
 export default class RouteMap{
     public static toDTO(route: Route): RouteDTO {
@@ -26,7 +26,7 @@ export default class RouteMap{
             extraChargingTime: route.extraChargingTime.value()
         };
     }
-    
+
     public static toDomain(routeDTO: RouteDTO): Route{
         return new Route(
             routeDTO.idRoute,
@@ -51,7 +51,7 @@ export default class RouteMap{
         };
     }
 
-    
+
     public static toJSONArray(routeList: RouteDTO[]): expectedJSON[]{
         const routeListDTO = [];
         for(const route of routeList){
