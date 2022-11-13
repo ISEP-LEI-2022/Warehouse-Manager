@@ -4,8 +4,9 @@ import config from "../../../config";
 import IRouteService from "./IRouteService";
 import IRouteRepository from "../../../infrastructure/repositories/IRepository";
 import RouteDTO from "../../dto/RouteDTO";
-import { businessRuleErrorFactory } from "../../utils/Err";
+import { businessRuleErrorFactory, getDataErrorFactory } from "../../utils/Err";
 import RouteMap from "../../../infrastructure/mappers/RouteMap";
+import { Route } from "../../aggregates";
 
 @Service()
 export default class RouteService implements IRouteService {
@@ -19,7 +20,6 @@ export default class RouteService implements IRouteService {
   }
 
   async createRoute(routeDTO: RouteDTO): Promise<RouteDTO> {
-    console.log(routeDTO.idRoute);
     const error = businessRuleErrorFactory();
 
     try {
@@ -33,4 +33,37 @@ export default class RouteService implements IRouteService {
       throw error;
     }
   }
+
+  async getRouteById(id: string): Promise<RouteDTO[]> {
+    const error = getDataErrorFactory();
+
+    try {
+      const route = await this.routeRepository.getDataById(id) as Route[];
+      return convertToObjDTO(route);
+    } catch (err) {
+      error.addError("Error getting route by id");
+      throw error;
+    }
+  }
+
+  async getRoutes(): Promise<RouteDTO[]> {
+    const error = getDataErrorFactory();
+
+    try {
+      const route = await this.routeRepository.getData() as Route[];
+      return convertToObjDTO(route);
+    } catch (err) {
+      error.addError(err);
+      throw error;
+    }
+  }
+}
+
+
+function convertToObjDTO(routeList: Route[]): RouteDTO[]{
+  let routeDTOList: RouteDTO[] = [];
+  routeList.forEach(route => {
+    routeDTOList.push(RouteMap.toDTO(route));
+  });
+  return routeDTOList;
 }

@@ -84,8 +84,15 @@ export function badRequestErrorFactory(): Err {
 }
 
 /**
- * Creates an error for bad requests
+ * Creates an error when persistance fails
  */
 export function persistanceErrorFactory(): Err {
   return new Err("PersistanceError", 409);
+}
+
+/**
+ * Creates an error no data is found
+ */
+ export function getDataErrorFactory(): Err {
+  return new Err("NotFound", 404);
 }
