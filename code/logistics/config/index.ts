@@ -3,9 +3,9 @@ export default {
    * Service configs
    */
   services: {
-    routeService: {
-      name: "routeService",
-      path: "../domain/services/routeService",
+    RouteService: {
+      name: "RouteService",
+      path: "../domain/services/RouteService",
     },
   },
 
@@ -13,9 +13,9 @@ export default {
    * Repository configs
    */
   repositories: {
-    routeRepository: {
-      name: "routeRepository",
-      path: "../infrastructure/repositories/routeRepository",
+    RouteRepository: {
+      name: "RouteRepository",
+      path: "../infrastructure/repositories/RouteRepository",
     },
   },
 
@@ -23,9 +23,9 @@ export default {
    * Controller configs
    */
   controllers: {
-    routeController: {
-      name: "routeController",
-      path: "../application/controllers/routeController",
+    RouteController: {
+      name: "RouteController",
+      path: "../application/controllers/RouteController",
     },
   },
 };
