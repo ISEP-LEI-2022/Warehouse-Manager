@@ -8,7 +8,7 @@ export type expectedBodyRoute = {
     extraChargingTime: number;
 }
 
-export type expectedJSON = {
+export type expectedRouteJSON = {
     idRoute: string;
     idStart: string;
     idEnd: string;
@@ -20,6 +20,6 @@ export type expectedJSON = {
 
 export interface IRouteController {
     createRoute(req: expectedBodyRoute): Promise<expectedBodyRoute>;
-    getRouteById(idRoute: string): Promise<expectedJSON[]>;
-    getRoutes(): Promise<expectedJSON[]>;
+    getRouteById(idRoute: string): Promise<expectedRouteJSON[]>;
+    getRoutes(): Promise<expectedRouteJSON[]>;
 }

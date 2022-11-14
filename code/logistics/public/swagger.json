@@ -5,11 +5,142 @@
 		"parameters": {},
 		"requestBodies": {},
 		"responses": {},
-		"schemas": {},
+		"schemas": {
+			"expectedBodyRoute": {
+				"properties": {
+					"extraChargingTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"energyConsumed": {
+						"type": "number",
+						"format": "double"
+					},
+					"timeRequired": {
+						"type": "number",
+						"format": "double"
+					},
+					"distance": {
+						"type": "number",
+						"format": "double"
+					},
+					"idEnd": {
+						"type": "string"
+					},
+					"idStart": {
+						"type": "string"
+					},
+					"idRoute": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"extraChargingTime",
+					"energyConsumed",
+					"timeRequired",
+					"distance",
+					"idEnd",
+					"idStart",
+					"idRoute"
+				],
+				"type": "object"
+			},
+			"expectedRouteJSON": {
+				"properties": {
+					"extraChargingTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"energyConsumed": {
+						"type": "number",
+						"format": "double"
+					},
+					"timeRequired": {
+						"type": "number",
+						"format": "double"
+					},
+					"distance": {
+						"type": "number",
+						"format": "double"
+					},
+					"idEnd": {
+						"type": "string"
+					},
+					"idStart": {
+						"type": "string"
+					},
+					"idRoute": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"extraChargingTime",
+					"energyConsumed",
+					"timeRequired",
+					"distance",
+					"idEnd",
+					"idStart",
+					"idRoute"
+				],
+				"type": "object"
+			},
+			"expectedTruckJSON": {
+				"properties": {
+					"autonomy": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"tare": {
+						"type": "number",
+						"format": "double"
+					},
+					"registration": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"autonomy",
+					"capacity",
+					"tare",
+					"registration"
+				],
+				"type": "object"
+			},
+			"expectedBodyTruck": {
+				"properties": {
+					"autonomy": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"tare": {
+						"type": "number",
+						"format": "double"
+					},
+					"registration": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"autonomy",
+					"capacity",
+					"tare",
+					"registration"
+				],
+				"type": "object"
+			}
+		},
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "logistics",
+		"title": "Logistics API",
 		"version": "1.0.0",
 		"license": {
 			"name": "ISC"
@@ -17,7 +148,186 @@
 		"contact": {}
 	},
 	"openapi": "3.0.0",
-	"paths": {},
+	"paths": {
+		"/routes": {
+			"post": {
+				"operationId": "CreateRoute",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedBodyRoute"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Routes"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyRoute"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetRoutes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/expectedRouteJSON"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Routes"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/routes/{id}": {
+			"get": {
+				"operationId": "GetRouteById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/expectedRouteJSON"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Routes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/trucks": {
+			"get": {
+				"operationId": "GetTrucks",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/expectedTruckJSON"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Trucks"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateTruck",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedBodyTruck"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Trucks"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyTruck"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/trucks/{registration}": {
+			"get": {
+				"operationId": "GetTruckByRegistration",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/expectedTruckJSON"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Trucks"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "registration",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
 	"servers": [
 		{
 			"url": "/"

@@ -5,7 +5,7 @@ export type expectedBodyTruck = {
     autonomy: number;
 }
 
-export type expectedJSON = {
+export type expectedTruckJSON = {
     registration: string;
     tare: number;
     capacity: number;
@@ -14,6 +14,6 @@ export type expectedJSON = {
 
 export interface ITruckController {
     createTruck(req: expectedBodyTruck): Promise<expectedBodyTruck>;
-    getTruckByRegistration(registration: string): Promise<expectedJSON[]>;
-    getTrucks(): Promise<expectedJSON[]>;
+    getTruckByRegistration(registration: string): Promise<expectedTruckJSON[]>;
+    getTrucks(): Promise<expectedTruckJSON[]>;
 }

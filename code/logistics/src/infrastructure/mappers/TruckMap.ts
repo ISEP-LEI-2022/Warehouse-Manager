@@ -1,6 +1,6 @@
 import TruckDTO from "../../domain/dto/TruckDTO";
 import { Truck } from "../../domain/aggregates";
-import { expectedJSON } from "../../application/controllers/truck/ITruckController";
+import { expectedTruckJSON } from "../../application/controllers/truck/ITruckController";
 
 export default class TruckMap{
     public static toDTO(truck: Truck): TruckDTO {
@@ -30,7 +30,7 @@ export default class TruckMap{
         );
     }
 
-    public static toJSON(truckDTO: TruckDTO): expectedJSON{
+    public static toJSON(truckDTO: TruckDTO): expectedTruckJSON{
         return  {
             registration: truckDTO.registration,
             tare: truckDTO.tare,
@@ -39,8 +39,8 @@ export default class TruckMap{
         };
     }
 
-    public static toJSONArray(truckList: TruckDTO[]): expectedJSON[]{
-        const truckListDTO : expectedJSON[] = [];
+    public static toJSONArray(truckList: TruckDTO[]): expectedTruckJSON[]{
+        const truckListDTO : expectedTruckJSON[] = [];
         for(const route of truckList){
             truckListDTO.push(TruckMap.toJSON(route));
         }
