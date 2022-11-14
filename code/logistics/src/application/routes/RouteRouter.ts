@@ -24,20 +24,20 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/:idRoute?", async (req: Request, res: Response) => {
   try {
     const getRouteInstance = <IRouteController>(
       container.get(config.controllers.RouteController.name)
     );
 
-    if (Object.keys(req.query).length === 0) {
-      const listRoutes = await getRouteInstance.getRoutes();
-      res.status(200).json(listRoutes);
-    } else {
+    if (req.params.idRoute !== undefined) {
       const route = await getRouteInstance.getRouteById(
-        req.query.idRoute as string
+        req.params.idRoute as string
       );
       res.status(200).json(route);
+    } else {
+      const listRoutes = await getRouteInstance.getRoutes();
+      res.status(200).json(listRoutes);
     }
   } catch (err) {
     if (err instanceof Err) {
