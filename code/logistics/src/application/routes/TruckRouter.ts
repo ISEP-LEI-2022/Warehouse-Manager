@@ -51,7 +51,7 @@ router.get("/:registration?", async (req: Request, res: Response) => {
 router.patch("/:registration", async (req: Request, res: Response) => {
   try {
     const updateTruckInstance = <ITruckController>(
-      container.get(config.controllers.RouteController.name)
+      container.get(config.controllers.TruckController.name)
     );
     const updated = await updateTruckInstance.updateTruck(
       req.params.registration as string,

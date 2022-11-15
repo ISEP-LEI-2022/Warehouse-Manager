@@ -23,8 +23,8 @@ export default class TruckController implements ITruckController {
 
   @Get("/")
   public async getTrucks(): Promise<Array<expectedTruckJSON>> {
-    const routeDTO = await this.truckService.getTrucks();
-    return TruckMap.toJSONArray(routeDTO);
+    const truckDTO = await this.truckService.getTrucks();
+    return TruckMap.toJSONArray(truckDTO);
   }
 
   @Post("/")
@@ -52,10 +52,10 @@ export default class TruckController implements ITruckController {
   public async getTruckByRegistration(
     @Path() registration: string
   ): Promise<expectedTruckJSON[]> {
-    const routeDTO = await this.truckService.getTruckByRegistration(
+    const truckDTO = await this.truckService.getTruckByRegistration(
       registration
     );
-    return TruckMap.toJSONArray(routeDTO);
+    return TruckMap.toJSONArray(truckDTO);
   }
 
   @Put("/:id")
@@ -63,10 +63,10 @@ export default class TruckController implements ITruckController {
     @Path() id: string,
     @Body() body: expectedBodyTruck
   ): Promise<expectedTruckJSON> {
-    //Any of these parameters is valid to update a route
+    //Any of these parameters is valid to update a truck
     if (body.registration !== null && body.registration !== undefined) {
       const error = badRequestErrorFactory();
-      error.addError("Cant update the id of a route");
+      error.addError("Cant update the id of a truck");
       throw error;
     }
     if (!validateRequestParams(body, ["tare", "capacity", "autonomy"])) {

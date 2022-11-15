@@ -1,4 +1,4 @@
-export default interface RouteDTO {
+export default interface TruckDTO {
     registration: string;
     tare: number;
     capacity: number;

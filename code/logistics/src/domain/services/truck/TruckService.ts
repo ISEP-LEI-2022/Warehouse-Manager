@@ -38,8 +38,8 @@ export default class TruckService implements ITruckService {
         const error = getDataErrorFactory();
 
         try {
-        const route = await this.truckRepository.getDataById(registration) as Truck[];
-        return convertToObjDTO(route);
+        const truck = await this.truckRepository.getDataById(registration) as Truck[];
+        return convertToObjDTO(truck);
         } catch (err) {
         error.addError("Error getting truck by registration");
         throw error;
@@ -50,8 +50,8 @@ export default class TruckService implements ITruckService {
         const error = getDataErrorFactory();
 
         try {
-            const route = await this.truckRepository.getData() as Truck[];
-            return convertToObjDTO(route);
+            const truck = await this.truckRepository.getData() as Truck[];
+            return convertToObjDTO(truck);
             } catch (err) {
             error.addError(String(err));
             throw error;
@@ -66,16 +66,16 @@ export default class TruckService implements ITruckService {
           const updated = await this.truckRepository.updateDataById(id, truckDTO);
           return TruckMap.toDTO(updated as Truck);
         }catch(err){
-          error.addError("Error updating route");
+          error.addError("Error updating truck");
           throw error;
         }
       }
 }
 
-function convertToObjDTO(routeList: Truck[]): TruckDTO[]{
-    const routeDTOList: TruckDTO[] = [];
-    routeList.forEach(route => {
-        routeDTOList.push(TruckMap.toDTO(route));
+function convertToObjDTO(truckList: Truck[]): TruckDTO[]{
+    const truckDTOList: TruckDTO[] = [];
+    truckList.forEach(truck => {
+        truckDTOList.push(TruckMap.toDTO(truck));
     });
-    return routeDTOList;
+    return truckDTOList;
 }
