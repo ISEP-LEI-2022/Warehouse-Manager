@@ -11,7 +11,7 @@ export function generateTruckData(overide = {}) {
     }
 }
 
-export function generateTrucksData(n: number = 1, overide = {}) {
+export function generateTrucksData(n = 1, overide = {}) {
     return Array.from({
         length: n
         }, (_, i) => {

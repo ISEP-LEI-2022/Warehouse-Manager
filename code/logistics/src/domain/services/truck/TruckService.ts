@@ -4,7 +4,7 @@ import config from "../../../config";
 import ITruckService from "./ITruckService";
 import ITruckRepository from "../../../infrastructure/repositories/IRepository";
 import TruckDTO from "../../dto/TruckDTO";
-import { businessRuleErrorFactory, getDataErrorFactory } from "../../utils/Err";
+import { businessRuleErrorFactory, getDataErrorFactory, persistanceErrorFactory } from "../../utils/Err";
 import TruckMap from "../../../infrastructure/mappers/TruckMap";
 import { Truck } from "../../aggregates";
 
@@ -57,6 +57,19 @@ export default class TruckService implements ITruckService {
             throw error;
         }
     }
+
+    async updateTruckById(id: string, truckDTO: TruckDTO): Promise<TruckDTO> {
+        const error = persistanceErrorFactory();
+    
+        try {
+    
+          const updated = await this.truckRepository.updateDataById(id, truckDTO);
+          return TruckMap.toDTO(updated as Truck);
+        }catch(err){
+          error.addError("Error updating route");
+          throw error;
+        }
+      }
 }
 
 function convertToObjDTO(routeList: Truck[]): TruckDTO[]{

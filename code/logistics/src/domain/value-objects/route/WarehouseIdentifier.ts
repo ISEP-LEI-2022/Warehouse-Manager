@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidStringIdentifier } from "../../utils/UtilityFunctions";
 
 export default class WarehouseIdentifier implements EntityIdentifier<string> {
-  private identifier: string = "";
+  private identifier = "";
 
   constructor(identifier: string) {
     const error = businessRuleErrorFactory();

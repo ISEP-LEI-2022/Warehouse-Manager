@@ -81,11 +81,11 @@ export default class RouteRepository implements IRepository<string> {
   async updateDataById(identifier: string, data: RouteDTO): Promise<Entity<string>> {
     const error = persistanceErrorFactory();
     try {
-      let route = (await RouteMongoose.findOneAndUpdate({ idRoute: identifier }, data, {
+      const route = (await RouteMongoose.findOneAndUpdate({ idRoute: identifier }, data, {
        new: true
      }).orFail());
 
-      let res = RouteMap.toDomain(route);
+      const res = RouteMap.toDomain(route);
       return res;
     } catch (err) {
       error.addError("Error updating data");
@@ -97,7 +97,7 @@ export default class RouteRepository implements IRepository<string> {
 function convertToObject(list: mongoose.Document[]): Route[] {
   let routeList: Route[] = [];
   for (const li of list) {
-    var jsonData: any = li.toJSON();
+    const jsonData: any = li.toJSON();
 
     routeList = [...routeList, RouteMap.toDomain(jsonData)];
   }

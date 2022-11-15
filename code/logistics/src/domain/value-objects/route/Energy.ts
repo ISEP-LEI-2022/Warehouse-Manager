@@ -2,7 +2,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import ValueObject from "../interfaces/ValueObject";
 
 export default class Energy implements ValueObject<number> {
-  private energy: number = 0;
+  private energy = 0;
 
   constructor(energy: number) {
     const error = businessRuleErrorFactory();

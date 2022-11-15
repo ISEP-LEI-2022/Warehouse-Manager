@@ -48,4 +48,23 @@ router.get("/:registration?", async (req: Request, res: Response) => {
     }
 });
 
+router.patch("/:registration", async (req: Request, res: Response) => {
+  try {
+    const updateTruckInstance = <ITruckController>(
+      container.get(config.controllers.RouteController.name)
+    );
+    const updated = await updateTruckInstance.updateTruck(
+      req.params.registration as string,
+      req.body
+    );
+    res.status(200).json(updated);
+  } catch (err) {
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
+});
+
 export default router;

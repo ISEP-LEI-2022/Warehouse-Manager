@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidNumber } from "../../utils/UtilityFunctions";
 
 export default class Tare implements ValueObject<number> {
-    private tare: number = 0;
+    private tare = 0;
 
     constructor(tare: number) {
     const error = businessRuleErrorFactory();

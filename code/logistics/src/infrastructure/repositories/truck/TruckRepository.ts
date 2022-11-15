@@ -79,14 +79,15 @@ export default class TruckRepository implements IRepository<string> {
     }
   }
 
-  async updateDataById(registration: string, data: TruckDTO): Promise<Entity<string>[]> {
+  async updateDataById(registration: string, data: TruckDTO): Promise<Entity<string>> {
     const error = persistanceErrorFactory();
     try {
-     let truck = (await TruckMongoose.findOneAndUpdate({ registration: registration }, data, {
+      const truck = (await TruckMongoose.findOneAndUpdate({ registration: registration }, data, {
        new: true
-     }).session(this.session));
-      const tr: mongoose.Document[] = truck !== null ? [truck] : [];
-      return convertToObject(tr);
+     }).orFail());
+
+      const res = TruckMap.toDomain(truck);
+      return res;
     } catch (err) {
       error.addError("Error updating data");
       throw error;
@@ -97,7 +98,7 @@ export default class TruckRepository implements IRepository<string> {
 function convertToObject(list: mongoose.Document[]): Truck[] {
   let truckList: Truck[] = [];
   for (const li of list) {
-    var jsonData: any = li.toJSON();
+    const jsonData: any = li.toJSON();
 
     truckList = [...truckList, TruckMap.toDomain(jsonData)];
   }

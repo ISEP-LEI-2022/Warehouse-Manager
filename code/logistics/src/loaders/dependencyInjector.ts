@@ -16,21 +16,21 @@ export default ({
   });
 
   repositories.forEach((r) => {
-    let repositoryClass = require(r.path).default;
-    let repositoryInstance = Container.get(repositoryClass);
+    const repositoryClass = require(r.path).default;
+    const repositoryInstance = Container.get(repositoryClass);
     Container.set(r.name, repositoryInstance);
   });
 
   services.forEach((s) => {
-    let serviceClass = require(s.path).default;
-    let serviceInstance = Container.get(serviceClass);
+    const serviceClass = require(s.path).default;
+    const serviceInstance = Container.get(serviceClass);
     Container.set(s.name, serviceInstance);
   });
 
   controllers.forEach((c) => {
-    let controllerClass = require(c.path).default;
+    const controllerClass = require(c.path).default;
 
-    let controllerInstance = Container.get(controllerClass);
+    const controllerInstance = Container.get(controllerClass);
 
     Container.set(c.name, controllerInstance);
   });

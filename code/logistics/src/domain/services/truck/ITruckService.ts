@@ -4,4 +4,5 @@ export default interface ITruckService {
   createTruck(route: TruckDTO): Promise<TruckDTO>;
   getTruckByRegistration(id: string): Promise<TruckDTO[]>;
   getTrucks(): Promise<TruckDTO[]>;
+  updateTruckById(id: string, route: TruckDTO): Promise<TruckDTO>;
 }
