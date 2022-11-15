@@ -10,7 +10,7 @@ namespace EletricGo.Domain.Deliveries {
         public Storage FinalStorageId { get; set; }
         public double TimeToLoad { get; set; }
         public double TimeToUnload { get; set; }
-        public List<Product> Products { get; set; }
+        public List<Product>? Products { get; set; }
 
         public Delivery() { }
 
