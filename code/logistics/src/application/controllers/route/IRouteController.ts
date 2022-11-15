@@ -22,5 +22,5 @@ export interface IRouteController {
     createRoute(req: expectedBodyRoute): Promise<expectedBodyRoute>;
     getRouteById(idRoute: string): Promise<expectedRouteJSON[]>;
     getRoutes(): Promise<expectedRouteJSON[]>;
-    updateRoute(idRoute:string, req: expectedBodyRoute): Promise<expectedRouteJSON[]>;
+    updateRoute(idRoute:string, req: expectedBodyRoute): Promise<expectedRouteJSON>;
 }

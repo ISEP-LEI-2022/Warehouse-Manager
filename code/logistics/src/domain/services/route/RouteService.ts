@@ -58,13 +58,13 @@ export default class RouteService implements IRouteService {
     }
   }
 
-  async updateRouteById(id: string, routeDTO: RouteDTO): Promise<RouteDTO[]> {
+  async updateRouteById(id: string, routeDTO: RouteDTO): Promise<RouteDTO> {
     const error = persistanceErrorFactory();
 
     try {
 
       const updated = await this.routeRepository.updateDataById(id, routeDTO);
-      return convertToObjDTO(updated as Route[]);
+      return RouteMap.toDTO(updated as Route);
     }catch(err){
       error.addError("Error updating route");
       throw error;
@@ -74,7 +74,7 @@ export default class RouteService implements IRouteService {
 
 
 function convertToObjDTO(routeList: Route[]): RouteDTO[]{
-  let routeDTOList: RouteDTO[] = [];
+  const routeDTOList: RouteDTO[] = [];
   routeList.forEach(route => {
     routeDTOList.push(RouteMap.toDTO(route));
   });

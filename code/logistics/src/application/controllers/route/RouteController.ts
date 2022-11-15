@@ -44,9 +44,8 @@ export default class RouteController implements IRouteController {
   }
 
   @Put("/:id")
-  async updateRoute(@Path() id: string,@Body() body: expectedBodyRoute): Promise<expectedRouteJSON[]> {
+  async updateRoute(@Path() id: string,@Body() body: expectedBodyRoute): Promise<expectedRouteJSON> {
     //Any of these parameters is valid to update a route
-    console.log(body.idRoute);
     if (body.idRoute !== null && body.idRoute !== undefined) {
       const error = badRequestErrorFactory()
       error.addError('Cant update the id of a route')
@@ -58,6 +57,6 @@ export default class RouteController implements IRouteController {
       throw error
     }
     const routeDTO = await this.routeService.updateRouteById(id, body as RouteDTO);
-    return RouteMap.toJSONArray(routeDTO);
+    return RouteMap.toJSON(routeDTO);
   }
 }

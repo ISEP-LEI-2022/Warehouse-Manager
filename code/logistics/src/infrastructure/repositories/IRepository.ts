@@ -7,5 +7,5 @@ export default interface IRepository<T> extends Repository<T> {
     removeSession(): void;
     getData(): Promise<Entity<string>[]>;
     getDataById(id: string): Promise<Entity<string>[]>;
-    updateDataById(id: string, data: object): Promise<Entity<string>[]>;
+    updateDataById(id: string, data: object): Promise<Entity<string>>;
 }

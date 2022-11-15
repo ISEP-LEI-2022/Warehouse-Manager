@@ -60,7 +60,7 @@ export default class TruckService implements ITruckService {
 }
 
 function convertToObjDTO(routeList: Truck[]): TruckDTO[]{
-    let routeDTOList: TruckDTO[] = [];
+    const routeDTOList: TruckDTO[] = [];
     routeList.forEach(route => {
         routeDTOList.push(TruckMap.toDTO(route));
     });

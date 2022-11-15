@@ -78,18 +78,14 @@ export default class RouteRepository implements IRepository<string> {
     }
   }
 
-  async updateDataById(identifier: string, data: RouteDTO): Promise<Entity<string>[]> {
+  async updateDataById(identifier: string, data: RouteDTO): Promise<Entity<string>> {
     const error = persistanceErrorFactory();
     try {
       let route = (await RouteMongoose.findOneAndUpdate({ idRoute: identifier }, data, {
        new: true
-     }).session(this.session));
-      const rt: mongoose.Document[] = route !== null ? [route] : [];
-      let res = convertToObject(rt)
-      if (res.length === 0) {
-        error.addError("No data found");
-        throw error;
-      }
+     }).orFail());
+
+      let res = RouteMap.toDomain(route);
       return res;
     } catch (err) {
       error.addError("Error updating data");

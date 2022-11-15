@@ -245,10 +245,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/expectedRouteJSON"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/expectedRouteJSON"
 								}
 							}
 						}
