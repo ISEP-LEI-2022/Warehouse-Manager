@@ -48,4 +48,23 @@ router.get("/:idRoute?", async (req: Request, res: Response) => {
   }
 });
 
+router.put("/:idRoute", async (req: Request, res: Response) => {
+  try {
+    const updateRouteInstance = <IRouteController>(
+      container.get(config.controllers.RouteController.name)
+    );
+    const updated = await updateRouteInstance.updateRoute(
+      req.params.idRoute as string,
+      req.body
+    );
+    res.status(200).json(updated);
+  } catch (err) {
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
+});
+
 export default router;

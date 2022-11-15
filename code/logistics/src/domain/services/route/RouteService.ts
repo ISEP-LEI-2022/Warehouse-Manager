@@ -4,7 +4,7 @@ import config from "../../../config";
 import IRouteService from "./IRouteService";
 import IRouteRepository from "../../../infrastructure/repositories/IRepository";
 import RouteDTO from "../../dto/RouteDTO";
-import { businessRuleErrorFactory, getDataErrorFactory } from "../../utils/Err";
+import { businessRuleErrorFactory, getDataErrorFactory, persistanceErrorFactory } from "../../utils/Err";
 import RouteMap from "../../../infrastructure/mappers/RouteMap";
 import { Route } from "../../aggregates";
 
@@ -53,7 +53,20 @@ export default class RouteService implements IRouteService {
       const route = await this.routeRepository.getData() as Route[];
       return convertToObjDTO(route);
     } catch (err) {
-      error.addError(String(err));
+      error.addError("Error getting routes");
+      throw error;
+    }
+  }
+
+  async updateRouteById(id: string, routeDTO: RouteDTO): Promise<RouteDTO[]> {
+    const error = persistanceErrorFactory();
+
+    try {
+
+      const updated = await this.routeRepository.updateDataById(id, routeDTO);
+      return convertToObjDTO(updated as Route[]);
+    }catch(err){
+      error.addError("Error updating route");
       throw error;
     }
   }

@@ -140,7 +140,7 @@
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "Logistics API",
+		"title": "Logistics",
 		"version": "1.0.0",
 		"license": {
 			"name": "ISC"
@@ -236,6 +236,48 @@
 						}
 					}
 				]
+			},
+			"put": {
+				"operationId": "UpdateRoute",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/expectedRouteJSON"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Routes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyRoute"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/trucks": {

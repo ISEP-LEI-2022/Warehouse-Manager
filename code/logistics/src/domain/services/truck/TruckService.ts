@@ -20,7 +20,6 @@ export default class TruckService implements ITruckService {
     }
 
     async createTruck(truckDTO: TruckDTO): Promise<TruckDTO> {
-        console.log(truckDTO.registration);
         const error = businessRuleErrorFactory();
 
         try {
