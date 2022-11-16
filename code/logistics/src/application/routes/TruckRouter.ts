@@ -32,7 +32,7 @@ router.get("/:registration?", async (req: Request, res: Response) => {
 
     if (req.params.registration !== undefined) {
         const truck = await getTruckInstance.getTruckByRegistration(
-            req.query.registration as string
+            req.params.registration as string
           );
           res.status(200).json(truck);
       } else {

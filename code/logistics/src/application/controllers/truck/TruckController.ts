@@ -22,7 +22,7 @@ export default class TruckController implements ITruckController {
   ) {}
 
   @Get("/")
-  public async getTrucks(): Promise<Array<expectedTruckJSON>> {
+  public async getTrucks(): Promise<expectedTruckJSON[]> {
     const truckDTO = await this.truckService.getTrucks();
     return TruckMap.toJSONArray(truckDTO);
   }
