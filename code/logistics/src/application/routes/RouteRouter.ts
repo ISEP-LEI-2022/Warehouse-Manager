@@ -48,7 +48,7 @@ router.get("/:idRoute?", async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/:idRoute", async (req: Request, res: Response) => {
+router.put("/:idRoute", async (req: Request, res: Response) => {
   try {
     const updateRouteInstance = <IRouteController>(
       container.get(config.controllers.RouteController.name)
