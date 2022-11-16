@@ -1,6 +1,4 @@
-import mongoose, {
-  ClientSession
-} from "mongoose";
+import mongoose, { ClientSession } from "mongoose";
 import { Service } from "typedi";
 import IRepository from "../IRepository";
 import { Route } from "../../../domain/aggregates";
@@ -11,7 +9,7 @@ import {
 import RouteMap from "../../mappers/RouteMap";
 import { RouteMongoose } from "../../schemas/RouteSchema";
 import Entity from "../../../domain/Entity";
-
+import RouteDTO from "src/domain/dto/RouteDTO";
 
 @Service()
 export default class RouteRepository implements IRepository<string> {
@@ -60,7 +58,6 @@ export default class RouteRepository implements IRepository<string> {
     try {
       data = await RouteMongoose.find().session(this.session);
       return convertToObject(data);
-
     } catch (err) {
       error.addError("Error searching data");
       throw error;
@@ -71,22 +68,38 @@ export default class RouteRepository implements IRepository<string> {
     const error = getDataErrorFactory();
     let data: mongoose.Document[] = [];
     try {
-      data = await RouteMongoose.find({idRoute: identifier}).session(this.session);
+      data = await RouteMongoose.find({ idRoute: identifier }).session(
+        this.session
+      );
       return convertToObject(data);
-
     } catch (err) {
       error.addError("Error searching data");
+      throw error;
+    }
+  }
+
+  async updateDataById(identifier: string, data: RouteDTO): Promise<Entity<string>> {
+    const error = persistanceErrorFactory();
+    try {
+      const route = (await RouteMongoose.findOneAndUpdate({ idRoute: identifier }, data, {
+       new: true
+     }).orFail());
+
+      const res = RouteMap.toDomain(route);
+      return res;
+    } catch (err) {
+      error.addError("Error updating data");
       throw error;
     }
   }
 }
 
 function convertToObject(list: mongoose.Document[]): Route[] {
-    let routeList: Route[] = [];
-    for (const li of list){
-        var jsonData:any = li.toJSON();
+  let routeList: Route[] = [];
+  for (const li of list) {
+    const jsonData: any = li.toJSON();
 
-        routeList = [...routeList, RouteMap.toDomain(jsonData)];
-    }
-    return routeList;
+    routeList = [...routeList, RouteMap.toDomain(jsonData)];
+  }
+  return routeList;
 }

@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidNumber } from "../../utils/UtilityFunctions";
 
 export default class Autonomy implements ValueObject<number> {
-private autonomy: number = 0;
+private autonomy = 0;
 
 constructor(autonomy: number) {
 const error = businessRuleErrorFactory();

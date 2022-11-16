@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidRegistration } from "../../utils/UtilityFunctions";
 
 export default class Registration implements ValueObject<string> {
-    private registration: string = "";
+    private registration = "";
 
     /**
      * Creates a value object that identifies the truck

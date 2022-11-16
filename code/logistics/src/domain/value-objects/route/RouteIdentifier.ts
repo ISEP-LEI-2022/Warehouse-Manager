@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidStringIdentifier } from "../../utils/UtilityFunctions";
 
 export default class RouteIdentifier implements EntityIdentifier<string> {
-  private identifier: string = "";
+  private identifier = "";
 
   /**
    * Creates a value object that identifies the route

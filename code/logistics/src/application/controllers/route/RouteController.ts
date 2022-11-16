@@ -6,7 +6,7 @@ import { IRouteController, expectedRouteJSON, expectedBodyRoute} from './IRouteC
 import {badRequestErrorFactory} from "../../../domain/utils/Err";
 import RouteDTO from '../../../domain/dto/RouteDTO';
 import RouteMap from '../../../infrastructure/mappers/RouteMap';
-import { Get, Route, Tags,  Post, Body, Path } from "tsoa";
+import { Get, Route, Tags,  Post, Body, Path, Put, Patch } from "tsoa";
 
 
 @Route("/routes")
@@ -41,5 +41,22 @@ export default class RouteController implements IRouteController {
   async getRoutes(): Promise<expectedRouteJSON[]> {
     const routeDTO = await this.routeService.getRoutes();
     return RouteMap.toJSONArray(routeDTO);
+  }
+
+  @Patch("/:id")
+  async updateRoute(@Path() id: string,@Body() body: expectedBodyRoute): Promise<expectedRouteJSON> {
+    //Any of these parameters is valid to update a route
+    if (body.idRoute !== null && body.idRoute !== undefined) {
+      const error = badRequestErrorFactory()
+      error.addError('Cant update the id of a route')
+      throw error
+    }
+    if (!validateRequestParams(body,[],['idStart', 'idEnd', 'distance', 'timeRequired', 'energyConsumed', 'extraChargingTime'])) {
+      const error = badRequestErrorFactory()
+      error.addError('Invalid request body')
+      throw error
+    }
+    const routeDTO = await this.routeService.updateRouteById(id, body as RouteDTO);
+    return RouteMap.toJSON(routeDTO);
   }
 }

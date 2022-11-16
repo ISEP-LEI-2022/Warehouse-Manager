@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidNumber } from "../../utils/UtilityFunctions";
 
 export default class Duration implements ValueObject<number> {
-  private duration: number = 0;
+  private duration = 0;
 
   constructor(duration: number) {
     const error = businessRuleErrorFactory();

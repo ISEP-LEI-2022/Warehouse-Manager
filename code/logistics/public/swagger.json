@@ -140,7 +140,7 @@
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "Logistics API",
+		"title": "logistics",
 		"version": "1.0.0",
 		"license": {
 			"name": "ISC"
@@ -236,6 +236,45 @@
 						}
 					}
 				]
+			},
+			"patch": {
+				"operationId": "UpdateRoute",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedRouteJSON"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Routes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyRoute"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/trucks": {
@@ -325,6 +364,47 @@
 						}
 					}
 				]
+			}
+		},
+		"/trucks/{id}": {
+			"put": {
+				"operationId": "UpdateTruck",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedTruckJSON"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Trucks"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyTruck"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

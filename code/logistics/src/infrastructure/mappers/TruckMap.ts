@@ -41,8 +41,8 @@ export default class TruckMap{
 
     public static toJSONArray(truckList: TruckDTO[]): expectedTruckJSON[]{
         const truckListDTO : expectedTruckJSON[] = [];
-        for(const route of truckList){
-            truckListDTO.push(TruckMap.toJSON(route));
+        for(const truck of truckList){
+            truckListDTO.push(TruckMap.toJSON(truck));
         }
         return truckListDTO;
     }

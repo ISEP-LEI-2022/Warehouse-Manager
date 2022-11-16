@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidNumber } from "../../utils/UtilityFunctions";
 
 export default class Capacity implements ValueObject<number> {
-    private capacity: number = 0;
+    private capacity = 0;
 
     constructor(capacity: number) {
     const error = businessRuleErrorFactory();

@@ -3,7 +3,7 @@ import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidNumber } from "../../utils/UtilityFunctions";
 
 export default class Distance implements ValueObject<number> {
-  private distance: number = 0;
+  private distance = 0;
 
   constructor(distance: number) {
     const error = businessRuleErrorFactory();
