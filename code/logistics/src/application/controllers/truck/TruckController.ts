@@ -19,7 +19,7 @@ export default class TruckController implements ITruckController {
   constructor(
     @Inject(config.services.TruckService.name)
     private truckService: ITruckService
-  ) {}
+  ) { }
 
   @Get("/")
   public async getTrucks(): Promise<expectedTruckJSON[]> {
@@ -51,11 +51,11 @@ export default class TruckController implements ITruckController {
   @Get("/:registration")
   public async getTruckByRegistration(
     @Path() registration: string
-  ): Promise<expectedTruckJSON[]> {
+  ): Promise<expectedTruckJSON> {
     const truckDTO = await this.truckService.getTruckByRegistration(
       registration
     );
-    return TruckMap.toJSONArray(truckDTO);
+    return TruckMap.toJSON(truckDTO);
   }
 
   @Put("/:id")

@@ -15,7 +15,6 @@ import TruckDTO from "src/domain/dto/TruckDTO";
 @Service()
 export default class TruckRepository implements IRepository<string> {
   private session: ClientSession | null;
-  constructor() {}
 
   defineSession(session: ClientSession): void {
     if (!session.inTransaction()) {
@@ -53,7 +52,7 @@ export default class TruckRepository implements IRepository<string> {
     }
   }
 
-  async getData(): Promise<Entity<string>[]> {
+  public async getData(): Promise<Entity<string>[]> {
     const error = getDataErrorFactory();
     let data: mongoose.Document[] = [];
     try {
@@ -65,14 +64,13 @@ export default class TruckRepository implements IRepository<string> {
     }
   }
 
-  async getDataById(registration: string): Promise<Entity<string>[]> {
+  async getDataById(registration: string): Promise<Entity<string>> {
     const error = getDataErrorFactory();
-    let data: mongoose.Document[] = [];
     try {
-      data = await TruckMongoose.find({ registration: registration }).session(
-        this.session
-      );
-      return convertToObject(data);
+
+      const data = await TruckMongoose.findOne({ registration: registration }).orFail();
+      return TruckMap.toDomain(data);
+
     } catch (err) {
       error.addError("Error searching data");
       throw error;
@@ -83,8 +81,8 @@ export default class TruckRepository implements IRepository<string> {
     const error = persistanceErrorFactory();
     try {
       const truck = (await TruckMongoose.findOneAndUpdate({ registration: registration }, data, {
-       new: true
-     }).orFail());
+        new: true
+      }).orFail());
 
       const res = TruckMap.toDomain(truck);
       return res;

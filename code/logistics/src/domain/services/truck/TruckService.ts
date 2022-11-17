@@ -13,10 +13,10 @@ export default class TruckService implements ITruckService {
     private session: ClientSession | null;
 
     constructor(
-    @Inject(config.repositories.TruckRepository.name)
-    private truckRepository: ITruckRepository<string>
+        @Inject(config.repositories.TruckRepository.name)
+        private truckRepository: ITruckRepository<string>
     ) {
-    this.session;
+        this.session;
     }
 
     async createTruck(truckDTO: TruckDTO): Promise<TruckDTO> {
@@ -34,15 +34,15 @@ export default class TruckService implements ITruckService {
         }
     }
 
-    async getTruckByRegistration(registration: string): Promise<TruckDTO[]> {
+    async getTruckByRegistration(registration: string): Promise<TruckDTO> {
         const error = getDataErrorFactory();
 
         try {
-        const truck = await this.truckRepository.getDataById(registration) as Truck[];
-        return convertToObjDTO(truck);
+            const truck = await this.truckRepository.getDataById(registration) as Truck;
+            return TruckMap.toDTO(truck);
         } catch (err) {
-        error.addError("Error getting truck by registration");
-        throw error;
+            error.addError("Error getting truck by registration");
+            throw error;
         }
     }
 
@@ -52,7 +52,7 @@ export default class TruckService implements ITruckService {
         try {
             const truck = await this.truckRepository.getData() as Truck[];
             return convertToObjDTO(truck);
-            } catch (err) {
+        } catch (err) {
             error.addError(String(err));
             throw error;
         }
@@ -60,19 +60,19 @@ export default class TruckService implements ITruckService {
 
     async updateTruckById(id: string, truckDTO: TruckDTO): Promise<TruckDTO> {
         const error = persistanceErrorFactory();
-    
+
         try {
-    
-          const updated = await this.truckRepository.updateDataById(id, truckDTO);
-          return TruckMap.toDTO(updated as Truck);
-        }catch(err){
-          error.addError("Error updating truck");
-          throw error;
+
+            const updated = await this.truckRepository.updateDataById(id, truckDTO);
+            return TruckMap.toDTO(updated as Truck);
+        } catch (err) {
+            error.addError("Error updating truck");
+            throw error;
         }
-      }
+    }
 }
 
-function convertToObjDTO(truckList: Truck[]): TruckDTO[]{
+function convertToObjDTO(truckList: Truck[]): TruckDTO[] {
     const truckDTOList: TruckDTO[] = [];
     truckList.forEach(truck => {
         truckDTOList.push(TruckMap.toDTO(truck));
