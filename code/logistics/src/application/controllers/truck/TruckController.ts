@@ -6,11 +6,12 @@ import {
   ITruckController,
   expectedTruckJSON,
   expectedBodyTruck,
+  expectedBodyUpdateTruck
 } from "./ITruckController";
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import TruckDTO from "../../../domain/dto/TruckDTO";
 import TruckMap from "../../../infrastructure/mappers/TruckMap";
-import { Get, Route, Tags, Post, Body, Path, Put } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Put, Patch } from "tsoa";
 
 @Route("/trucks")
 @Tags("Trucks")
@@ -58,25 +59,21 @@ export default class TruckController implements ITruckController {
     return TruckMap.toJSON(truckDTO);
   }
 
-  @Put("/:id")
-  async updateTruck(
-    @Path() id: string,
-    @Body() body: expectedBodyTruck
+  @Patch("/:registration")
+  async updateTruckByRegistration(
+    @Path() registration: string,
+    @Body() body: expectedBodyUpdateTruck
   ): Promise<expectedTruckJSON> {
-    //Any of these parameters is valid to update a truck
-    if (body.registration !== null && body.registration !== undefined) {
-      const error = badRequestErrorFactory();
-      error.addError("Cant update the id of a truck");
-      throw error;
-    }
     if (!validateRequestParams(body, ["tare", "capacity", "autonomy"])) {
       const error = badRequestErrorFactory();
       error.addError("Invalid request body");
       throw error;
     }
-    const truckDTO = await this.truckService.updateTruckById(
-      id,
-      body as TruckDTO
+    const truck = body as TruckDTO
+    truck.registration = registration
+    const truckDTO = await this.truckService.updateTruckByRegistration(
+      registration,
+      truck
     );
     return TruckMap.toJSON(truckDTO);
   }

@@ -58,12 +58,12 @@ export default class TruckService implements ITruckService {
         }
     }
 
-    async updateTruckById(id: string, truckDTO: TruckDTO): Promise<TruckDTO> {
+    async updateTruckByRegistration(registration: string, truckDTO: TruckDTO): Promise<TruckDTO> {
         const error = persistanceErrorFactory();
 
         try {
 
-            const updated = await this.truckRepository.updateDataById(id, truckDTO);
+            const updated = await this.truckRepository.updateDataById(registration, truckDTO);
             return TruckMap.toDTO(updated as Truck);
         } catch (err) {
             error.addError("Error updating truck");

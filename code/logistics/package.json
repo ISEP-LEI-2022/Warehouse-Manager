@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon",
     "lint": "eslint . --ext .ts",
-    "test": "jest",
+    "test": "mocha --require ts-node/register --recursive 'tests/**/*test.ts' --colors --exit",
     "predev": "npm run swagger",
     "prebuild": "npm run swagger",
     "build": "tsoa spec-and-routes && tsc",

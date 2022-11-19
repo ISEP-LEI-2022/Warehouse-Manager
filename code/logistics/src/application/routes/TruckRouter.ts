@@ -53,7 +53,7 @@ router.patch("/:registration", async (req: Request, res: Response) => {
     const updateTruckInstance = <ITruckController>(
       container.get(config.controllers.TruckController.name)
     );
-    const updated = await updateTruckInstance.updateTruck(
+    const updated = await updateTruckInstance.updateTruckByRegistration(
       req.params.registration as string,
       req.body
     );

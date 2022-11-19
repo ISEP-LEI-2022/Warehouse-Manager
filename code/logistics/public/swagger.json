@@ -135,6 +135,28 @@
 					"registration"
 				],
 				"type": "object"
+			},
+			"expectedBodyUpdateTruck": {
+				"properties": {
+					"autonomy": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"tare": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"autonomy",
+					"capacity",
+					"tare"
+				],
+				"type": "object"
 			}
 		},
 		"securitySchemes": {}
@@ -361,11 +383,9 @@
 						}
 					}
 				]
-			}
-		},
-		"/trucks/{id}": {
-			"put": {
-				"operationId": "UpdateTruck",
+			},
+			"patch": {
+				"operationId": "UpdateTruckByRegistration",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -385,7 +405,7 @@
 				"parameters": [
 					{
 						"in": "path",
-						"name": "id",
+						"name": "registration",
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -397,7 +417,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/expectedBodyTruck"
+								"$ref": "#/components/schemas/expectedBodyUpdateTruck"
 							}
 						}
 					}
