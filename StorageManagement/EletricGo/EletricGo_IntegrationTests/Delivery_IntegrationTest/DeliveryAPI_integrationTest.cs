@@ -24,12 +24,12 @@ namespace EletricGo_IntegrationTests.Delivery_IntegrationTest {
         [Fact]
         public async Task CreateDeliveryITest() {
 
-            var designation = "Teste integração";
+            var designation = "Integration Test V1";
             List<ChargingSystem> chargingSystems = new List<ChargingSystem>();
             chargingSystems.Add(new ChargingSystem("40"));
             Location location = new Location("15", "15", "15", new Address("rua 6", "7", "5", "4455-856", new City(123, "Lisboa")));
             List<Product> productsList = new List<Product>();
-            productsList.Add(new Product("P1 Unit Test", 2, 2));
+            productsList.Add(new Product("P1 Integration Test", 2, 2));
 
             var client = new TestClientProvider().Client;
 
@@ -38,7 +38,7 @@ namespace EletricGo_IntegrationTests.Delivery_IntegrationTest {
                JsonConvert.SerializeObject(new CreatingDeliveryDto() {
                    DeliveryDate = new DateTime(2022,05,02),
                    DeliveryWeight = 5.5,
-                   FinalStorageId = new Storage(designation, location, chargingSystems),
+                   FinalStorageId = "bd1f0ba2-cb2d-4bc5-af4f-fe920697dffb",
                    TimeToLoad = 5,
                    TimeToUnload = 5,
                    Products = productsList,
