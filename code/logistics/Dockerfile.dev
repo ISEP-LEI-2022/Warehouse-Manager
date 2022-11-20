@@ -1,7 +1,5 @@
 FROM node:16-slim
 
-#WORKDIR /logistics
-
 COPY package*.json ./
 
 RUN npm install
