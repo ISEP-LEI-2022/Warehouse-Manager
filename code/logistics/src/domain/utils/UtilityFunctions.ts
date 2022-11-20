@@ -28,17 +28,15 @@ export function isValidNumber(number: number): boolean {
   );
 }
 
-
 /**
  * Function validates if the registration is valid
  * @param {string} registration
  * @returns {boolean} true if valid, false otherwise
  */
 export function isValidRegistration(registration: string): boolean {
-  const regex = /^(([A-Z]{2}-\d{2}-(\d{2}|[A-Z]{2}))|(\d{2}-(\d{2}-[A-Z]{2}|[A-Z]{2}-\d{2})))$/;
-  return (
-    regex.test(registration)
-  );
+  const regex =
+    /^(([A-Z]{2}-\d{2}-(\d{2}|[A-Z]{2}))|(\d{2}-(\d{2}-[A-Z]{2}|[A-Z]{2}-\d{2})))$/;
+  return regex.test(registration);
 }
 
 /**
@@ -48,18 +46,21 @@ export function isValidRegistration(registration: string): boolean {
  * @param {string[]} required Names of the optional params
  * @returns {boolean} true if valid, false otherwise
  */
-export function validateRequestParams(request:object, requiredParams:string[], optionalParams?:string[]) : boolean{
+export function validateRequestParams(
+  request: object,
+  requiredParams: string[],
+  optionalParams?: string[]
+): boolean {
   const keys = Object.keys(request);
   for (const param of requiredParams) {
     if (!keys.includes(param)) {
       return false;
     }
   }
-  return(
-    !(keys.filter((key) => requiredParams.includes(key) || optionalParams?.includes(key)).length === 0)
-  )
 
-  return true;
+  return (
+    keys.filter((val) => {
+      return !(requiredParams.includes(val) || optionalParams?.includes(val));
+    }).length === 0
+  );
 }
-
-

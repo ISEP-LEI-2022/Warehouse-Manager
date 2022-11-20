@@ -78,7 +78,7 @@ export default class RouteController implements IRouteController {
    * @returns Updated route
    */
   @Patch("/:idRoute")
-  async updateRoute(
+  async updateRouteById(
     @Path() idRoute: string,
     @Body() body: expectedPatchBodyRoute
   ): Promise<expectedRouteJSON> {
