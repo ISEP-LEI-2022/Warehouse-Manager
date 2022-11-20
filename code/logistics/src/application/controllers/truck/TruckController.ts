@@ -10,7 +10,7 @@ import {
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import TruckDTO from "../../../domain/dto/TruckDTO";
 import TruckMap from "../../../infrastructure/mappers/TruckMap";
-import { Get, Route, Tags, Post, Body, Path, Put, Patch } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Put } from "tsoa";
 
 @Route("/trucks")
 @Tags("Trucks")
@@ -93,7 +93,7 @@ export default class TruckController implements ITruckController {
       error.addError("Invalid request body");
       throw error;
     }
-    const truckDTO = await this.truckService.updateTruckById(body as TruckDTO);
+    const truckDTO = await this.truckService.updateTruckByRegistration(body as TruckDTO);
     return TruckMap.toJSON(truckDTO);
   }
 }

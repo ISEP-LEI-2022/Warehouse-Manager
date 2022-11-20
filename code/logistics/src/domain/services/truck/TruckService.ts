@@ -66,7 +66,7 @@ export default class TruckService implements ITruckService {
     }
   }
 
-  async updateTruckById(truckDTO: TruckDTO): Promise<TruckDTO> {
+  async updateTruckByRegistration(truckDTO: TruckDTO): Promise<TruckDTO> {
     const error = persistanceErrorFactory();
 
     try {
