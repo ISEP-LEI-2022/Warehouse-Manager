@@ -53,7 +53,7 @@ router.patch("/:idRoute", async (req: Request, res: Response) => {
     const updateRouteInstance = <IRouteController>(
       container.get(config.controllers.RouteController.name)
     );
-    const updated = await updateRouteInstance.updateRoute(
+    const updated = await updateRouteInstance.updateRouteById(
       req.params.idRoute as string,
       req.body
     );
