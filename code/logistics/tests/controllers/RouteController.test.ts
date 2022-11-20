@@ -6,7 +6,7 @@ import RouteMap from "../../src/infrastructure/mappers/RouteMap";
 import { describe } from "mocha";
 import assert from "assert";
 import Sinon from "sinon";
-import { badRequestErrorFactory, Err, persistanceErrorFactory } from "../../src/domain/utils/Err";
+import { badRequestErrorFactory, Err } from "../../src/domain/utils/Err";
 
 const body = {
   idRoute: "idroute1",
@@ -42,7 +42,7 @@ const dto = body as RouteDTO;
 const update_dto = update_body as RouteDTO;
 const array_dto = [body as RouteDTO];
 
-describe("Create Route", () => {
+describe("Test Route Controller", () => {
   const routePrototype: RouteService = new RouteService(new RouteRepository());
 
   const rlc: RouteController = new RouteController(routePrototype);
