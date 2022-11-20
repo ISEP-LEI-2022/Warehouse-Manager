@@ -14,7 +14,7 @@ namespace ARQSI_1_Unit_Tests.RelationUnitTests.cs
         [Fact]
         public void CreateDelivery()
         {
-            StorageId storageId = new StorageId("bd1f0ba2-cb2d-4bc5-af4f-fe920697dffb");
+            StorageId storageId = new StorageId("0c9f678a-e1f3-41dd-8e71-cef7d2ebaede");
             List<Product> productsList = new List<Product>();
             productsList.Add(new Product("P1 Unit Test", 2, 2));
             Delivery newDelivery = new Delivery(new DateTime(2022, 11, 1), 12.5, storageId, 10, 10, productsList);
@@ -26,7 +26,7 @@ namespace ARQSI_1_Unit_Tests.RelationUnitTests.cs
 
             //mockedUnitOfWork.Setup(x => x.CommitAsync()).ReturnsAsync(null);
 
-            CreatingDeliveryDto creatingDeliveryDto = new CreatingDeliveryDto(new DateTime(2022, 11, 1), 12.5, "bd1f0ba2-cb2d-4bc5-af4f-fe920697dffb", 10, 10, productsList);
+            CreatingDeliveryDto creatingDeliveryDto = new CreatingDeliveryDto(new DateTime(2022, 11, 1), 12.5, "0c9f678a-e1f3-41dd-8e71-cef7d2ebaede", 10, 10, productsList);
             // Act guarda na bd
             DeliveryService deliveryService = new DeliveryService(mockedUnitOfWork.Object, mockedDeliveryRepo.Object);
             Task<DeliveryDto> deliveryDto = deliveryService.AddAsync(creatingDeliveryDto);
@@ -51,12 +51,13 @@ namespace ARQSI_1_Unit_Tests.RelationUnitTests.cs
         public async Task GetByIdDeliveryTest()
         {
             // Arrange
-            string testSessionId = "0e44a3fb-5bcf-4f13-8f0f-bb672e7deceb";
+            string testSessionId = "c329f12d-d7f3-4a6e-bbdb-d5a21fcd4140";
             List<Product> products = new List<Product>();
-            products.Add(new Product("Ana",5,5));
+            products.Add(new Product("Ana", 5, 5));
             products.Add(new Product("Nuno", 6, 1));
-            StorageId storageId = new StorageId("bd1f0ba2-cb2d-4bc5-af4f-fe920697dffb");
+            StorageId storageId = new StorageId("0c9f678a-e1f3-41dd-8e71-cef7d2ebaede");
             Delivery delivery = new Delivery(new DateTime(2022, 11, 30), 6, storageId, 10, 11, products);
+
             var mockRepo = new Mock<IDeliveryRepository>();
             Moq.Mock<IUnitOfWork> mockedUnitOfWork = new Moq.Mock<IUnitOfWork>();
             mockRepo.Setup(repo => repo.GetByIdAsync(new DeliveryId(testSessionId)))
@@ -77,15 +78,10 @@ namespace ARQSI_1_Unit_Tests.RelationUnitTests.cs
             Assert.True(delivery.TimeToLoad.Equals(getDelivery.TimeToLoad));
             Assert.True(delivery.TimeToUnload.Equals(getDelivery.TimeToUnload));
 
-            //for (int i = 0; i < getDelivery.Products.Count; i++)
-            //{
-            //    for (int j = 0; j < delivery.Products.Count; j++)
-            //    {
-            //        Assert.True(delivery.Products[j].Name.Equals(getDelivery.Products[i].Name));
-            //        Assert.True(delivery.Products[j].LevelOfPolution.Equals(getDelivery.Products[i].LevelOfPolution));
-
-            //    }
-            //}
+            foreach (var s in getDelivery.Products.Select((value, i) => (value, i))) {
+                Assert.True(s.value.Name.Equals(delivery.Products[s.i].Name));
+                Assert.True(s.value.LevelOfPolution.Equals(delivery.Products[s.i].LevelOfPolution));
+            }
         }
 
     } 
