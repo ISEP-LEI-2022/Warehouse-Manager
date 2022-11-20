@@ -29,12 +29,12 @@ const routeSchema = new mongoose.Schema({
     timeRequired:{
         type: Number,
         required: true,
-        min:0,
+        min:1,
     },
     energyConsumed:{
         type: Number,
         required: true,
-        min:0,
+        min:1,
     },
     extraChargingTime:{
         type: Number,
