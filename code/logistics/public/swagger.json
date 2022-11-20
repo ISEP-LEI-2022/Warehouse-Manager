@@ -274,7 +274,7 @@
 				]
 			},
 			"patch": {
-				"operationId": "UpdateRoute",
+				"operationId": "UpdateRouteById",
 				"responses": {
 					"200": {
 						"description": "Updated route",
