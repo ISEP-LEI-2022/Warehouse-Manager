@@ -77,7 +77,7 @@ export default class TruckController implements ITruckController {
    * @returns Returns a JSON with the updated truck
    */
   @Put("/")
-  async updateTruck(
+  async updateTruckByRegistration(
     @Body() body: expectedBodyTruck
   ): Promise<expectedTruckJSON> {
     //Registration is the only required parameter to update a truck
