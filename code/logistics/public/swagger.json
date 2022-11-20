@@ -374,7 +374,7 @@
 				}
 			},
 			"put": {
-				"operationId": "UpdateTruck",
+				"operationId": "UpdateTruckByRegistration",
 				"responses": {
 					"200": {
 						"description": "Returns a JSON with the updated truck",
