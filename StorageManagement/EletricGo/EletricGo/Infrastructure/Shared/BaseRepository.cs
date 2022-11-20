@@ -27,14 +27,6 @@ namespace EletricGo.Infrastructure.Shared
         
         }
 
-        /*public async Task<List<TEntity>> GetAllAsync()
-        {
-            var query = _context.Set<TEntity>();
-            if(query.Any())
-                return query.ToList();
-            return new List<TEntity>();
-        }*/
-
         public async Task<List<TEntity>> GetAllAsync()
         {
 

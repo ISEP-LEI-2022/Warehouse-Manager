@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EletricGo.Migrations
 {
     [DbContext(typeof(DDDSample1DbContext))]
-    [Migration("20221030231430_Storages")]
-    partial class Storages
+    [Migration("20221120015431_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,13 +29,17 @@ namespace EletricGo.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<double>("DeliveryWeight")
                         .HasColumnType("float");
 
-                    b.Property<string>("FinalStorageIdId")
+                    b.Property<string>("FinalStorageId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("TimeToLoad")
@@ -46,9 +50,9 @@ namespace EletricGo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FinalStorageIdId");
+                    b.HasIndex("FinalStorageId");
 
-                    b.ToTable("Deliveries");
+                    b.ToTable("Delivery");
                 });
 
             modelBuilder.Entity("EletricGo.Domain.Deliveries.Product", b =>
@@ -57,6 +61,7 @@ namespace EletricGo.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("DeliveryId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<float>("LevelOfPolution")
@@ -107,6 +112,25 @@ namespace EletricGo.Migrations
                     b.ToTable("Address");
                 });
 
+            modelBuilder.Entity("EletricGo.Domain.Storages.ChargingSystem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ChargingTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StorageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StorageId");
+
+                    b.ToTable("ChargingSystem");
+                });
+
             modelBuilder.Entity("EletricGo.Domain.Storages.City", b =>
                 {
                     b.Property<string>("Id")
@@ -130,6 +154,7 @@ namespace EletricGo.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AddressId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Altitude")
@@ -164,29 +189,36 @@ namespace EletricGo.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LocationId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Storages");
+                    b.ToTable("Storage");
                 });
 
             modelBuilder.Entity("EletricGo.Domain.Deliveries.Delivery", b =>
                 {
-                    b.HasOne("EletricGo.Domain.Storages.Storage", "FinalStorageId")
-                        .WithMany()
-                        .HasForeignKey("FinalStorageIdId");
+                    b.HasOne("EletricGo.Domain.Storages.Storage", "FinalStorage")
+                        .WithMany("Deliveries")
+                        .HasForeignKey("FinalStorageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("FinalStorageId");
+                    b.Navigation("FinalStorage");
                 });
 
             modelBuilder.Entity("EletricGo.Domain.Deliveries.Product", b =>
                 {
-                    b.HasOne("EletricGo.Domain.Deliveries.Delivery", null)
+                    b.HasOne("EletricGo.Domain.Deliveries.Delivery", "Delivery")
                         .WithMany("Products")
-                        .HasForeignKey("DeliveryId");
+                        .HasForeignKey("DeliveryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Delivery");
                 });
 
             modelBuilder.Entity("EletricGo.Domain.Storages.Address", b =>
@@ -198,11 +230,20 @@ namespace EletricGo.Migrations
                     b.Navigation("City");
                 });
 
+            modelBuilder.Entity("EletricGo.Domain.Storages.ChargingSystem", b =>
+                {
+                    b.HasOne("EletricGo.Domain.Storages.Storage", null)
+                        .WithMany("ChargingSystems")
+                        .HasForeignKey("StorageId");
+                });
+
             modelBuilder.Entity("EletricGo.Domain.Storages.Location", b =>
                 {
                     b.HasOne("EletricGo.Domain.Storages.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
                 });
@@ -211,7 +252,9 @@ namespace EletricGo.Migrations
                 {
                     b.HasOne("EletricGo.Domain.Storages.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Location");
                 });
@@ -219,6 +262,13 @@ namespace EletricGo.Migrations
             modelBuilder.Entity("EletricGo.Domain.Deliveries.Delivery", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("EletricGo.Domain.Storages.Storage", b =>
+                {
+                    b.Navigation("ChargingSystems");
+
+                    b.Navigation("Deliveries");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,7 +7,7 @@ namespace EletricGo.Domain.Deliveries
 {
     public interface IDeliveryRepository: IRepository<Delivery, DeliveryId>
     {
-        Task<List<Delivery>> GetAll();
-        Task<List<Delivery>> GetById(DeliveryId deliveryId);
+        //Task<List<Delivery>> GetAll();
+        //Task<List<Delivery>> GetById(DeliveryId deliveryId);
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EletricGo.Migrations
 {
-    public partial class Storages : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,7 +51,7 @@ namespace EletricGo.Migrations
                     Latitude = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Longitude = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Altitude = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AddressId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AddressId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,47 +60,69 @@ namespace EletricGo.Migrations
                         name: "FK_Location_Address_AddressId",
                         column: x => x.AddressId,
                         principalTable: "Address",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Storages",
+                name: "Storage",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Storages", x => x.Id);
+                    table.PrimaryKey("PK_Storage", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Storages_Location_LocationId",
+                        name: "FK_Storage_Location_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Location",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChargingSystem",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ChargingTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StorageId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChargingSystem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChargingSystem_Storage_StorageId",
+                        column: x => x.StorageId,
+                        principalTable: "Storage",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Deliveries",
+                name: "Delivery",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeliveryWeight = table.Column<double>(type: "float", nullable: false),
-                    FinalStorageIdId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FinalStorageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TimeToLoad = table.Column<double>(type: "float", nullable: false),
-                    TimeToUnload = table.Column<double>(type: "float", nullable: false)
+                    TimeToUnload = table.Column<double>(type: "float", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Deliveries", x => x.Id);
+                    table.PrimaryKey("PK_Delivery", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Deliveries_Storages_FinalStorageIdId",
-                        column: x => x.FinalStorageIdId,
-                        principalTable: "Storages",
-                        principalColumn: "Id");
+                        name: "FK_Delivery_Storage_FinalStorageId",
+                        column: x => x.FinalStorageId,
+                        principalTable: "Storage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,16 +133,17 @@ namespace EletricGo.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
                     LevelOfPolution = table.Column<float>(type: "real", nullable: false),
-                    DeliveryId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    DeliveryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_Deliveries_DeliveryId",
+                        name: "FK_Product_Delivery_DeliveryId",
                         column: x => x.DeliveryId,
-                        principalTable: "Deliveries",
-                        principalColumn: "Id");
+                        principalTable: "Delivery",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -129,9 +152,14 @@ namespace EletricGo.Migrations
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Deliveries_FinalStorageIdId",
-                table: "Deliveries",
-                column: "FinalStorageIdId");
+                name: "IX_ChargingSystem_StorageId",
+                table: "ChargingSystem",
+                column: "StorageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Delivery_FinalStorageId",
+                table: "Delivery",
+                column: "FinalStorageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Location_AddressId",
@@ -144,21 +172,24 @@ namespace EletricGo.Migrations
                 column: "DeliveryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Storages_LocationId",
-                table: "Storages",
+                name: "IX_Storage_LocationId",
+                table: "Storage",
                 column: "LocationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ChargingSystem");
+
+            migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Deliveries");
+                name: "Delivery");
 
             migrationBuilder.DropTable(
-                name: "Storages");
+                name: "Storage");
 
             migrationBuilder.DropTable(
                 name: "Location");

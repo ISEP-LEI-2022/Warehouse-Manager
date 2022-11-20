@@ -5,6 +5,8 @@ namespace EletricGo.Domain.Deliveries {
         public string Name { get; set; }
         public double Weight { get; set; }
         public float LevelOfPolution { get; set; }
+        public Delivery? Delivery { get; set; }
+        public DeliveryId? DeliveryId { get; set; }
 
 
         public Product() {
