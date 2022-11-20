@@ -93,6 +93,6 @@ export function persistanceErrorFactory(): Err {
 /**
  * Creates an error no data is found
  */
- export function getDataErrorFactory(): Err {
+export function getDataErrorFactory(): Err {
   return new Err("NotFound", 404);
 }
