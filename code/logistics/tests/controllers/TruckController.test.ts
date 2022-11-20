@@ -63,7 +63,7 @@ describe("Create Truck", () => {
         assert.deepStrictEqual(result, TruckMap.toJSON(dto));
     });
 
-    it("../package-lock.json get Truck by registration", async () => {
+    it("Succefully get Truck by registration", async () => {
         (truckPrototype.getTruckByRegistration as sinon.SinonStub).callsFake(function (this: TruckDTO) {
             return Promise.resolve(dto);
         });
