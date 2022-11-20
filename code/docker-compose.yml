@@ -34,10 +34,11 @@ services:
     build:
       context: ./storage/src
       dockerfile: Dockerfile.dev
-    volumes:
-      - ./storage:/storage
+      target: final
     environment:
-      - database=ConnectionString = "Server=tcp:localhost,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./storage/certs/https:/https:ro
     networks:
       - mynet
     ports:
