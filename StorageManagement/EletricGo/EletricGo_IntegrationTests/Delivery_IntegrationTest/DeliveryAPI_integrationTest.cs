@@ -38,7 +38,7 @@ namespace EletricGo_IntegrationTests.Delivery_IntegrationTest {
                JsonConvert.SerializeObject(new CreatingDeliveryDto() {
                    DeliveryDate = new DateTime(2022,05,02),
                    DeliveryWeight = 5.5,
-                   FinalStorageId = "bd1f0ba2-cb2d-4bc5-af4f-fe920697dffb",
+                   FinalStorageId = "54fb23bb-e8c3-44f7-8d15-dacb23285473",
                    TimeToLoad = 5,
                    TimeToUnload = 5,
                    Products = productsList,

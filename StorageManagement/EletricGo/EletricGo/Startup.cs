@@ -25,8 +25,7 @@ namespace EletricGo
         public IConfiguration Configuration { get; }
 
 #if DEBUG
-        string ConnectionString = "Server = localhost; Database = EletricGo; Integrated Security = SSPI;";
-        
+        string ConnectionString = "Server=tcp:arqsi.database.windows.net,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 #else
          string ConnectionString = "Server=tcp:arqsi.database.windows.net,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 #endif
