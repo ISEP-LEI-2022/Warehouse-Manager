@@ -33,7 +33,6 @@ export default class RouteService implements IRouteService {
 
       return routeDTO;
     } catch (err) {
-      console.log(this.routeRepository.exists(routeDTO.idRoute));
       !!(await this.routeRepository.exists(routeDTO.idRoute)) === true
         ? error.addError("Route with this idRoute already exists")
         : error.addError("Error inserting route: verify the body");

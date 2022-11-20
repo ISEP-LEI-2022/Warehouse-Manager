@@ -5,12 +5,6 @@ export type expectedBodyTruck = {
     autonomy: number;
 }
 
-export type expectedBodyUpdateTruck = {
-    tare: number;
-    capacity: number;
-    autonomy: number;
-}
-
 export type expectedTruckJSON = {
     registration: string;
     tare: number;

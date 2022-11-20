@@ -5,8 +5,7 @@ import { validateRequestParams } from "../../../domain/utils/UtilityFunctions";
 import {
   ITruckController,
   expectedTruckJSON,
-  expectedBodyTruck,
-  expectedBodyUpdateTruck
+  expectedBodyTruck
 } from "./ITruckController";
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import TruckDTO from "../../../domain/dto/TruckDTO";
