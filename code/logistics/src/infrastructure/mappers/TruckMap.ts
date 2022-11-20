@@ -12,7 +12,7 @@ export default class TruckMap{
         } as TruckDTO;
     }
 
-    public static toPersistence(truck: Truck): object{
+    public static toPersistence(truck: Truck): TruckDTO{
         return {
             registration: truck.registration.value(),
             tare: truck.tare.value(),

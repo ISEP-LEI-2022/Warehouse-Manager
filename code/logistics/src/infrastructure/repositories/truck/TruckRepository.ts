@@ -11,7 +11,6 @@ import { TruckMongoose } from "../../schemas/TruckSchema";
 import Entity from "src/domain/Entity";
 import TruckDTO from "src/domain/dto/TruckDTO";
 
-
 @Service()
 export default class TruckRepository implements IRepository<string> {
   private session: ClientSession | null;
@@ -43,13 +42,13 @@ export default class TruckRepository implements IRepository<string> {
     }
   }
 
-  async exists(identifier: string): Promise<boolean> {
+  async exists(registration: string): Promise<boolean> {
     if (this.session) {
-      return await !!TruckMongoose.exists({ id: identifier }).session(
+      return !!(await TruckMongoose.exists({ registration: registration }).session(
         this.session
-      );
+      ));
     } else {
-      return await !!TruckMongoose.exists({ id: identifier });
+      return !!(await TruckMongoose.exists({ registration: registration }));
     }
   }
 
@@ -65,26 +64,33 @@ export default class TruckRepository implements IRepository<string> {
     }
   }
 
-  async getDataById(registration: string): Promise<Entity<string>[]> {
+  async getDataById(registration: string): Promise<Entity<string>> {
     const error = getDataErrorFactory();
-    let data: mongoose.Document[] = [];
     try {
-      data = await TruckMongoose.find({ registration: registration }).session(
-        this.session
-      );
-      return convertToObject(data);
+      const data = await TruckMongoose.findOne({ registration: registration })
+        .session(this.session)
+        .orFail();
+      return TruckMap.toDomain(data);
     } catch (err) {
       error.addError("Error searching data");
       throw error;
     }
   }
 
-  async updateDataById(registration: string, data: TruckDTO): Promise<Entity<string>> {
+  async updateDataById(
+    registration: string,
+    data: TruckDTO
+  ): Promise<Entity<string>> {
     const error = persistanceErrorFactory();
     try {
-      const truck = (await TruckMongoose.findOneAndUpdate({ registration: registration }, data, {
-       new: true
-     }).orFail());
+      const truck = await TruckMongoose.findOneAndUpdate(
+        { registration: registration },
+        data,
+        {
+          new: true,
+          upsert: true,
+        }
+      );
 
       const res = TruckMap.toDomain(truck);
       return res;
