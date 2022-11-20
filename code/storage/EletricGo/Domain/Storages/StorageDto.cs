@@ -1,5 +1,4 @@
-﻿using EletricGo.Migrations;
-
+﻿
 namespace EletricGo.Domain.Storages
 {
     public class StorageDto
@@ -12,10 +11,10 @@ namespace EletricGo.Domain.Storages
 
         public StorageDto(Guid id, string designation, Location location, List<ChargingSystem> chargingSystems)
         {
-            Id = id;
-            Designation = designation;
-            Location = location;
-            ChargingSystems = chargingSystems;
+            this.Id = id;
+            this.Designation = designation;
+            this.Location = location;
+            this.ChargingSystems = chargingSystems;
         }
     }
 }

@@ -10,16 +10,16 @@ namespace EletricGo.Domain.Storages
         public string Door { get; set; }
         public string Floor { get; set; }
         public string PostalCode { get; set; }
-        public City? City { get;  set; }
+        public City City { get;  set; }
 
         public Address(string street, string door, string floor, string postalCode, City city)
         {
-            Id = new AddressId(Guid.NewGuid());
-            Street = street;
-            Door = door;
-            Floor = floor;
-            PostalCode = postalCode;
-            City = city;
+            this.Id = new AddressId(Guid.NewGuid());
+            this.Street = street;
+            this.Door = door;
+            this.Floor = floor;
+            this.PostalCode = postalCode;
+            this.City = city;
         }
 
         public Address()

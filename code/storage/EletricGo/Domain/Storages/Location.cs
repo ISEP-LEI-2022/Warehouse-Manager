@@ -8,7 +8,7 @@ namespace EletricGo.Domain.Storages
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Altitude { get; set; }
-        public Address? Address { get; set; }
+        public Address Address { get; set; }
 
 
         public Location() {
@@ -16,12 +16,11 @@ namespace EletricGo.Domain.Storages
 
         public Location(string latitude, string longitude, string altitude, Address addr)
         {
-            Id = new LocationId(Guid.NewGuid());
-            Latitude = latitude;
-            Longitude = longitude;
-            Altitude = altitude;
-            if(addr != null) 
-                Address = new Address(addr.Street, addr.Door, addr.Floor, addr.PostalCode, addr.City); 
+            this.Id = new LocationId(Guid.NewGuid());
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+            this.Altitude = altitude;
+            this.Address = new Address(addr.Street, addr.Door, addr.Floor, addr.PostalCode, addr.City); 
         }
 
         public void changeLatitude(string latitude)
