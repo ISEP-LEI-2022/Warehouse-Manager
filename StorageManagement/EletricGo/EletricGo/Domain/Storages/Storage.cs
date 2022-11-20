@@ -5,9 +5,9 @@ namespace EletricGo.Domain.Storages
     public class Storage : Entity<StorageId>, IAggregateRoot
     {
         public string Designation { get; set; }
-        public Location Location { get;  set; }
+        public Location? Location { get;  set; }
 
-        public List<ChargingSystem> ChargingSystems { get; set; }
+        public List<ChargingSystem>? ChargingSystems { get; set; }
         public bool Active { get; private set; }
 
         public Storage(string designation, Location loc, List<ChargingSystem> chargingSystems)
@@ -24,6 +24,17 @@ namespace EletricGo.Domain.Storages
             }
         }
         public Storage() { }
+
+        public Storage(string designation) {
+            this.Id = new StorageId(Guid.NewGuid());
+            this.Designation = designation;
+        }
+
+        public Storage(string designation, Location loc) {
+            this.Id = new StorageId(Guid.NewGuid());
+            this.Designation = designation;
+            Location = new Location(loc.Latitude, loc.Longitude, loc.Altitude, loc.Address);
+        }
 
         public void changeDesignation(string designation)
         {
