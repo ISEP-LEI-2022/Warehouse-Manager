@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./logistics:/logistics
+      -  /logistics/node_modules
     environment:
       - database=mongodb://mongodb:27017/logistics
     networks:
