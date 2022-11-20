@@ -35,11 +35,9 @@ export function isValidNumber(number: number): boolean {
  * @returns {boolean} true if valid, false otherwise
  */
 export function isValidRegistration(registration: string): boolean {
+  const regex = /^(([A-Z]{2}-\d{2}-(\d{2}|[A-Z]{2}))|(\d{2}-(\d{2}-[A-Z]{2}|[A-Z]{2}-\d{2})))$/;
   return (
-    registration !== undefined &&
-    registration !== null &&
-    typeof registration === "string" &&
-    registration.length > 0
+    regex.test(registration)
   );
 }
 

@@ -29,14 +29,14 @@ export default class TruckService implements ITruckService {
     try {
       const truck = TruckMap.toDomain(truckDTO);
 
-      await this.truckRepository.persists(truck);
+      !!(await this.truckRepository.exists(truckDTO.registration)) === true
+        ? error.addError("Truck with this registration already exists")
+        : await this.truckRepository.persists(truck);
+      if (error.hasErrors()) throw error;
 
       return truckDTO;
     } catch (err) {
-      !!(await this.truckRepository.exists(truckDTO.registration)) === true
-        ? error.addError("Truck with this registration already exists")
-        : error.addError("Error creating truck: verify the body");
-      throw error;
+      throw err;
     }
   }
 

@@ -55,7 +55,7 @@ export class Err extends Error {
     return {
       message: this.message,
       code: this.errorCode,
-      errors: this.errors,
+      errors: [...this.errors],
     };
   }
 }
