@@ -6,7 +6,6 @@ import ITruckRepository from "../../../infrastructure/repositories/IRepository";
 import TruckDTO from "../../dto/TruckDTO";
 import {
   businessRuleErrorFactory,
-  Err,
   getDataErrorFactory,
   persistanceErrorFactory,
 } from "../../utils/Err";
