@@ -6,11 +6,12 @@ import {
   ITruckController,
   expectedTruckJSON,
   expectedBodyTruck,
+  expectedBodyUpdateTruck
 } from "./ITruckController";
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import TruckDTO from "../../../domain/dto/TruckDTO";
 import TruckMap from "../../../infrastructure/mappers/TruckMap";
-import { Get, Route, Tags, Post, Body, Path, Put } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Put, Patch } from "tsoa";
 
 @Route("/trucks")
 @Tags("Trucks")
@@ -19,7 +20,7 @@ export default class TruckController implements ITruckController {
   constructor(
     @Inject(config.services.TruckService.name)
     private truckService: ITruckService
-  ) {}
+  ) { }
 
   /**
    * Returns all the trucks that exist
@@ -88,6 +89,7 @@ export default class TruckController implements ITruckController {
         ["tare", "capacity", "autonomy"]
       )
     ) {
+
       const error = badRequestErrorFactory();
       error.addError("Invalid request body");
       throw error;

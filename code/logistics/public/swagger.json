@@ -170,6 +170,28 @@
 					"registration"
 				],
 				"type": "object"
+			},
+			"expectedBodyUpdateTruck": {
+				"properties": {
+					"autonomy": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"tare": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"autonomy",
+					"capacity",
+					"tare"
+				],
+				"type": "object"
 			}
 		},
 		"securitySchemes": {}

@@ -14,7 +14,6 @@ import TruckDTO from "src/domain/dto/TruckDTO";
 @Service()
 export default class TruckRepository implements IRepository<string> {
   private session: ClientSession | null;
-  constructor() {}
 
   defineSession(session: ClientSession): void {
     if (!session.inTransaction()) {
@@ -52,7 +51,7 @@ export default class TruckRepository implements IRepository<string> {
     }
   }
 
-  async getData(): Promise<Entity<string>[]> {
+  public async getData(): Promise<Entity<string>[]> {
     const error = getDataErrorFactory();
     let data: mongoose.Document[] = [];
     try {
