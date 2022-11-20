@@ -8,8 +8,13 @@ namespace DDDSample1.Infrastructure
 {
     public class DDDSample1DbContext : DbContext
     {
-        public DbSet<Storage> Storages { get; set; }
-        public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<Storage> Storage { get; set; }
+        public DbSet<Delivery> Delivery { get; set; }
+        public DbSet<Address> Address { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<Location> Location { get; set; }
+        public DbSet<ChargingSystem> ChargingSystem { get; set; }
+        public DbSet<Product> Product { get; set; }
 
         public DDDSample1DbContext(DbContextOptions options) : base(options)
         {
@@ -18,7 +23,7 @@ namespace DDDSample1.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new StorageEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new LocationEntityTypeConfiguration());
 
         }
     }

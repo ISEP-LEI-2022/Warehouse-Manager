@@ -5,6 +5,8 @@ namespace EletricGo.Domain.Deliveries {
         public string Name { get; set; }
         public double Weight { get; set; }
         public float LevelOfPolution { get; set; }
+        public Delivery? Delivery { get; set; }
+        public DeliveryId? DeliveryId { get; set; }
 
 
         public Product() {
@@ -16,6 +18,14 @@ namespace EletricGo.Domain.Deliveries {
             Weight = weight;
             LevelOfPolution = levelOfPolution;
         }
+
+        //public Product(string name, double weight, float levelOfPolution, DeliveryId deliveryId) {
+        //    Id = new ProductId(Guid.NewGuid());
+        //    Name = name;
+        //    Weight = weight;
+        //    LevelOfPolution = levelOfPolution;
+        //    DeliveryId = deliveryId;
+        //}
 
     }
 }

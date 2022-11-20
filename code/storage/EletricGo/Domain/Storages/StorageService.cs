@@ -16,7 +16,7 @@ namespace EletricGo.Domain.Storages
 
         public async Task<List<StorageDto>> GetAllAsync()
         {
-            var list = await this._repo.GetAll();
+            var list = await this._repo.GetAllAsync();
 
             List<StorageDto> StorageslistDto = list.ConvertAll<StorageDto>(storage =>
                 new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems));
@@ -26,12 +26,17 @@ namespace EletricGo.Domain.Storages
 
         public async Task<StorageDto> GetByIdAsync(StorageId id)
         {
-              var storage = await this._repo.GetById(id);
+            var storage = await this._repo.GetByIdAsync(id);
 
-            List<StorageDto> StorageslistDto = storage.ConvertAll<StorageDto>(storage =>
-                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems));
+            if(storage == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems);
 
-            return StorageslistDto[0];
+            }
         }
 
         public async Task<StorageDto> AddAsync(CreatingStorageDto dto)
@@ -47,8 +52,8 @@ namespace EletricGo.Domain.Storages
 
         public async Task<StorageDto> UpdateAsync(StorageDto dto)
         {
-            var queryResult = await this._repo.GetById(new StorageId(dto.Id));
-            var storage = queryResult[0];
+            var queryResult = await this._repo.GetByIdAsync(new StorageId(dto.Id));
+            var storage = queryResult;
             
             if (storage == null)
                 return null;
@@ -56,6 +61,7 @@ namespace EletricGo.Domain.Storages
             // change all fields
             storage.changeDesignation(dto.Designation);
             storage.changeLocation(dto.Location);
+            //storage.changeChargingSystems(dto.ChargingSystems);
 
             await this._unitOfWork.CommitAsync();
 
