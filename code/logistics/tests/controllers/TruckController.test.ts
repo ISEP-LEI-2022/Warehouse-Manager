@@ -54,7 +54,7 @@ describe("Create Truck", () => {
         (truckPrototype.updateTruckByRegistration as sinon.SinonStub).restore();
     });
 
-    it("Succefully create Truck", async () => {
+    it("Successfully create Truck", async () => {
         (truckPrototype.createTruck as sinon.SinonStub).callsFake(function (this: TruckDTO) {
             return Promise.resolve(dto);
         });
@@ -63,7 +63,7 @@ describe("Create Truck", () => {
         assert.deepStrictEqual(result, TruckMap.toJSON(dto));
     });
 
-    it("Succefully get Truck by registration", async () => {
+    it("Successfully get Truck by registration", async () => {
         (truckPrototype.getTruckByRegistration as sinon.SinonStub).callsFake(function (this: TruckDTO) {
             return Promise.resolve(dto);
         });
@@ -72,7 +72,7 @@ describe("Create Truck", () => {
         assert.deepStrictEqual(result, body);
     });
 
-    it("Succefully list Trucks", async () => {
+    it("Successfully list Trucks", async () => {
         (truckPrototype.getTrucks as sinon.SinonStub).callsFake(function (this: TruckDTO[]) {
             return Promise.resolve(array_dto);
         });
@@ -81,12 +81,12 @@ describe("Create Truck", () => {
         assert.deepStrictEqual(result, [body]);
     });
 
-    it("Succefully update Truck", async () => {
+    it("Successfully update Truck", async () => {
         (truckPrototype.updateTruckByRegistration as sinon.SinonStub).callsFake(function (this: TruckDTO) {
             return Promise.resolve(update_dto);
         });
 
-        const result = await clc.updateTruckByRegistration(body.registration, update_body);
+        const result = await clc.updateTruckByRegistration(update_body);
         assert.deepStrictEqual(result, update_body);
     });
 
@@ -96,7 +96,7 @@ describe("Create Truck", () => {
         });
 
         try {
-            await clc.updateTruckByRegistration(bad_body.registration, bad_dto);
+            await clc.updateTruckByRegistration(bad_dto);
         } catch (e) {
             assert.deepStrictEqual((e as Error).message, persistanceErrorFactory().message);
         }

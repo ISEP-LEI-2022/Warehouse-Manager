@@ -1,0 +1,61 @@
+
+version: '3.8'
+services:
+  logistics-api:
+    container_name: logistics-api
+    image: logistics-api:dev
+    build:
+      context: ./logistics
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./logistics:/logistics
+    environment:
+      - database=mongodb://mongodb:27017/logistics
+    networks:
+      - mynet
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    hostname: mongodb
+    volumes:
+      - ./volumes/mongodb:/data/db
+    networks:
+      - mynet
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+
+  storage-api:
+    container_name: storage-api
+    image: storage-api:dev
+    build:
+      context: ./storage/src
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./storage:/storage
+    environment:
+      - database=ConnectionString = "Server=tcp:localhost,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+    networks:
+      - mynet
+    ports:
+      - 8000:80
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "SqlServer2019!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+
+
+networks:
+  mynet:
+    driver: bridge
