@@ -35,7 +35,7 @@ const bad_dto = body as TruckDTO;
 const update_dto = update_body as TruckDTO;
 const array_dto = [body as TruckDTO];
 
-describe("Create Truck", () => {
+describe("Test Truck Controller", () => {
     const truckPrototype: TruckService = new TruckService(
         new TruckRepository());
 
