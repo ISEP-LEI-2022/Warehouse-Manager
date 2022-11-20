@@ -43,12 +43,13 @@ export default class RouteRepository implements IRepository<string> {
   }
 
   async exists(identifier: string): Promise<boolean> {
+    
     if (this.session) {
-      return await !!RouteMongoose.exists({ id: identifier }).session(
+      return !!(await RouteMongoose.exists({ idRoute: identifier }).session(
         this.session
-      );
+      ));
     } else {
-      return await !!RouteMongoose.exists({ id: identifier });
+      return !!await (RouteMongoose.exists({ idRoute: identifier }));
     }
   }
 
@@ -64,26 +65,32 @@ export default class RouteRepository implements IRepository<string> {
     }
   }
 
-  async getDataById(identifier: string): Promise<Entity<string>[]> {
+  async getDataById(identifier: string): Promise<Entity<string>> {
     const error = getDataErrorFactory();
-    let data: mongoose.Document[] = [];
     try {
-      data = await RouteMongoose.find({ idRoute: identifier }).session(
-        this.session
-      );
-      return convertToObject(data);
+      const data = await RouteMongoose.findOne({ idRoute: identifier })
+        .session(this.session)
+        .orFail();
+      return RouteMap.toDomain(data);
     } catch (err) {
       error.addError("Error searching data");
       throw error;
     }
   }
 
-  async updateDataById(identifier: string, data: RouteDTO): Promise<Entity<string>> {
+  async updateDataById(
+    identifier: string,
+    data: RouteDTO
+  ): Promise<Entity<string>> {
     const error = persistanceErrorFactory();
     try {
-      const route = (await RouteMongoose.findOneAndUpdate({ idRoute: identifier }, data, {
-       new: true
-     }).orFail());
+      const route = await RouteMongoose.findOneAndUpdate(
+        { idRoute: identifier },
+        data,
+        {
+          new: true,
+        }
+      ).orFail();
 
       const res = RouteMap.toDomain(route);
       return res;

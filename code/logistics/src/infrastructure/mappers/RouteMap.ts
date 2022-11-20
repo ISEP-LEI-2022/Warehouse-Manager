@@ -15,7 +15,7 @@ export default class RouteMap{
         } as RouteDTO;
     }
 
-    public static toPersistence(route: Route): object{
+    public static toPersistence(route: Route): RouteDTO{
         return {
             idRoute: route.identifier.value(),
             idStart: route.idStart.value(),

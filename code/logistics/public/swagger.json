@@ -6,6 +6,45 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"expectedRouteJSON": {
+				"properties": {
+					"extraChargingTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"energyConsumed": {
+						"type": "number",
+						"format": "double"
+					},
+					"timeRequired": {
+						"type": "number",
+						"format": "double"
+					},
+					"distance": {
+						"type": "number",
+						"format": "double"
+					},
+					"idEnd": {
+						"type": "string"
+					},
+					"idStart": {
+						"type": "string"
+					},
+					"idRoute": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"extraChargingTime",
+					"energyConsumed",
+					"timeRequired",
+					"distance",
+					"idEnd",
+					"idStart",
+					"idRoute"
+				],
+				"type": "object"
+			},
 			"expectedBodyRoute": {
 				"properties": {
 					"extraChargingTime": {
@@ -45,7 +84,7 @@
 				],
 				"type": "object"
 			},
-			"expectedRouteJSON": {
+			"expectedPatchBodyRoute": {
 				"properties": {
 					"extraChargingTime": {
 						"type": "number",
@@ -68,9 +107,6 @@
 					},
 					"idStart": {
 						"type": "string"
-					},
-					"idRoute": {
-						"type": "string"
 					}
 				},
 				"required": [
@@ -79,8 +115,7 @@
 					"timeRequired",
 					"distance",
 					"idEnd",
-					"idStart",
-					"idRoute"
+					"idStart"
 				],
 				"type": "object"
 			},
@@ -172,11 +207,35 @@
 	"openapi": "3.0.0",
 	"paths": {
 		"/routes": {
+			"get": {
+				"operationId": "GetRoutes",
+				"responses": {
+					"200": {
+						"description": "JSON with all the routes",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/expectedRouteJSON"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns all the routes that exist",
+				"tags": [
+					"Routes"
+				],
+				"security": [],
+				"parameters": []
+			},
 			"post": {
 				"operationId": "CreateRoute",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Returns a JSON with the created route",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -186,6 +245,7 @@
 						}
 					}
 				},
+				"description": "Creates a new route from the given body and returns the created route",
 				"tags": [
 					"Routes"
 				],
@@ -201,57 +261,33 @@
 						}
 					}
 				}
-			},
-			"get": {
-				"operationId": "GetRoutes",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/expectedRouteJSON"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Routes"
-				],
-				"security": [],
-				"parameters": []
 			}
 		},
-		"/routes/{id}": {
+		"/routes/{idRoute}": {
 			"get": {
 				"operationId": "GetRouteById",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Returns a JSON with the route information",
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/expectedRouteJSON"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/expectedRouteJSON"
 								}
 							}
 						}
 					}
 				},
+				"description": "This method searches for a route from the given id",
 				"tags": [
 					"Routes"
 				],
 				"security": [],
 				"parameters": [
 					{
+						"description": "idRoute of the route",
 						"in": "path",
-						"name": "id",
+						"name": "idRoute",
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -263,7 +299,7 @@
 				"operationId": "UpdateRoute",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Updated route",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -273,14 +309,16 @@
 						}
 					}
 				},
+				"description": "Searches for the route with the given idRoute and updates it with any of the parameters given in the body",
 				"tags": [
 					"Routes"
 				],
 				"security": [],
 				"parameters": [
 					{
+						"description": "Id of the route to be updated",
 						"in": "path",
-						"name": "id",
+						"name": "idRoute",
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -288,11 +326,13 @@
 					}
 				],
 				"requestBody": {
+					"description": "Can update any of the parameters of the route, not all of them are required",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/expectedBodyRoute"
+								"$ref": "#/components/schemas/expectedPatchBodyRoute",
+								"description": "Can update any of the parameters of the route, not all of them are required"
 							}
 						}
 					}
@@ -304,7 +344,7 @@
 				"operationId": "GetTrucks",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "JSON with all the trucks",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -317,6 +357,7 @@
 						}
 					}
 				},
+				"description": "Returns all the trucks that exist",
 				"tags": [
 					"Trucks"
 				],
@@ -327,7 +368,7 @@
 				"operationId": "CreateTruck",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Returns a JSON with the created truck",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -337,6 +378,7 @@
 						}
 					}
 				},
+				"description": "Creates a truck from the given body and returns the created truck",
 				"tags": [
 					"Trucks"
 				],
@@ -352,14 +394,12 @@
 						}
 					}
 				}
-			}
-		},
-		"/trucks/{registration}": {
-			"get": {
-				"operationId": "GetTruckByRegistration",
+			},
+			"put": {
+				"operationId": "UpdateTruck",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Returns a JSON with the updated truck",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -369,12 +409,49 @@
 						}
 					}
 				},
+				"description": "Will update a truck with the given body else if there is no truck with the given registration it will create a new truck",
+				"tags": [
+					"Trucks"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "- Truck body",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyTruck",
+								"description": "- Truck body"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/trucks/{registration}": {
+			"get": {
+				"operationId": "GetTruckByRegistration",
+				"responses": {
+					"200": {
+						"description": "Returns a JSON with the truck if its found else returns an error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedTruckJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets a truck by its registration",
 				"tags": [
 					"Trucks"
 				],
 				"security": [],
 				"parameters": [
 					{
+						"description": "- The registration of the truck",
 						"in": "path",
 						"name": "registration",
 						"required": true,
@@ -383,45 +460,6 @@
 						}
 					}
 				]
-			},
-			"patch": {
-				"operationId": "UpdateTruckByRegistration",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/expectedTruckJSON"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Trucks"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "registration",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/expectedBodyUpdateTruck"
-							}
-						}
-					}
-				}
 			}
 		}
 	},

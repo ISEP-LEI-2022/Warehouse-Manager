@@ -22,5 +22,5 @@ export interface ITruckController {
     createTruck(req: expectedBodyTruck): Promise<expectedBodyTruck>;
     getTruckByRegistration(registration: string): Promise<expectedTruckJSON>;
     getTrucks(): Promise<expectedTruckJSON[]>;
-    updateTruckByRegistration(idRoute:string, req: expectedBodyTruck): Promise<expectedTruckJSON>;
+    updateTruck( req: expectedBodyTruck): Promise<expectedTruckJSON>;
 }

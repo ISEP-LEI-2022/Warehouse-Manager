@@ -22,12 +22,35 @@ export default class TruckController implements ITruckController {
     private truckService: ITruckService
   ) { }
 
+  /**
+   * Returns all the trucks that exist
+   * @returns JSON with all the trucks
+   */
   @Get("/")
   public async getTrucks(): Promise<expectedTruckJSON[]> {
     const truckDTO = await this.truckService.getTrucks();
     return TruckMap.toJSONArray(truckDTO);
   }
 
+  /**
+   * Gets a truck by its registration
+   * @param registration - The registration of the truck
+   * @returns Returns a JSON with the truck if its found else returns an error
+   */
+  @Get("/:registration")
+  public async getTruckByRegistration(
+    @Path() registration: string
+  ): Promise<expectedTruckJSON> {
+    const truckDTO = await this.truckService.getTruckByRegistration(
+      registration
+    );
+    return TruckMap.toJSON(truckDTO);
+  }
+
+  /**
+   * Creates a truck from the given body and returns the created truck
+   * @returns {expectedBodyTruck} Returns a JSON with the created truck
+   */
   @Post("/")
   public async createTruck(
     @Body() body: expectedBodyTruck
@@ -49,32 +72,29 @@ export default class TruckController implements ITruckController {
     return TruckMap.toJSON(truckDTO);
   }
 
-  @Get("/:registration")
-  public async getTruckByRegistration(
-    @Path() registration: string
+  /**
+   * Will update a truck with the given body else if there is no truck with the given registration it will create a new truck
+   * @param body - Truck body
+   * @returns Returns a JSON with the updated truck
+   */
+  @Put("/")
+  async updateTruck(
+    @Body() body: expectedBodyTruck
   ): Promise<expectedTruckJSON> {
-    const truckDTO = await this.truckService.getTruckByRegistration(
-      registration
-    );
-    return TruckMap.toJSON(truckDTO);
-  }
+    //Registration is the only required parameter to update a truck
+    if (
+      !validateRequestParams(
+        body,
+        ["registration"],
+        ["tare", "capacity", "autonomy"]
+      )
+    ) {
 
-  @Patch("/:registration")
-  async updateTruckByRegistration(
-    @Path() registration: string,
-    @Body() body: expectedBodyUpdateTruck
-  ): Promise<expectedTruckJSON> {
-    if (!validateRequestParams(body, ["tare", "capacity", "autonomy"])) {
       const error = badRequestErrorFactory();
       error.addError("Invalid request body");
       throw error;
     }
-    const truck = body as TruckDTO
-    truck.registration = registration
-    const truckDTO = await this.truckService.updateTruckByRegistration(
-      registration,
-      truck
-    );
+    const truckDTO = await this.truckService.updateTruckById(body as TruckDTO);
     return TruckMap.toJSON(truckDTO);
   }
 }
