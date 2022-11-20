@@ -28,15 +28,14 @@ export default class RouteService implements IRouteService {
 
     try {
       const route = RouteMap.toDomain(routeDTO);
-
-      await this.routeRepository.persists(route);
+      !!(await this.routeRepository.exists(routeDTO.idRoute)) === true
+        ? error.addError("Route with this idRoute already exists")
+        : await this.routeRepository.persists(route);
+      if (error.hasErrors()) throw error;
 
       return routeDTO;
     } catch (err) {
-      !!(await this.routeRepository.exists(routeDTO.idRoute)) === true
-        ? error.addError("Route with this idRoute already exists")
-        : error.addError("Error inserting route: verify the body");
-      throw error;
+      throw err;
     }
   }
 

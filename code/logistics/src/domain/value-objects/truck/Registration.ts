@@ -1,6 +1,7 @@
 import ValueObject from "../interfaces/ValueObject";
 import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidRegistration } from "../../utils/UtilityFunctions";
+import TruckRepository from "src/infrastructure/repositories/truck/TruckRepository";
 
 export default class Registration implements ValueObject<string> {
     private registration = "";
@@ -13,7 +14,7 @@ export default class Registration implements ValueObject<string> {
 
     isValidRegistration(registration)
     ? (this.registration = registration)
-    : error.addError("Invalid identifier");
+    : error.addError("Invalid Registration");
     if (error.hasErrors()) throw error;
     }
 
