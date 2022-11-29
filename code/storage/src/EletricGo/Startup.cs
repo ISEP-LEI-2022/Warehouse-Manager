@@ -24,11 +24,7 @@ namespace EletricGo
 
         public IConfiguration Configuration { get; }
 
-#if DEBUG
         string ConnectionString = "Server=tcp:arqsi.database.windows.net,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-#else
-         string ConnectionString = "Server=tcp:arqsi.database.windows.net,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-#endif
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -68,7 +64,9 @@ namespace EletricGo
         {
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            
+            var EnvConnectionString = Environment.GetEnvironmentVariable("DATABASE");
+            if (EnvConnectionString != null) ConnectionString = EnvConnectionString;
+
             services.AddDbContext<DDDSample1DbContext>(options => options.UseSqlServer(ConnectionString).ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
