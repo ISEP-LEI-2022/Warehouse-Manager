@@ -35,3 +35,18 @@ With Docker installed run: `Warehouse-Manager/code:` `docker-compose up`
 Manual test logistics API: `http://localhost:3000/docs`
 
 Manual test storage API: `http://localhost:8000/swagger`
+
+
+## SPA
+
+To run cypress for test:e2e please intall dependencies:
+`apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb`
+
+To run on docker containers:
+`https://github.com/cypress-io/cypress-docker-images`
+
+To install Google Chrome:
+`wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -`
+`sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'`
+`sudo apt-get update`
+`sudo apt-get install google-chrome-stable`
