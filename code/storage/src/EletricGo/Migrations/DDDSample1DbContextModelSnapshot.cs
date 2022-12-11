@@ -59,7 +59,6 @@ namespace EletricGo.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("DeliveryId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<float>("LevelOfPolution")
@@ -212,9 +211,7 @@ namespace EletricGo.Migrations
                 {
                     b.HasOne("EletricGo.Domain.Deliveries.Delivery", "Delivery")
                         .WithMany("Products")
-                        .HasForeignKey("DeliveryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeliveryId");
 
                     b.Navigation("Delivery");
                 });

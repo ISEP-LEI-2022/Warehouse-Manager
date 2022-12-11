@@ -41,6 +41,11 @@ namespace EletricGo.Domain.Storages
 
         public async Task<StorageDto> AddAsync(CreatingStorageDto dto)
         {
+            //check if storage exists
+            var exists = _repo.GetStorageByDesignation(dto.Designation);
+            if (exists.Result)
+                throw new Exception("It already exists a Storage with that Designation");
+
             var storage = new Storage(dto.Designation, dto.Location, dto.ChargingSystems);
 
              await this._repo.AddAsync(storage);
