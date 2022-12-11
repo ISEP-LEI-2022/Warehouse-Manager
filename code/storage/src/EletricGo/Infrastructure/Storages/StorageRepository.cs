@@ -36,11 +36,15 @@ namespace EletricGo.Infrastructure.Storages
 
         public async Task<Storage> GetByIdAsync(StorageId id)
         {
-            var query = _context.Set<Storage>();
-            query.Where(x => id == x.Id).Include(storage => storage.Location).ThenInclude(location => location.Address).ThenInclude(address => address.City).ToList();
-            query.Include(storage => storage.ChargingSystems).ToList();
+            var result = _context.Storage.Where(x => id == x.Id).Include(storage => storage.Location).ThenInclude(location => location.Address).ThenInclude(address => address.City)
+                .Include(storage => storage.ChargingSystems).FirstAsync();
 
-            return await query.FirstOrDefaultAsync();
+            return await result;
+        }
+
+        public async Task<bool> GetStorageByDesignation(string storageName) {
+            if (_context.Storage.Where(x => x.Designation == storageName).Count() > 0) return true;
+            return false;
         }
     }
 }

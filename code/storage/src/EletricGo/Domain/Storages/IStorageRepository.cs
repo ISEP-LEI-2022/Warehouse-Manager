@@ -7,5 +7,6 @@ namespace EletricGo.Domain.Storages
     {
         //Task<List<Storage>> GetAll();
         //Task<List<Storage>> GetById(StorageId storageId);
+        Task<bool> GetStorageByDesignation(string designation);
     }
 }
