@@ -1,0 +1,58 @@
+{
+    "data": [
+        {
+            "extraChargingTime": 0,
+            "energyConsumed": 0,
+            "timeRequired": 0,
+            "distance": 0,
+            "idEnd": "string",
+            "idStart": "string",
+            "idRoute": "string"
+        },
+        {
+            "extraChargingTime": 0,
+            "energyConsumed": 0,
+            "timeRequired": 0,
+            "distance": 0,
+            "idEnd": "string",
+            "idStart": "string",
+            "idRoute": "string"
+        },
+        {
+            "extraChargingTime": 0,
+            "energyConsumed": 0,
+            "timeRequired": 0,
+            "distance": 0,
+            "idEnd": "string",
+            "idStart": "string",
+            "idRoute": "string"
+        },
+        {
+            "extraChargingTime": 0,
+            "energyConsumed": 0,
+            "timeRequired": 0,
+            "distance": 0,
+            "idEnd": "string",
+            "idStart": "string",
+            "idRoute": "string"
+        },
+        {
+            "extraChargingTime": 0,
+            "energyConsumed": 0,
+            "timeRequired": 0,
+            "distance": 0,
+            "idEnd": "string",
+            "idStart": "string",
+            "idRoute": "string"
+        },
+        {
+            "extraChargingTime": 0,
+            "energyConsumed": 0,
+            "timeRequired": 0,
+            "distance": 0,
+            "idEnd": "string",
+            "idStart": "string",
+            "idRoute": "string"
+        }
+    ]
+}

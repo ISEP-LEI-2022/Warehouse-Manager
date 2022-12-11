@@ -39,6 +39,9 @@ Manual test storage API: `http://localhost:8000/swagger`
 
 ## SPA
 
+## To Run SPA on CMD
+`Warehouse-Manager/code/spa:` `npm run dev`
+
 To run cypress for test:e2e please intall dependencies:
 `apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb`
 
