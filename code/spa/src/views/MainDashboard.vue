@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import LogisticsService from "@/service/LogisticsService";
-import StorageService from "@/service/StorageService";
+import LogisticsService from "@/services/LogisticsService";
+import StorageService from "@/services/StorageService";
 import CardItem from "@/components/CardItem.vue";
 
 

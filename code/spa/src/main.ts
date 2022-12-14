@@ -101,8 +101,10 @@ import TriStateCheckbox from "primevue/tristatecheckbox";
 import VirtualScroller from "primevue/virtualscroller";
 import CardItem from "@/components/CardItem.vue";
 import IconElement from "@/components/icons/IconElement.vue";
+import CrudDialog from "./components/CrudDialog.vue";
 
 import "@/assets/styles.scss";
+
 
 
 const app = createApp(App);
@@ -209,5 +211,6 @@ app.component("TriStateCheckbox", TriStateCheckbox);
 app.component("VirtualScroller", VirtualScroller);
 app.component("CardItem", CardItem);
 app.component("IconElement", IconElement);
+app.component("CrudDialog", CrudDialog);
 
 app.mount("#app");

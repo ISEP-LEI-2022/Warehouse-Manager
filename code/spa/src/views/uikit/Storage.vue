@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import StorageService from "@/service/StorageService";
-import { useLayout } from "@/layout/composables/layout";
-
-const { contextPath } = useLayout();
+import StorageService from "@/services/StorageService";
+import CrudDialog from "../../components/CrudDialog.vue";
 
 const expandedRows = ref([]);
 const deliveries = ref([]);
 const storages = ref([]);
 const storageService = new StorageService();
+
+const buildAddress = (
+  street: string,
+  door: string,
+  floor: string,
+  postalCode: string,
+  city: string
+) => {
+  return `${street}, ${door} - ${floor}, ${postalCode}, ${city}`;
+};
 
 onMounted(() => {
   storageService.getDeliveries().then((data) => (deliveries.value = data));
@@ -19,107 +27,79 @@ onMounted(() => {
 <template>
   <TabView>
     <TabPanel header="Storages">
+      <CrudDialog title="Add new Storage" content="" :edit="false" />
       <div class="card">
-        <h5>Row Expand</h5>
         <DataTable
           :value="storages"
+          :rows="10"
+          :paginator="true"
           v-model:expandedRows="expandedRows"
           dataKey="id"
           responsiveLayout="scroll"
         >
           <Column :expander="true" headerStyle="width: 3rem" />
-          <Column field="name" header="Name" :sortable="true">
+          <Column field="designation" header="Designation" :sortable="true">
             <template #body="slotProps">
-              {{ slotProps.data.name }}
+              {{ slotProps.data.designation }}
             </template>
           </Column>
-          <Column header="Image">
+          <Column field="address" header="Address">
             <template #body="slotProps">
-              <img
-                :src="
-                  contextPath + 'demo/images/product/' + slotProps.data.image
-                "
-                :alt="slotProps.data.image"
-                class="shadow-2"
-                width="100"
+              {{
+                buildAddress(
+                  slotProps.data.location.address.street,
+                  slotProps.data.location.address.door,
+                  slotProps.data.location.address.floor,
+                  slotProps.data.location.address.postalCode,
+                  slotProps.data.location.address.city.name
+                )
+              }}
+            </template>
+          </Column>
+          <Column field="location" header="Location" :sortable="true">
+            <template #body="slotProps">
+              {{
+                `(${slotProps.data.location.latitude},${slotProps.data.location.latitude},${slotProps.data.location.latitude})`
+              }}
+            </template>
+          </Column>
+          <Column headerStyle="width:4rem">
+            <template #body="slotProps">
+              <CrudDialog
+                :title="`Edit Storage '${slotProps.data.designation}'`"
+                content=""
+                :edit="true"
               />
-            </template>
-          </Column>
-          <Column field="price" header="Price" :sortable="true">
-            <template #body="slotProps">
-              {{ slotProps.data.price }}
-            </template>
-          </Column>
-          <Column field="category" header="Category" :sortable="true">
-            <template #body="slotProps">
-              {{ slotProps.data.category }}
-            </template></Column
-          >
-          <Column field="rating" header="Reviews" :sortable="true">
-            <template #body="slotProps">
-              <Rating
-                :modelValue="slotProps.data.rating"
-                :readonly="true"
-                :cancel="false"
-              />
-            </template>
-          </Column>
-          <Column field="inventoryStatus" header="Status" :sortable="true">
-            <template #body="slotProps">
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
             </template>
           </Column>
           <template #expansion="slotProps">
             <div class="p-3">
-              <h5>Orders for {{ slotProps.data.name }}</h5>
+              <h5>Charging Systems</h5>
               <DataTable
-                :value="slotProps.data.orders"
+                :value="slotProps.data.chargingSystems"
                 responsiveLayout="scroll"
               >
                 <Column field="id" header="Id" :sortable="true">
                   <template #body="slotProps">
-                    {{ slotProps.data.id }}
+                    {{ slotProps.data.id.value }}
                   </template>
                 </Column>
-                <Column field="customer" header="Customer" :sortable="true">
+                <Column
+                  field="chargingTime"
+                  header="Charging Time [min]"
+                  :sortable="true"
+                >
                   <template #body="slotProps">
-                    {{ slotProps.data.customer }}
-                  </template>
-                </Column>
-                <Column field="date" header="Date" :sortable="true">
-                  <template #body="slotProps">
-                    {{ slotProps.data.date }}
-                  </template>
-                </Column>
-                <Column field="amount" header="Amount" :sortable="true">
-                  <template #body="slotProps">
-                    {{ slotProps.data.amount }}
-                  </template>
-                </Column>
-                <Column field="status" header="Status" :sortable="true">
-                  <template #body="slotProps">
-                    <span
-                      :class="
-                        'order-badge order-' +
-                        (slotProps.data.status
-                          ? slotProps.data.status.toLowerCase()
-                          : '')
-                      "
-                      >{{ slotProps.data.status }}</span
-                    >
+                    {{ slotProps.data.chargingTime }}
                   </template>
                 </Column>
                 <Column headerStyle="width:4rem">
-                  <template #body>
-                    <Button icon="pi pi-search" />
+                  <template #body="slotProps">
+                    <CrudDialog
+                      :title="`Edit Charging System '${slotProps.data.id.value}'`"
+                      content=""
+                      :edit="true"
+                    />
                   </template>
                 </Column>
               </DataTable>
@@ -129,15 +109,99 @@ onMounted(() => {
       </div>
     </TabPanel>
     <TabPanel header="Deliveries">
-      <p class="line-height-3 m-0">
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-        explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
-        odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-        voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non
-        numquam eius modi.
-      </p>
+      <CrudDialog title="Add new Storage" content="" :edit="false" />
+      <div class="card">
+        <DataTable
+          :value="deliveries"
+          :rows="10"
+          :paginator="true"
+          v-model:expandedRows="expandedRows"
+          dataKey="id"
+          responsiveLayout="scroll"
+        >
+          <Column :expander="true" headerStyle="width: 3rem" />
+          <Column field="deliveryDate" header="Date" :sortable="true">
+            <template #body="slotProps">
+              {{ new Date(slotProps.data.deliveryDate).toLocaleString() }}
+            </template>
+          </Column>
+          <Column field="deliveryWeight" header="Weight [kg]" :sortable="true">
+            <template #body="slotProps">
+              {{ slotProps.data.deliveryWeight }}
+            </template>
+          </Column>
+          <Column field="finalStorageId" header="Final Storage">
+            <template #body="slotProps">
+              <a href="#/uikit/storage">
+                {{
+                  storages.find((item) => {
+                    return item?.id == slotProps.data.finalStorageId;
+                  })?.designation
+                }}
+              </a>
+            </template>
+          </Column>
+          <Column field="timeToLoad" header="Time To Load [min]">
+            <template #body="slotProps">
+              {{ slotProps.data.timeToLoad }}
+            </template>
+          </Column>
+          <Column field="timeToUnload" header="Time To Unload [min]">
+            <template #body="slotProps">
+              {{ slotProps.data.timeToUnload }}
+            </template>
+          </Column>
+          <Column headerStyle="width:4rem">
+            <template #body="slotProps">
+              <CrudDialog
+                :title="`Edit Delivery from ${new Date(
+                  slotProps.data.deliveryDate
+                ).toLocaleString()}`"
+                content=""
+                :edit="true"
+              />
+            </template>
+          </Column>
+          <template #expansion="slotProps">
+            <div class="p-3">
+              <h5>Products</h5>
+              <DataTable
+                :value="slotProps.data.products"
+                responsiveLayout="scroll"
+              >
+                <Column field="name" header="Name" :sortable="true">
+                  <template #body="slotProps">
+                    {{ slotProps.data.name }}
+                  </template>
+                </Column>
+                <Column field="weight" header="Weight [kg]" :sortable="true">
+                  <template #body="slotProps">
+                    {{ slotProps.data.weight }}
+                  </template>
+                </Column>
+                <Column
+                  field="levelOfPolution"
+                  header="Level Of Polution"
+                  :sortable="true"
+                >
+                  <template #body="slotProps">
+                    {{ slotProps.data.levelOfPolution }}
+                  </template>
+                </Column>
+                <Column headerStyle="width:4rem">
+                  <template #body="slotProps">
+                    <CrudDialog
+                      :title="`Edit Product '${slotProps.data.name}'`"
+                      content=""
+                      :edit="true"
+                    />
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </template>
+        </DataTable>
+      </div>
     </TabPanel>
   </TabView>
 </template>
