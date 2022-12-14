@@ -1,7 +1,28 @@
 version: '3.8'
 services:
+
+  spa:
+    container_name: spa
+    image: spa:dev
+    build:
+      context: ./spa
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./spa:/spa
+    environment:
+      - storage_api_endpoint=http://storage-api:80/
+      - logistics_api_endpoint=http://logistics-api:3000/
+    networks:
+      - mynet
+    ports:
+      - 8080:8080
+    depends_on:
+      - logistics-api
+      - storage-api
+
   logistics-api:
     container_name: logistics-api
+    hostname: logistics-api
     image: logistics-api:dev
     build:
       context: ./logistics
@@ -30,6 +51,7 @@ services:
 
   storage-api:
     container_name: storage-api
+    hostname: storage-api
     image: storage-api:dev
     build:
       context: ./storage/src
@@ -37,7 +59,7 @@ services:
       target: final
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=sa;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
     networks:
       - mynet
     ports:
@@ -46,11 +68,11 @@ services:
       - sqlserver
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    build:
+      context: ./storage/sqlserver
+      dockerfile: Dockerfile
     hostname: local.sqlserver
-    environment:
-      - SA_PASSWORD=Adminxyz22#
-      - ACCEPT_EULA=Y
     networks:
       - mynet
     ports:

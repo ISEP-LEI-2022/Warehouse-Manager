@@ -36,3 +36,7 @@ Manual test logistics API: `http://localhost:3000/docs`
 
 Manual test storage API: `http://localhost:8000/swagger`
 
+
+
+## To Run SPA directly on Docker Container:
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa sh -c "npm run dev"`
