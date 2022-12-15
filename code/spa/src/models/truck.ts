@@ -1,18 +1,13 @@
 export default class Truck {
-  registration: string;
-  capacity: number;
-  autonomy: number;
-  tare: number;
+  Registration: string;
+  Capacity: number;
+  Autonomy: number;
+  Tare: number;
 
-  constructor(
-    registration: string,
-    capacity: number,
-    autonomy: number,
-    tare: number
-  ) {
-    this.registration = registration;
-    this.capacity = capacity;
-    this.autonomy = autonomy;
-    this.tare = tare;
+  constructor(json: any) {
+    this.Registration = json.registration;
+    this.Capacity = json.capacity;
+    this.Autonomy = json.autonomy;
+    this.Tare = json.tare;
   }
 }

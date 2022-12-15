@@ -1,22 +1,42 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
-const display = ref(false);
+const emit = defineEmits(["submit"]);
 
 const open = () => {
   display.value = true;
-  console.log(props.model);
 };
 const close = () => {
   display.value = false;
+  emit("submit", properties.value);
 };
+const validation_class = (invalid: boolean) => {
+  if (invalid) return "p-invalid";
+  return "";
+};
+const model_properties = computed(() => {
+  const keys = Object.getOwnPropertyNames(props.model);
+  const values = Object.values(props.model);
+  const properties = [];
+  for (let i = 0; i < keys.length; i++) {
+    properties.push({
+      key: keys[i],
+      value: values[i],
+      type: typeof values[i],
+    });
+  }
+  return properties;
+});
 
 const props = defineProps<{
   title: string;
-  content: string;
   edit: boolean;
   model: Object;
+  invalid_fields: string[];
 }>();
+
+const properties = ref(model_properties);
+const display = ref(false);
 </script>
 
 <template>
@@ -29,17 +49,16 @@ const props = defineProps<{
       :modal="true"
     >
       <div class="card p-fluid">
-        <div class="field">
-          <label for="name1">Name</label>
-          <InputText id="name1" type="text" />
-        </div>
-        <div class="field">
-          <label for="email1">Email</label>
-          <InputText id="email1" type="text" />
-        </div>
-        <div class="field">
-          <label for="age1">Age</label>
-          <InputText id="age1" type="text" />
+        <div v-for="(property, index) in properties" :key="index" class="field">
+          <strong
+            ><label :for="property.key">{{ property.key }}</label></strong
+          >
+          <InputText
+            :id="property.key"
+            :type="property.type"
+            v-model="properties[index].value"
+            :class="validation_class(property.key in props.invalid_fields)"
+          />
         </div>
       </div>
       <template #footer>

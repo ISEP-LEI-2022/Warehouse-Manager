@@ -3,10 +3,12 @@ import { onMounted, ref } from "vue";
 import LogisticsService from "@/services/LogisticsService";
 import StorageService from "@/services/StorageService";
 import CardItem from "@/components/CardItem.vue";
+import type Truck from "@/models/truck";
+import type Route from "@/models/route";
 
 
-const trucks = ref([]);
-const routes = ref([]);
+const trucks = ref([] as Truck[]);
+const routes = ref([] as Route[]);
 const deliveries = ref([]);
 const storages = ref([]);
 const logisticsService = new LogisticsService();
@@ -40,24 +42,24 @@ onMounted(() => {
           responsiveLayout="scroll"
         >
           <Column
-            field="registration"
+            field="Registration"
             header="Registration"
             style="width: 25%"
           ></Column>
           <Column
-            field="autonomy"
+            field="Autonomy"
             header="Autonomy [min]"
             :sortable="true"
             style="width: 25%"
           ></Column>
           <Column
-            field="capacity"
+            field="Capacity"
             header="Capacity [kg]"
             :sortable="true"
             style="width: 30%"
           ></Column>
           <Column
-            field="tare"
+            field="Tare"
             header="Tare [kg]"
             :sortable="true"
             style="width: 20%"
@@ -72,27 +74,27 @@ onMounted(() => {
           :paginator="true"
           responsiveLayout="scroll"
         >
-          <Column field="idRoute" header="Route" style="width: 15%" />
+          <Column field="Route" header="Route" style="width: 15%" />
           <Column
-            field="idStart"
+            field="Start"
             header="Start"
             :sortable="true"
             style="width: 20%"
           />
           <Column
-            field="idEnd"
+            field="End"
             header="End"
             :sortable="true"
             style="width: 20%"
           />
           <Column
-            field="distance"
+            field="Distance"
             header="Distance [km]"
             :sortable="true"
             style="width: 25%"
           />
           <Column
-            field="timeRequired"
+            field="TimeRequired"
             header="Time [min]"
             :sortable="true"
             style="width: 20%"

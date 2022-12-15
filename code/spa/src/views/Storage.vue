@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import StorageService from "@/services/StorageService";
-import CrudDialog from "../../components/CrudDialog.vue";
+import CrudDialog from "@/components/CrudDialog.vue";
 
 const expandedRows = ref([]);
 const deliveries = ref([]);

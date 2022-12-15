@@ -16,12 +16,12 @@ const router = createRouter({
         {
           path: "/uikit/logistics",
           name: "logistics",
-          component: () => import("@/views/uikit/Logistics.vue"),
+          component: () => import("@/views/Logistics.vue"),
         },
         {
           path: "/uikit/storage",
           name: "storage",
-          component: () => import("@/views/uikit/Storage.vue"),
+          component: () => import("@/views/Storage.vue"),
         },
       ],
     }
