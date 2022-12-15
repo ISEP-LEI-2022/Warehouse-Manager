@@ -6,7 +6,6 @@ import CardItem from "@/components/CardItem.vue";
 import type Truck from "@/models/truck";
 import type Route from "@/models/route";
 
-
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
 const deliveries = ref([]);
@@ -35,6 +34,12 @@ onMounted(() => {
     <div class="col-12 xl:col-6">
       <div class="card">
         <h5>Trucks</h5>
+        <Message
+          v-for="msg of logisticsService.Truck_Errors"
+          :severity="msg.severity"
+          :key="msg.content"
+          >{{ msg.content }}</Message
+        >
         <DataTable
           :value="trucks"
           :rows="3"
@@ -68,6 +73,12 @@ onMounted(() => {
       </div>
       <div class="card">
         <h5>Routes</h5>
+        <Message
+          v-for="msg of logisticsService.Route_Errors"
+          :severity="msg.severity"
+          :key="msg.content"
+          >{{ msg.content }}</Message
+        >
         <DataTable
           :value="routes"
           :rows="3"

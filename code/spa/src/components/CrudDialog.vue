@@ -1,26 +1,43 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(["submit", "newValue"]);
 
 const open = () => {
   display.value = true;
 };
-const close = () => {
-  display.value = false;
+const submit = () => {
   emit("submit", properties.value);
 };
 const validation_class = (invalid: boolean) => {
   if (invalid) return "p-invalid";
   return "";
 };
+const error_class = (error: boolean) => {
+  if (error) return "p-error";
+  return "";
+};
+const validate_field = (field_name: string) => {
+  if (field_name in props.invalid_fields) {
+    return true;
+  }
+  return false;
+};
+const disable_field = (field_name: string) => {
+  if (field_name in props.disabled_fields) {
+    return true;
+  }
+  return false;
+};
+
 const model_properties = computed(() => {
   const keys = Object.getOwnPropertyNames(props.model);
   const values = Object.values(props.model);
   const properties = [];
   for (let i = 0; i < keys.length; i++) {
     properties.push({
-      key: keys[i],
+      index: i,
+      name: keys[i],
       value: values[i],
       type: typeof values[i],
     });
@@ -33,6 +50,8 @@ const props = defineProps<{
   edit: boolean;
   model: Object;
   invalid_fields: string[];
+  required_fields: string[];
+  disabled_fields: string[];
 }>();
 
 const properties = ref(model_properties);
@@ -51,20 +70,26 @@ const display = ref(false);
       <div class="card p-fluid">
         <div v-for="(property, index) in properties" :key="index" class="field">
           <strong
-            ><label :for="property.key">{{ property.key }}</label></strong
+            ><label :for="property.name">{{ property.name }}</label></strong
           >
           <InputText
-            :id="property.key"
+            :id="property.name"
             :type="property.type"
             v-model="properties[index].value"
-            :class="validation_class(property.key in props.invalid_fields)"
+            :class="validation_class(validate_field(property.name))"
+            :disabled="disable_field(property.name)"
           />
+          <small
+            v-if="validate_field(property.name)"
+            :class="error_class(validate_field(property.name))"
+            >Please enter a valid {{ property.name }}</small
+          >
         </div>
       </div>
       <template #footer>
         <Button
-          label="Ok"
-          @click="close"
+          label="Save"
+          @click="submit"
           icon="pi pi-check"
           class="p-button-outlined"
         />

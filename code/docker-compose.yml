@@ -10,8 +10,8 @@ services:
     volumes:
       - ./spa:/spa
     environment:
-      - storage_api_endpoint=http://storage-api:80/
-      - logistics_api_endpoint=http://logistics-api:3000/
+      - VITE_STORAGE_API=http://storage-api:80/
+      - VITE_LOGISTICS_API=http://localhost:3000/
     networks:
       - mynet
     ports:
