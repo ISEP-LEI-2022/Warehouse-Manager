@@ -1,10 +1,7 @@
 import { ClientSession } from "mongoose";
 import { Trip } from "../../aggregates";
 import TripDTO from "../../dto/TripDTO";
-import {
-  businessRuleErrorFactory,
-  getDataErrorFactory,
-} from "../../utils/Err";
+import { businessRuleErrorFactory, getDataErrorFactory } from "../../utils/Err";
 import TripMap from "../../../infrastructure/mappers/TripMap";
 import { Inject, Service } from "typedi";
 import config from "../../../config";
@@ -66,7 +63,10 @@ export default class TripService implements ITripService {
     const error = businessRuleErrorFactory();
 
     try {
-      const updated = await this.tripRepository.updateDataById(tripDTO.idTrip,tripDTO);
+      const updated = await this.tripRepository.updateDataById(
+        tripDTO.idTrip,
+        tripDTO
+      );
       return TripMap.toDTO(updated as Trip);
     } catch (err) {
       error.addError("Error updating truck");

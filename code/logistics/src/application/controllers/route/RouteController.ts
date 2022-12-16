@@ -23,7 +23,7 @@ export default class RouteController implements IRouteController {
   ) {}
 
   /**
-   * Returns all the routes that exist
+   * @summary Returns all the routes that exist
    * @returns JSON with all the routes
    */
   @Get("/")
@@ -33,7 +33,7 @@ export default class RouteController implements IRouteController {
   }
 
   /**
-   * This method searches for a route from the given id
+   * @summary This method searches for a route from the given id
    * @param idRoute idRoute of the route
    * @returns {expectedRouteJSON} Returns a JSON with the route information
    */
@@ -44,7 +44,7 @@ export default class RouteController implements IRouteController {
   }
 
   /**
-   * Creates a new route from the given body and returns the created route
+   * @summary Creates a new route from the given body and returns the created route
    * @returns {expectedBodyRoute} Returns a JSON with the created route
    */
   @Post("/")
@@ -72,7 +72,7 @@ export default class RouteController implements IRouteController {
   }
 
   /**
-   * Searches for the route with the given idRoute and updates it with any of the parameters given in the body
+   * @summary Searches for the route with the given idRoute and updates it with any of the parameters given in the body
    * @param idRoute Id of the route to be updated
    * @param body Can update any of the parameters of the route, not all of them are required
    * @returns Updated route

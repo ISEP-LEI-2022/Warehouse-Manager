@@ -27,7 +27,6 @@ export default class Route implements AggregateRoot<string> {
     energyConsumed: number,
     extraChargingTime: number
   ) {
-    const error = businessRuleErrorFactory();
     try {
       this.idRoute = new RouteIdentifier(idRoute);
       this.idStartProp = new WarehouseIdentifier(idStart);
@@ -37,9 +36,8 @@ export default class Route implements AggregateRoot<string> {
       this.energyConsumedProp = new Energy(energyConsumed);
       this.extraChargingTimeProp = new Duration(extraChargingTime);
     } catch (err) {
-      error.addError(err as string);
+      throw err;
     }
-    if (error.hasErrors()) throw error;
   }
 
   get identifier() {
