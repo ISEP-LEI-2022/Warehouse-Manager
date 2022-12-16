@@ -36,7 +36,11 @@ export default class TruckRepository implements IRepository<string> {
       const saved = await truckDocument.save({ session: this.session });
       return saved;
     } catch (err) {
-      error.addError(err as string);
+      if (err instanceof Error) {
+        error.addError(err.message);
+      }else{
+        error.addError("Error persisting data");
+      }      
       throw error;
     }
   }

@@ -5,7 +5,7 @@ import {
   RouteIdentifier,
   TripIdentifier,
   DateTrip,
-  DeliveryIdentifier
+  DeliveryIdentifier,
 } from "../../value-objects";
 import AggregateRoot from "../AggregateRoot";
 
@@ -23,17 +23,17 @@ export default class Trip implements AggregateRoot<string> {
     routes: string[],
     deliveries: string[]
   ) {
-    const error = businessRuleErrorFactory();
     try {
-        this.idTrip = new TripIdentifier(idTrip);
-        this.registrationProp = new Registration(registration);
-        this.dateTripProp = new DateTrip(dateTrip);
-        this.routesProp = routes.map(route => new RouteIdentifier(route));
-        this.deliveriesProp = deliveries.map(delivery => new DeliveryIdentifier(delivery));
-    }catch(err){
-        error.addError(err as string);
+      this.idTrip = new TripIdentifier(idTrip);
+      this.registrationProp = new Registration(registration);
+      this.dateTripProp = new DateTrip(dateTrip);
+      this.routesProp = routes.map((route) => new RouteIdentifier(route));
+      this.deliveriesProp = deliveries.map(
+        (delivery) => new DeliveryIdentifier(delivery)
+      );
+    } catch (err) {
+      throw err;
     }
-    if (error.hasErrors()) throw error;
   }
 
   get identifier() {
@@ -41,7 +41,7 @@ export default class Trip implements AggregateRoot<string> {
   }
 
   sameAs(ent2: Entity<string>): boolean {
-      return this.idTrip.equals(ent2.identifier);
+    return this.idTrip.equals(ent2.identifier);
   }
 
   get registration() {
@@ -59,5 +59,4 @@ export default class Trip implements AggregateRoot<string> {
   get deliveries() {
     return this.deliveriesProp;
   }
-
 }

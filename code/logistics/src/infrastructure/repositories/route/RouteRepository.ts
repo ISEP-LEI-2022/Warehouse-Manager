@@ -37,7 +37,11 @@ export default class RouteRepository implements IRepository<string> {
       const saved = await routeDocument.save({ session: this.session });
       return saved;
     } catch (err) {
-      error.addError("Error persisting data");
+      if (err instanceof Error) {
+        error.addError(err.message);
+      }else{
+        error.addError("Error persisting data");
+      }
       throw error;
     }
   }
