@@ -4,8 +4,8 @@ import LogisticsService from "@/services/LogisticsService";
 import CrudDialog from "@/components/CrudDialog.vue";
 import type Truck from "@/models/truck";
 import type Route from "@/models/route";
-import RouteMap from "@/mappers/RouteMap";
-import TruckMap from "@/mappers/TruckMap";
+import RouteMap from "@/services/mappers/RouteMap";
+import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();

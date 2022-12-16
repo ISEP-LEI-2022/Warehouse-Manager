@@ -1,7 +1,10 @@
-import TruckMap from "@/mappers/TruckMap";
-import RouteMap from "@/mappers/RouteMap";
 import type Truck from "@/models/truck";
 import type Route from "@/models/route";
+import type TruckDTO from "@/services/dtos/TruckDTO";
+import type RouteDTO from "@/services/dtos/RouteDTO";
+import TruckMap from "@/services/mappers/TruckMap";
+import RouteMap from "@/services/mappers/RouteMap";
+
 
 export default class LogisticsService {
   Truck_Errors: Array<any>;
@@ -15,22 +18,24 @@ export default class LogisticsService {
   getTrucks() {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
-        const data = await response.json();
+        const json = await response.json();
+        console.log(json)
+        var data: Array<TruckDTO> = json;
         if (!response.ok) {
           this.Truck_Errors.push({
             content: response.statusText,
             severity: "error",
           });
-          return TruckMap.fromJSONArray([]);
+          return TruckMap.fromDTOArray([]);
         }
-        return TruckMap.fromJSONArray(data);
+        return TruckMap.fromDTOArray(data);
       })
       .catch((error) => {
         this.Truck_Errors.push({
           content: error,
           severity: "error",
         });
-        return TruckMap.fromJSONArray([]);
+        return TruckMap.fromDTOArray([]);
       });
   }
 
@@ -50,23 +55,24 @@ export default class LogisticsService {
   getRoutes() {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
       .then(async (response) => {
-        const data = await response.json();
+        const json = await response.json();
+        var data: Array<RouteDTO> = json
         if (!response.ok) {
           this.Route_Errors.push({
             content: response.statusText,
             severity: "error",
           });
-          return RouteMap.fromJSONArray([]);
+          return RouteMap.fromDTOArray([]);
         }
 
-        return RouteMap.fromJSONArray(data);
+        return RouteMap.fromDTOArray(data);
       })
       .catch((error) => {
         this.Route_Errors.push({
           content: error,
           severity: "error",
         });
-        return RouteMap.fromJSONArray([]);
+        return RouteMap.fromDTOArray([]);
       });
   }
 

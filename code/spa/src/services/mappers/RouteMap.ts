@@ -1,7 +1,8 @@
 import Route from "@/models/route";
+import type RouteDTO from "../dtos/RouteDTO";
 
 export default class RouteMap {
-  public static fromJSONArray(trucks: any): Route[] {
+  public static fromDTOArray(trucks: Array<RouteDTO>): Route[] {
     const truckList: Route[] = [];
     for (const truck of trucks) {
       truckList.push(

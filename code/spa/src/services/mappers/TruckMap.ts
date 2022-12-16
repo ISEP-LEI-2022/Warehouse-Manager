@@ -1,7 +1,8 @@
 import Truck from "@/models/truck";
+import type TruckDTO from "../dtos/TruckDTO";
 
 export default class TruckMap {
-  public static fromJSONArray(trucks: any): Truck[] {
+  public static fromDTOArray(trucks: Array<TruckDTO>): Truck[] {
     const truckList: Truck[] = [];
     if (trucks) {
       for (const truck of trucks) {
