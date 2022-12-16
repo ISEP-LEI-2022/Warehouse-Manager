@@ -38,7 +38,6 @@ export default class RouteRepository implements IRepository<string> {
       return saved;
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err.message)
         error.addError(err.message);
       }else{
         error.addError("Error persisting data");
