@@ -10,12 +10,6 @@ const submit = () => {
   emit("submit", properties.value);
 };
 
-const disable_field = (field_name: string) => {
-  if (field_name in props.disabled_fields) {
-    return true;
-  }
-  return false;
-};
 
 function unCamelCase(str: string) {
   return (
@@ -79,7 +73,6 @@ const display = ref(false);
             :id="property.name"
             :type="property.type"
             v-model="properties[index].value"
-            :disabled="disable_field(property.name)"
           />
           <small v-if="props.help_text_fields[property.name]">{{
             props.help_text_fields[property.name]
