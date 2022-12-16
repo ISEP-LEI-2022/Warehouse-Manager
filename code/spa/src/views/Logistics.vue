@@ -9,7 +9,6 @@ import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
-
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
 const logisticsService = new LogisticsService();
