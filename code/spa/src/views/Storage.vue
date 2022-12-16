@@ -67,7 +67,6 @@ onMounted(() => {
             <template #body="slotProps">
               <CrudDialog
                 :title="`Edit Storage '${slotProps.data.designation}'`"
-                content=""
                 :edit="true"
               />
             </template>
@@ -97,7 +96,6 @@ onMounted(() => {
                   <template #body="slotProps">
                     <CrudDialog
                       :title="`Edit Charging System '${slotProps.data.id.value}'`"
-                      content=""
                       :edit="true"
                     />
                   </template>
@@ -157,7 +155,6 @@ onMounted(() => {
                 :title="`Edit Delivery from ${new Date(
                   slotProps.data.deliveryDate
                 ).toLocaleString()}`"
-                content=""
                 :edit="true"
               />
             </template>
@@ -192,7 +189,6 @@ onMounted(() => {
                   <template #body="slotProps">
                     <CrudDialog
                       :title="`Edit Product '${slotProps.data.name}'`"
-                      content=""
                       :edit="true"
                     />
                   </template>

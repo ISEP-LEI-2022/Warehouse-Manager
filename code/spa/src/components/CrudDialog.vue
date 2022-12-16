@@ -17,17 +17,33 @@ const disable_field = (field_name: string) => {
   return false;
 };
 
+function unCamelCase(str: string) {
+  return (
+    str
+      // insert a space between lower & upper
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      // space before last upper in a sequence followed by lower
+      .replace(/\b([A-Z]+)([A-Z])([a-z])/, "$1 $2$3")
+      // uppercase the first character
+      .replace(/^./, function (str) {
+        return str.toUpperCase();
+      })
+  );
+}
+
 const model_properties = computed(() => {
-  const keys = Object.getOwnPropertyNames(props.model);
-  const values = Object.values(props.model);
   const properties = [];
-  for (let i = 0; i < keys.length; i++) {
-    properties.push({
-      index: i,
-      name: keys[i],
-      value: values[i],
-      type: typeof values[i],
-    });
+  if (props.model) {
+    const keys = Object.getOwnPropertyNames(props.model);
+    const values = Object.values(props.model);
+    for (let i = 0; i < keys.length; i++) {
+      properties.push({
+        index: i,
+        name: keys[i],
+        value: values[i],
+        type: typeof values[i],
+      });
+    }
   }
   return properties;
 });
@@ -56,7 +72,9 @@ const display = ref(false);
       <div class="card p-fluid">
         <div v-for="(property, index) in properties" :key="index" class="field">
           <strong
-            ><label :for="property.name">{{ property.name }} *</label></strong
+            ><label :for="property.name"
+              >{{ unCamelCase(property.name) }} *</label
+            ></strong
           >
           <InputText
             :id="property.name"
@@ -64,10 +82,9 @@ const display = ref(false);
             v-model="properties[index].value"
             :disabled="disable_field(property.name)"
           />
-          <small
-            v-if="props.help_text_fields[property.name]"
-            >{{ props.help_text_fields[property.name] }}</small
-          >
+          <small v-if="props.help_text_fields[property.name]">{{
+            props.help_text_fields[property.name]
+          }}</small>
         </div>
       </div>
       <template #footer>
