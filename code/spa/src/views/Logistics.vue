@@ -13,7 +13,12 @@ const routes = ref([] as Route[]);
 const logisticsService = new LogisticsService();
 
 const help_truck_fields = ref({ Registration: "Format: XX-00-XX" });
-const help_route_fields = ref([]);
+const help_route_fields = ref({
+  Distance: "Bigger than 0",
+  TimeRequired: "Bigger than 0",
+  EnergyConsumed: "Bigger than 0",
+  ExtraChargingTime: "Bigger than 0",
+});
 const required_truck_fields = ref([]);
 const required_route_fields = ref([]);
 const disabled_truck_fields = ref(["Registration"]);

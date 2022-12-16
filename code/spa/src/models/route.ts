@@ -20,10 +20,10 @@ export default class route {
       this.Route = "";
       this.Start = "";
       this.End = "";
-      this.Distance = 0;
-      this.TimeRequired = 0;
-      this.EnergyConsumed = 0;
-      this.ExtraChargingTime = 0;
+      this.Distance = 1;
+      this.TimeRequired = 1;
+      this.EnergyConsumed = 1;
+      this.ExtraChargingTime = 1;
     }
   }
 
