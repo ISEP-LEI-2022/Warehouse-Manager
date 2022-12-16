@@ -268,7 +268,7 @@
 						}
 					}
 				},
-				"description": "Returns all the routes that exist",
+				"summary": "Returns all the routes that exist",
 				"tags": [
 					"Routes"
 				],
@@ -289,7 +289,7 @@
 						}
 					}
 				},
-				"description": "Creates a new route from the given body and returns the created route",
+				"summary": "Creates a new route from the given body and returns the created route",
 				"tags": [
 					"Routes"
 				],
@@ -322,7 +322,7 @@
 						}
 					}
 				},
-				"description": "This method searches for a route from the given id",
+				"summary": "This method searches for a route from the given id",
 				"tags": [
 					"Routes"
 				],
@@ -353,7 +353,7 @@
 						}
 					}
 				},
-				"description": "Searches for the route with the given idRoute and updates it with any of the parameters given in the body",
+				"summary": "Searches for the route with the given idRoute and updates it with any of the parameters given in the body",
 				"tags": [
 					"Routes"
 				],
@@ -453,7 +453,7 @@
 						}
 					}
 				},
-				"description": "Will update a trip with the given body else if there is no trip with the given idTrip it will create a new trip",
+				"summary": "Will update a trip with the given body else if there is no trip with the given idTrip it will create a new trip",
 				"tags": [
 					"Trips"
 				],
@@ -488,7 +488,7 @@
 						}
 					}
 				},
-				"description": "This method searches for a trip from the given id",
+				"summary": "This method searches for a trip from the given id",
 				"tags": [
 					"Trips"
 				],
@@ -524,7 +524,7 @@
 						}
 					}
 				},
-				"description": "Returns all the trucks that exist",
+				"summary": "Returns all the trucks that exist",
 				"tags": [
 					"Trucks"
 				],
@@ -545,7 +545,7 @@
 						}
 					}
 				},
-				"description": "Creates a truck from the given body and returns the created truck",
+				"summary": "Creates a truck from the given body and returns the created truck",
 				"tags": [
 					"Trucks"
 				],
@@ -576,7 +576,7 @@
 						}
 					}
 				},
-				"description": "Will update a truck with the given body else if there is no truck with the given registration it will create a new truck",
+				"summary": "Will update a truck with the given body else if there is no truck with the given registration it will create a new truck",
 				"tags": [
 					"Trucks"
 				],
@@ -611,7 +611,7 @@
 						}
 					}
 				},
-				"description": "Gets a truck by its registration",
+				"summary": "Gets a truck by its registration",
 				"tags": [
 					"Trucks"
 				],

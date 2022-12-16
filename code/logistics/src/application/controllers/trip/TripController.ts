@@ -32,7 +32,7 @@ export default class TripController implements ITripController {
   }
 
   /**
-   * This method searches for a trip from the given id
+   * @summary This method searches for a trip from the given id
    * @param idTrip idTrip of the trip
    * @returns {expectedTripJSON} Returns a JSON with the trip information
    */
@@ -54,7 +54,7 @@ export default class TripController implements ITripController {
         "registration",
         "date",
         "routes",
-        "deliveries"
+        "deliveries",
       ])
     ) {
       const error = badRequestErrorFactory();
@@ -66,7 +66,7 @@ export default class TripController implements ITripController {
   }
 
   /**
-   * Will update a trip with the given body else if there is no trip with the given idTrip it will create a new trip
+   * @summary Will update a trip with the given body else if there is no trip with the given idTrip it will create a new trip
    * @param idTrip idTrip of the trip
    * @param body body of the trip
    * @returns {expectedBodyTrip} Returns a JSON with the updated trip

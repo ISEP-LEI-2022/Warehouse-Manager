@@ -22,7 +22,7 @@ export default class TruckController implements ITruckController {
   ) { }
 
   /**
-   * Returns all the trucks that exist
+   * @summary Returns all the trucks that exist
    * @returns JSON with all the trucks
    */
   @Get("/")
@@ -32,7 +32,7 @@ export default class TruckController implements ITruckController {
   }
 
   /**
-   * Gets a truck by its registration
+   * @summary Gets a truck by its registration
    * @param registration - The registration of the truck
    * @returns Returns a JSON with the truck if its found else returns an error
    */
@@ -47,7 +47,7 @@ export default class TruckController implements ITruckController {
   }
 
   /**
-   * Creates a truck from the given body and returns the created truck
+   * @summary Creates a truck from the given body and returns the created truck
    * @returns {expectedBodyTruck} Returns a JSON with the created truck
    */
   @Post("/")
@@ -72,7 +72,7 @@ export default class TruckController implements ITruckController {
   }
 
   /**
-   * Will update a truck with the given body else if there is no truck with the given registration it will create a new truck
+   * @summary Will update a truck with the given body else if there is no truck with the given registration it will create a new truck
    * @param body - Truck body
    * @returns Returns a JSON with the updated truck
    */

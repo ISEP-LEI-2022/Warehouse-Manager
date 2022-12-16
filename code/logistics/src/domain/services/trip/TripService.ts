@@ -1,14 +1,13 @@
 import { ClientSession } from "mongoose";
 import { Trip } from "../../aggregates";
 import TripDTO from "../../dto/TripDTO";
-import {
-  businessRuleErrorFactory,
-  getDataErrorFactory,
-} from "../../utils/Err";
+import { businessRuleErrorFactory, getDataErrorFactory } from "../../utils/Err";
 import TripMap from "../../../infrastructure/mappers/TripMap";
 import { Inject, Service } from "typedi";
 import config from "../../../config";
 import ITripRepository from "../../../infrastructure/repositories/IRepository";
+import IRouteRepository from "../../../infrastructure/repositories/IRepository";
+import ITruckRepository from "../../../infrastructure/repositories/IRepository";
 import ITripService from "./ITripService";
 
 @Service()
@@ -17,7 +16,11 @@ export default class TripService implements ITripService {
 
   constructor(
     @Inject(config.repositories.TripRepository.name)
-    private tripRepository: ITripRepository<string>
+    private tripRepository: ITripRepository<string>,
+    @Inject(config.repositories.RouteRepository.name)
+    private routeRepository: IRouteRepository<string>,
+    @Inject(config.repositories.TruckRepository.name)
+    private truckRepository: ITruckRepository<string>
   ) {
     this.session;
   }
@@ -27,11 +30,42 @@ export default class TripService implements ITripService {
 
     try {
       const trip = TripMap.toDomain(tripDTO);
+
+      // Check if the routes exist
+      for (const route in tripDTO.routes) {
+        if (!(await this.routeRepository.exists(tripDTO.routes[route]))) {
+          error.addError("Route " + tripDTO.routes[route] + " does not exist");
+          throw error;
+        }
+      }
+
+      // Check if the truck exists
+      if (!(await this.truckRepository.exists(tripDTO.registration))) {
+        error.addError(
+          "Truck with " + tripDTO.registration + " registration does not exist"
+        );
+        throw error;
+      }
+
+      // Check if the delivery exists
+      for (const delivery in tripDTO.deliveries) {
+        fetch("http://localhost:8000/api/deliveries/" + tripDTO.deliveries[delivery]).then(
+          (response) => {
+            if (response.status === 404) {
+              error.addError(
+                "Delivery " + tripDTO.deliveries[delivery] + " does not exist"
+              );
+              throw error;
+            }
+          }
+        );
+      }
+
       !!(await this.tripRepository.exists(tripDTO.idTrip)) === true
         ? error.addError("Trip with this idTrip already exists")
         : await this.tripRepository.persists(trip);
-      if (error.hasErrors()) throw error;
 
+      if (error.hasErrors()) throw error;
       return tripDTO;
     } catch (err) {
       throw err;
@@ -66,7 +100,10 @@ export default class TripService implements ITripService {
     const error = businessRuleErrorFactory();
 
     try {
-      const updated = await this.tripRepository.updateDataById(tripDTO.idTrip,tripDTO);
+      const updated = await this.tripRepository.updateDataById(
+        tripDTO.idTrip,
+        tripDTO
+      );
       return TripMap.toDTO(updated as Trip);
     } catch (err) {
       error.addError("Error updating truck");

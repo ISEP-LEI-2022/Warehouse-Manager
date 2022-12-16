@@ -8,6 +8,7 @@ using EletricGo.Infrastructure.Shared;
 using EletricGo.Infrastructure.Storages;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.OpenApi.Models;
 using System;
@@ -25,7 +26,8 @@ namespace EletricGo
         public IConfiguration Configuration { get; }
 
         //string ConnectionString = "Server=tcp:arqsi.database.windows.net,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        string ConnectionString = "Server = localhost; Database= EletricGo; Integrated Security = SSPI;";
+        //string ConnectionString = "Server = localhost; Database= EletricGo; Integrated Security = SSPI;";
+        string ConnectionString = "tcp:local.sqlserver,1433;Database=ARQSI;User ID = SA; Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -59,6 +61,20 @@ namespace EletricGo
             {
                 endpoints.MapControllers();
             });
+
+            UpdateDatabase(app);
+
+            //var context = app.ApplicationServices.GetRequiredService<DbContext>();
+            //context.Database.Migrate();
+
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app) {
+            using( var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope() ) {
+                using(var context = serviceScope.ServiceProvider.GetService<DDDSample1DbContext>()) {
+                    context.Database.Migrate();
+                }
+            }
         }
 
         public void ConfigureMyServices(IServiceCollection services)
@@ -71,7 +87,9 @@ namespace EletricGo
             var EnvConnectionString = Environment.GetEnvironmentVariable("DATABASE");
             if (EnvConnectionString != null) ConnectionString = EnvConnectionString;
 
-            services.AddDbContext<DDDSample1DbContext>(options => options.UseSqlServer(ConnectionString).ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
+             services.AddDbContext<DDDSample1DbContext>(options => options.UseSqlServer(ConnectionString).ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
+
+            
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 

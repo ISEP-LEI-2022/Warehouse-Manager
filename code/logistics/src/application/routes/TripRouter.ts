@@ -31,21 +31,21 @@ router.get("/:idTrip?", async (req: Request, res: Response) => {
     );
 
     if (req.params.idTrip !== undefined) {
-        const trip = await getTripInstance.getTripById(
-            req.params.idTrip as string
-          );
-          res.status(200).json(trip);
-      } else {
-        const listTrips = await getTripInstance.getTrips();
-        res.status(200).json(listTrips);
-      }
-    } catch (err) {
-      if (err instanceof Err) {
-        res.status(err.code).send(err.object());
-      } else {
-        res.status(500).send("Unexpected Error" + err);
-      }
+      const trip = await getTripInstance.getTripById(
+        req.params.idTrip as string
+      );
+      res.status(200).json(trip);
+    } else {
+      const listTrips = await getTripInstance.getTrips();
+      res.status(200).json(listTrips);
     }
+  } catch (err) {
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
 });
 
 router.put("/", async (req: Request, res: Response) => {
@@ -53,9 +53,7 @@ router.put("/", async (req: Request, res: Response) => {
     const updateTripInstance = <ITripController>(
       container.get(config.controllers.TripController.name)
     );
-    const updated = await updateTripInstance.updateTripById(
-      req.body
-    );
+    const updated = await updateTripInstance.updateTripById(req.body);
     res.status(200).json(updated);
   } catch (err) {
     if (err instanceof Err) {
