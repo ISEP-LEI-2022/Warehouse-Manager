@@ -9,20 +9,7 @@ const open = () => {
 const submit = () => {
   emit("submit", properties.value);
 };
-const validation_class = (invalid: boolean) => {
-  if (invalid) return "p-invalid";
-  return "";
-};
-const error_class = (error: boolean) => {
-  if (error) return "p-error";
-  return "";
-};
-const validate_field = (field_name: string) => {
-  if (field_name in props.invalid_fields) {
-    return true;
-  }
-  return false;
-};
+
 const disable_field = (field_name: string) => {
   if (field_name in props.disabled_fields) {
     return true;
@@ -48,9 +35,8 @@ const model_properties = computed(() => {
 const props = defineProps<{
   title: string;
   edit: boolean;
-  model: Object;
-  invalid_fields: string[];
-  required_fields: string[];
+  model: object;
+  help_text_fields: {};
   disabled_fields: string[];
 }>();
 
@@ -70,19 +56,17 @@ const display = ref(false);
       <div class="card p-fluid">
         <div v-for="(property, index) in properties" :key="index" class="field">
           <strong
-            ><label :for="property.name">{{ property.name }}</label></strong
+            ><label :for="property.name">{{ property.name }} *</label></strong
           >
           <InputText
             :id="property.name"
             :type="property.type"
             v-model="properties[index].value"
-            :class="validation_class(validate_field(property.name))"
             :disabled="disable_field(property.name)"
           />
           <small
-            v-if="validate_field(property.name)"
-            :class="error_class(validate_field(property.name))"
-            >Please enter a valid {{ property.name }}</small
+            v-if="props.help_text_fields[property.name]"
+            >{{ props.help_text_fields[property.name] }}</small
           >
         </div>
       </div>

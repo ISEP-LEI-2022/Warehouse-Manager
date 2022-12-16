@@ -12,8 +12,8 @@ const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
 const logisticsService = new LogisticsService();
 
-const invalid_truck_fields = ref([] as string[]);
-const invalid_route_fields = ref([]);
+const help_truck_fields = ref({ Registration: "Format: XX-00-XX" });
+const help_route_fields = ref([]);
 const required_truck_fields = ref([]);
 const required_route_fields = ref([]);
 const disabled_truck_fields = ref(["Registration"]);
@@ -64,7 +64,7 @@ const addRoute = (route: Array<any>) => {
       () => {
         routes.value.push(new_route);
       },
-      () => { invalid_truck_fields.value.push("Registration"); }
+      () => {}
     )
   );
 };
@@ -104,10 +104,11 @@ const processResponse = (
       <Toast />
       <CrudDialog
         v-if="logisticsService.Truck_Errors.length == 0"
-        title="Add new Truck"
+        title="Add
+      new Truck"
         :edit="false"
         :model="new Truck()"
-        :invalid_fields="invalid_truck_fields"
+        :help_text_fields="help_truck_fields"
         :required_fields="required_truck_fields"
         :disabled_fields="[]"
         @submit="addTruck"
@@ -153,11 +154,11 @@ const processResponse = (
               <CrudDialog
                 :title="`Edit Truck '${slotProps.data.Registration}'`"
                 :model="slotProps.data"
-                :invalid_fields="invalid_truck_fields"
                 :required_fields="required_truck_fields"
                 :disabled_fields="disabled_truck_fields"
                 @submit="updateTruck"
                 :edit="true"
+                :help_text_fields="help_truck_fields"
               />
             </template>
           </Column>
@@ -171,11 +172,10 @@ const processResponse = (
         title="Add new Route"
         :edit="false"
         :model="new Route()"
-        :invalid_fields="invalid_route_fields"
         :required_fields="required_route_fields"
         :disabled_fields="disabled_route_fields"
+        :help_text_fields="help_route_fields"
         @submit="addRoute"
-        :open_close="open_close_dialog"
       />
       <div class="card">
         <Message
@@ -232,11 +232,10 @@ const processResponse = (
               <CrudDialog
                 :title="`Edit Route '${slotProps.data.Route}'`"
                 :model="slotProps.data"
-                :invalid_fields="invalid_route_fields"
-                :required_fields="required_route_fields"
                 :disabled_fields="disabled_route_fields"
                 @submit="updateRoute"
                 :edit="true"
+                :help_text_fields="help_route_fields"
               />
             </template>
           </Column>

@@ -21,9 +21,9 @@ export default class Truck {
   toJSON() {
     return {
       registration: this.Registration,
-      capacity: this.Capacity,
-      autonomy: this.Autonomy,
-      tare: this.Tare,
+      capacity: Number(this.Capacity),
+      autonomy: Number(this.Autonomy),
+      tare: Number(this.Tare),
     };
   }
 }

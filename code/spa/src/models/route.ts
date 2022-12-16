@@ -30,10 +30,10 @@ export default class route {
   toJSON(): any {
     return {
       idRoute: this.Route,
-      extraChargingTime: this.ExtraChargingTime,
-      energyConsumed: this.EnergyConsumed,
-      timeRequired: this.TimeRequired,
-      distance: this.Distance,
+      extraChargingTime: Number(this.ExtraChargingTime),
+      energyConsumed: Number(this.EnergyConsumed),
+      timeRequired: Number(this.TimeRequired),
+      distance: Number(this.Distance),
       idEnd: this.End,
       idStart: this.Start,
     };
