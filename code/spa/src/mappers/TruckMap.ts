@@ -8,7 +8,14 @@ export default class TruckMap {
         truckList.push(new Truck(truck));
       }
     }
-
     return truckList;
+  }
+
+  public static fromAnyArray(trucks: Array<any>): Truck {
+    return new Truck();
+  }
+
+  public static toJson(truck: Truck): string {
+    return "";
   }
 }
