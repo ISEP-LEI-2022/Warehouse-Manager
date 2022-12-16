@@ -38,7 +38,7 @@ export default class LogisticsService {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(truck.toJSON(), null, "\t"),
+      body: TruckMap.toJson(truck),
     };
     const response = await fetch(
       import.meta.env.VITE_LOGISTICS_API + "trucks",
@@ -74,7 +74,7 @@ export default class LogisticsService {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(route.toJSON(), null, "\t"),
+      body: RouteMap.toJson(route),
     };
     const response = await fetch(
       import.meta.env.VITE_LOGISTICS_API + "routes",

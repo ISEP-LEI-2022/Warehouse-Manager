@@ -53,7 +53,6 @@ const props = defineProps<{
   edit: boolean;
   model: object;
   help_text_fields: {};
-  disabled_fields: string[];
 }>();
 
 const properties = ref(model_properties);

@@ -2,8 +2,10 @@
 import { ref, onBeforeMount } from "vue";
 import LogisticsService from "@/services/LogisticsService";
 import CrudDialog from "@/components/CrudDialog.vue";
-import Truck from "@/models/truck";
-import Route from "@/models/route";
+import type Truck from "@/models/truck";
+import type Route from "@/models/route";
+import RouteMap from "@/mappers/RouteMap";
+import TruckMap from "@/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
@@ -19,10 +21,6 @@ const help_route_fields = ref({
   EnergyConsumed: "Bigger than 0",
   ExtraChargingTime: "Bigger than 0",
 });
-const required_truck_fields = ref([]);
-const required_route_fields = ref([]);
-const disabled_truck_fields = ref(["Registration"]);
-const disabled_route_fields = ref([]);
 
 onBeforeMount(() => {
   logisticsService.getTrucks().then((data) => (trucks.value = data));
@@ -30,21 +28,14 @@ onBeforeMount(() => {
 });
 
 const addTruck = (truck: Array<any>) => {
-  let obj = Object.assign({}, ...truck.map((x) => ({ [x.name]: x.value })));
-
-  const new_truck = new Truck();
-  new_truck.Registration = obj.Registration;
-  new_truck.Capacity = obj.Capacity;
-  new_truck.Autonomy = obj.Autonomy;
-  new_truck.Tare = obj.Tare;
+  const new_truck = TruckMap.fromAnyArray(truck);
   logisticsService.createTruck(new_truck).then((response) =>
     processResponse(
       response,
       "Create Truck",
       () => {
         trucks.value.push(new_truck);
-      },
-      () => {}
+      }
     )
   );
 };
@@ -56,25 +47,15 @@ const updateTruck = () => {
     life: 3000,
   });
 };
-
 const addRoute = (route: Array<any>) => {
-  let obj = Object.assign({}, ...route.map((x) => ({ [x.name]: x.value })));
-  const new_route = new Route();
-  new_route.Route = obj.Route;
-  new_route.Start = obj.Start;
-  new_route.End = obj.End;
-  new_route.Distance = obj.Distance;
-  new_route.TimeRequired = obj.TimeRequired;
-  new_route.EnergyConsumed = obj.EnergyConsumed;
-  new_route.ExtraChargingTime = obj.ExtraChargingTime;
+  const new_route = RouteMap.fromAnyArray(route);
   logisticsService.createRoute(new_route).then((response) =>
     processResponse(
       response,
       "Create Route",
       () => {
         routes.value.push(new_route);
-      },
-      () => {}
+      }
     )
   );
 };
@@ -86,12 +67,11 @@ const updateRoute = () => {
     life: 3000,
   });
 };
-
 const processResponse = (
   resp: any,
   message: string = "",
   onSuccess: Function,
-  onError: Function
+  onError: Function = ()=> {}
 ) => {
   if ("code" in resp) {
     toast.add({
@@ -122,9 +102,8 @@ const processResponse = (
         title="Add
       new Truck"
         :edit="false"
-        :model="new Truck()"
+        :model="TruckMap.empty()"
         :help_text_fields="help_truck_fields"
-        :required_fields="required_truck_fields"
         :disabled_fields="[]"
         @submit="addTruck"
       />
@@ -169,11 +148,9 @@ const processResponse = (
               <CrudDialog
                 :title="`Edit Truck '${slotProps.data.Registration}'`"
                 :model="slotProps.data"
-                :required_fields="required_truck_fields"
-                :disabled_fields="disabled_truck_fields"
-                @submit="updateTruck"
                 :edit="true"
                 :help_text_fields="help_truck_fields"
+                @submit="updateTruck"
               />
             </template>
           </Column>
@@ -186,9 +163,7 @@ const processResponse = (
         v-if="logisticsService.Route_Errors.length == 0"
         title="Add new Route"
         :edit="false"
-        :model="new Route()"
-        :required_fields="required_route_fields"
-        :disabled_fields="disabled_route_fields"
+        :model="RouteMap.empty()"
         :help_text_fields="help_route_fields"
         @submit="addRoute"
       />
@@ -247,10 +222,9 @@ const processResponse = (
               <CrudDialog
                 :title="`Edit Route '${slotProps.data.Route}'`"
                 :model="slotProps.data"
-                :disabled_fields="disabled_route_fields"
-                @submit="updateRoute"
                 :edit="true"
                 :help_text_fields="help_route_fields"
+                @submit="updateRoute"
               />
             </template>
           </Column>

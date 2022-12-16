@@ -47,7 +47,6 @@ services:
       - mynet
     ports:
       - 27017:27017
-    restart: unless-stopped
 
   storage-api:
     container_name: storage-api
