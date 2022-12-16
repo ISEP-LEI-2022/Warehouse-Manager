@@ -119,6 +119,72 @@
 				],
 				"type": "object"
 			},
+			"expectedTripJSON": {
+				"properties": {
+					"deliveries": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"routes": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"date": {
+						"type": "string"
+					},
+					"registration": {
+						"type": "string"
+					},
+					"idTrip": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"deliveries",
+					"routes",
+					"date",
+					"registration",
+					"idTrip"
+				],
+				"type": "object"
+			},
+			"expectedBodyTrip": {
+				"properties": {
+					"deliveries": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"routes": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"date": {
+						"type": "string"
+					},
+					"registration": {
+						"type": "string"
+					},
+					"idTrip": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"deliveries",
+					"routes",
+					"date",
+					"registration",
+					"idTrip"
+				],
+				"type": "object"
+			},
 			"expectedTruckJSON": {
 				"properties": {
 					"autonomy": {
@@ -315,6 +381,129 @@
 						}
 					}
 				}
+			}
+		},
+		"/trips": {
+			"get": {
+				"operationId": "GetTrips",
+				"responses": {
+					"200": {
+						"description": "JSON with all the trips",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/expectedTripJSON"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"summary": "Returns all the trips that exist",
+				"tags": [
+					"Trips"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateTrip",
+				"responses": {
+					"200": {
+						"description": "Returns a JSON with the created trip",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedBodyTrip"
+								}
+							}
+						}
+					}
+				},
+				"summary": "Creates a new trip from the given body and returns the created trip",
+				"tags": [
+					"Trips"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyTrip"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "UpdateTripById",
+				"responses": {
+					"200": {
+						"description": "Returns a JSON with the updated trip",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedBodyTrip"
+								}
+							}
+						}
+					}
+				},
+				"description": "Will update a trip with the given body else if there is no trip with the given idTrip it will create a new trip",
+				"tags": [
+					"Trips"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "body of the trip",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/expectedBodyTrip",
+								"description": "body of the trip"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/trips/{idTrip}": {
+			"get": {
+				"operationId": "GetTripById",
+				"responses": {
+					"200": {
+						"description": "Returns a JSON with the trip information",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedTripJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "This method searches for a trip from the given id",
+				"tags": [
+					"Trips"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "idTrip of the trip",
+						"in": "path",
+						"name": "idTrip",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/trucks": {
