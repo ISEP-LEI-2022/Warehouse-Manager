@@ -11,7 +11,7 @@ import {
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import RouteDTO from "../../../domain/dto/RouteDTO";
 import RouteMap from "../../../infrastructure/mappers/RouteMap";
-import { Get, Route, Tags, Post, Body, Path, Put, Patch } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Patch } from "tsoa";
 
 @Route("/routes")
 @Tags("Routes")

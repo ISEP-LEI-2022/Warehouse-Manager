@@ -1,5 +1,6 @@
 import { Application } from "express";
 import mongoose from "mongoose";
+import { TripMongoose } from "../infrastructure/schemas/TripSchema";
 import config from "../config";
 import { RouteMongoose } from "../infrastructure/schemas/RouteSchema";
 import { TruckMongoose } from "../infrastructure/schemas/TruckSchema";
@@ -18,14 +19,16 @@ async function appLoader({
     maxPoolSize: 10, // Maintain up to 10 socket connections
     serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
     socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-    family: 4 // Use IPv4, skip trying IPv6
+    family: 4, // Use IPv4, skip trying IPv6
   };
 
   await mongoose.connect(mongoDB_HOST, options).then(
-    () => { console.log(`Connected to database! - ${mongoDB_HOST}`) },
-    err => {
-      console.log('Unable to connect to the database. Exiting..')
-      process.exit()
+    () => {
+      console.log(`Connected to database! - ${mongoDB_HOST}`);
+    },
+    (err) => {
+      console.log("Unable to connect to the database. Exiting..");
+      process.exit();
     }
   );
 
@@ -40,6 +43,10 @@ async function appLoader({
     name: "TruckSchema",
     model: TruckMongoose,
   };
+  const TripSchema = {
+    name: "TripSchema",
+    model: TripMongoose,
+  };
 
   /*
    * Controllers
@@ -51,6 +58,10 @@ async function appLoader({
   const TruckController = {
     name: config.controllers.TruckController.name,
     path: config.controllers.TruckController.path,
+  };
+  const TripController = {
+    name: config.controllers.TripController.name,
+    path: config.controllers.TripController.path,
   };
 
   /*
@@ -64,6 +75,11 @@ async function appLoader({
     name: config.services.TruckService.name,
     path: config.services.TruckService.path,
   };
+  const TripService = {
+    name: config.services.TripService.name,
+    path: config.services.TripService.path,
+  };
+
   /*
    * Repositories
    */
@@ -75,17 +91,20 @@ async function appLoader({
     name: config.repositories.TruckRepository.name,
     path: config.repositories.TruckRepository.path,
   };
+  const TripRepository = {
+    name: config.repositories.TripRepository.name,
+    path: config.repositories.TripRepository.path,
+  };
 
   dependencyInjector({
-    models: [RouteSchema, TruckSchema],
-    controllers: [RouteController, TruckController],
-    services: [RouteService, TruckService],
-    repositories: [RouteRepository, TruckRepository],
+    models: [RouteSchema, TruckSchema, TripSchema],
+    controllers: [RouteController, TruckController, TripController],
+    services: [RouteService, TruckService, TripService],
+    repositories: [RouteRepository, TruckRepository, TripRepository],
   });
 
   expressLoader(expressApp);
   console.log("Configurations loaded successfully.");
-
 }
 
 export default appLoader;

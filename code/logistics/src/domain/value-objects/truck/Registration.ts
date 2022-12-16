@@ -1,9 +1,8 @@
-import ValueObject from "../interfaces/ValueObject";
 import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidRegistration } from "../../utils/UtilityFunctions";
-import TruckRepository from "src/infrastructure/repositories/truck/TruckRepository";
+import EntityIdentifier from "../interfaces/EntityIdentifier";
 
-export default class Registration implements ValueObject<string> {
+export default class Registration implements EntityIdentifier<string> {
     private registration = "";
 
     /**
@@ -25,7 +24,7 @@ export default class Registration implements ValueObject<string> {
     return this.registration;
     }
 
-    equals(o: ValueObject<string>): boolean {
+    equals(o: EntityIdentifier<string>): boolean {
     if (this === o) {
     return true;
     }

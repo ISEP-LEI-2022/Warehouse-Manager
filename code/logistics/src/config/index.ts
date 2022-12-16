@@ -11,6 +11,10 @@ export default {
       name: "TruckService",
       path: "../domain/services/truck/TruckService",
     },
+    TripService: {
+      name: "TripService",
+      path: "../domain/services/trip/TripService",
+    },
   },
 
   /*
@@ -25,6 +29,10 @@ export default {
       name: "TruckRepository",
       path: "../infrastructure/repositories/truck/TruckRepository",
     },
+    TripRepository: {
+      name: "TripRepository",
+      path: "../infrastructure/repositories/trip/TripRepository",
+    },
   },
 
   /*
@@ -38,6 +46,10 @@ export default {
     TruckController: {
       name: "TruckController",
       path: "../application/controllers/truck/TruckController",
+    },
+    TripController: {
+      name: "TripController",
+      path: "../application/controllers/trip/TripController",
     },
   },
 };
