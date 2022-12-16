@@ -48,8 +48,13 @@ const addTruck = (truck: Array<any>) => {
     )
   );
 };
-const updateTruck = (truck: Array<any>) => {
-  console.log(truck);
+const updateTruck = () => {
+  toast.add({
+    severity: "error",
+    summary: "Not implemented",
+    detail: "Not possible to update Truck yet",
+    life: 3000,
+  });
 };
 
 const addRoute = (route: Array<any>) => {
@@ -73,8 +78,13 @@ const addRoute = (route: Array<any>) => {
     )
   );
 };
-const updateRoute = (route: any) => {
-  console.log(route);
+const updateRoute = () => {
+  toast.add({
+    severity: "error",
+    summary: "Not implemented",
+    detail: "Not possible to update Route yet",
+    life: 3000,
+  });
 };
 
 const processResponse = (
