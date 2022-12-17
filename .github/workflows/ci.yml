@@ -28,6 +28,6 @@ jobs:
         run: docker push 1180910/logistics-api:node-16-slim-${{ steps.date.outputs.date }}
       - name: Build Latest Docker image
         working-directory: ./code/logistics
-        run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:node-16-slim:latest
+        run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:latest
       - name: Docker Push Latest
-        run: docker push 1180910/logistics-api:node-16-slim:latest
+        run: docker push 1180910/logistics-api:latest
