@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
 import StorageService from "@/services/StorageService";
 import CrudDialog from "@/components/CrudDialog.vue";
+import StorageMap from "@/services/mappers/StorageMap";
+import type Storage from "@/models/storage";
 
 const expandedRows = ref([]);
 const deliveries = ref([]);
-const storages = ref([]);
+const storages = ref([] as Storage[]);
 const storageService = new StorageService();
 
 const buildAddress = (
@@ -18,8 +20,7 @@ const buildAddress = (
   return `${street}, ${door} - ${floor}, ${postalCode}, ${city}`;
 };
 
-onMounted(() => {
-  storageService.getDeliveries().then((data) => (deliveries.value = data));
+onBeforeMount(() => {
   storageService.getStorages().then((data) => (storages.value = data));
 });
 </script>

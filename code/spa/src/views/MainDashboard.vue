@@ -5,11 +5,13 @@ import StorageService from "@/services/StorageService";
 import CardItem from "@/components/CardItem.vue";
 import type Truck from "@/models/truck";
 import type Route from "@/models/route";
+import type Storage from "@/models/storage";
+
 
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
 const deliveries = ref([]);
-const storages = ref([]);
+const storages = ref([] as Storage[]);
 const logisticsService = new LogisticsService();
 const storageService = new StorageService();
 
@@ -156,7 +158,7 @@ onMounted(() => {
           responsiveLayout="scroll"
         >
           <Column
-            field="designation"
+            field="Designation"
             header="Designation"
             style="width: 35%"
           ></Column>

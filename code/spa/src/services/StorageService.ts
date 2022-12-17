@@ -1,3 +1,8 @@
+//import type Storage from "@/models/storage";
+import type StorageDTO from "@/services/dtos/StorageDTO";
+import StorageMap from "@/services/mappers/StorageMap";
+
+
 const contextPath = import.meta.env.BASE_URL;
 
 export default class StorageService {
@@ -16,11 +21,45 @@ export default class StorageService {
       .then((d) => d.data);
   }
 
-  getStorages() {
+  /*getStorages() {
     return fetch(contextPath + "demo/data/storages.json")
       .then((res) => res.json())
       .then((d) => d.data);
+  }*/
+
+
+
+
+  getStorages() {
+    const headers = {
+      
+    };
+    return fetch("https://localhost:7067/api/Storages")
+      .then(async (response) => {
+        const json = await response.json();
+        console.log(json)
+        var data: Array<StorageDTO> = json;
+        if (!response.ok) {
+          this.Storage_Errors.push({
+            content: response.statusText,
+            severity: "error",
+          });
+          return StorageMap.fromDTOArray([]);
+        }
+        return StorageMap.fromDTOArray(data);
+      })
+      .catch((error) => {
+        this.Storage_Errors.push({
+          content: error,
+          severity: "error",
+        });
+        return StorageMap.fromDTOArray([]);
+      });
   }
+
+
+
+
 
   getStorageById(id: string) {
     return fetch(contextPath + "demo/data/storages.json")
