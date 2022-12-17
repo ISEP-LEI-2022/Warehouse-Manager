@@ -28,6 +28,8 @@ services:
       context: ./logistics
       dockerfile: Dockerfile
       target: dev
+    volumes:
+      - ./logistics:/logistics
     environment:
       - database=mongodb://mongodb:27017/logistics
     networks:
