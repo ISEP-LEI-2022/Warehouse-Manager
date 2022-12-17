@@ -4,7 +4,7 @@
 
 ## To Run logistics API directly on Docker Container:
 
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports logistics-api sh -c "npm run dev"`
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports logistics-api npm run dev`
 
 
 ## To Run on CMD
@@ -17,7 +17,7 @@
 
 ## To Run logistics API tests directly on Docker Container:
 
-`Warehouse-Manager/code:` `docker-compose -f docker-compose.yml run --rm --service-ports logistics-api sh -c "npm test"`
+`Warehouse-Manager/code:` `docker-compose run logistics-api npm run test`
 
 ## To Run tests on CMD
 `Warehouse-Manager/code/logistics:` `npm test`
@@ -40,8 +40,12 @@ Manual test storage API: `http://localhost:8000/swagger`
 
 
 ## To Run SPA directly on Docker Container:
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa sh -c "npm run dev"`
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa npm run dev`
 
 
 ## To Run SPA unit tests directly on Docker Container:
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa sh -c "npm run test:unit"`
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa npm run test:unit`
+
+
+
+docker-compose run logistics-api npm run test
