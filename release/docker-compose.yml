@@ -1,32 +1,10 @@
 version: '3.8'
-services:
 
-  spa:
-    container_name: spa
-    image: spa:dev
-    build:
-      context: ./spa
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./spa:/spa
-    environment:
-      - VITE_STORAGE_API=http://storage-api:80/
-      - VITE_LOGISTICS_API=http://localhost:3000/
-    networks:
-      - mynet
-    ports:
-      - 8080:8080
-    depends_on:
-      - logistics-api
-      - storage-api
+services:
 
   logistics-api:
     container_name: logistics-api
-    hostname: logistics-api
-    image: logistics-api:dev
-    build:
-      context: ./logistics
-      dockerfile: Dockerfile.dev
+    image: 1180910/logistics-api:node-16-slim:latest
     volumes:
       - ./logistics:/logistics
     environment:
@@ -45,37 +23,7 @@ services:
       - ./volumes/mongodb:/data/db
     networks:
       - mynet
-    ports:
-      - 27017:27017
-
-  storage-api:
-    container_name: storage-api
-    hostname: storage-api
-    image: storage-api:dev
-    build:
-      context: ./storage/src
-      dockerfile: Dockerfile.dev
-      target: final
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
-    networks:
-      - mynet
-    ports:
-      - 8000:80
-    depends_on:
-      - sqlserver
-
-  sqlserver:
-    container_name: sqlserver
-    build:
-      context: ./storage/sqlserver
-      dockerfile: Dockerfile
-    hostname: local.sqlserver
-    networks:
-      - mynet
-    ports:
-      - 1433:1433
+    restart: unless-stopped
 
 
 networks:

@@ -12,4 +12,5 @@ CMD ["npm", "run", "start"]
 
 
 FROM base as dev
+RUN npm install -g mocha
 CMD ["npm", "run", "dev"]
