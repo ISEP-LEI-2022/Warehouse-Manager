@@ -27,10 +27,15 @@ jobs:
       - name: Build Latest Logistics API Docker image
         working-directory: ./code/logistics
         run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:latest
+      - name: Build Latest SQL SERVER Docker image
+        working-directory: ./code/storage/sqlserver
+        run: docker build . --file Dockerfile --tag 1180910/local-sql-server:latest
       - name: Build Latest Storage API Docker image
         working-directory: ./code/storage
         run: docker build . --file Dockerfile --target final --tag 1180910/storage-api:latest
       - name: Docker Push Logistics API Latest Image
         run: docker push 1180910/logistics-api:latest
+      - name: Docker Push SQL SERVER Latest Image
+        run: docker push 1180910/local-sql-server:latest
       - name: Docker Push Storage API Latest Image
         run: docker push 1180910/storage-api:latest

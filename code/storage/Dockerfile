@@ -17,13 +17,13 @@ RUN dotnet publish "EletricGo.csproj" -c Release -o /app/publish /p:UseAppHost=f
 
 FROM build AS unit_tests
 WORKDIR /app
-COPY ./tests/EletricGo_UnitTests .
+COPY ./tests/EletricGo_UnitTests ./EletricGo_UnitTests
 WORKDIR /app/EletricGo_UnitTests
 CMD ["dotnet", "test"]
 
 FROM build AS integration_tests
 WORKDIR /app
-COPY ./tests/EletricGo_IntegrationTests .
+COPY ./tests/EletricGo_IntegrationTests ./EletricGo_IntegrationTests
 WORKDIR /app/EletricGo_IntegrationTests
 CMD ["dotnet", "test"]
 

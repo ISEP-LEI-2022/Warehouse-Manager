@@ -97,10 +97,10 @@ services:
 
   sqlserver:
     container_name: sqlserver
+    hostname: local.sqlserver
     build:
       context: ./storage/sqlserver
       dockerfile: Dockerfile
-    hostname: local.sqlserver
     networks:
       - mynet
     ports:

@@ -5,8 +5,6 @@ services:
   logistics-api:
     container_name: logistics-api
     image: 1180910/logistics-api:node-16-slim:latest
-    volumes:
-      - ./logistics:/logistics
     environment:
       - database=mongodb://mongodb:27017/logistics
     networks:
@@ -15,6 +13,20 @@ services:
       - 3000:3000
     depends_on:
       - mongodb
+
+  storage-api:
+    container_name: storage-api
+    hostname: storage-api
+    image: 1180910/storage-api:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+    networks:
+      - mynet
+    ports:
+      - 8000:80
+    depends_on:
+      - sqlserver
 
   mongodb:
     image: mongo
@@ -25,6 +37,13 @@ services:
       - mynet
     restart: unless-stopped
 
+  sqlserver:
+    container_name: sqlserver
+    image: 1180910/local-sql-server:latest
+    hostname: local.sqlserver
+    networks:
+      - mynet
+    restart: unless-stopped
 
 networks:
   mynet:
