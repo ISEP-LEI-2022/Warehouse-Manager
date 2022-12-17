@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Test logistics API
         working-directory: ./code
-        run: docker-compose run --rm --service-ports logistics-api sh -c "npm test"
+        run: docker-compose run logistics-api npm run test
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d%M%S')"
