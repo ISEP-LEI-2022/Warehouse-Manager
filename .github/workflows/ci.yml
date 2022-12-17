@@ -1,0 +1,37 @@
+---
+name: CI
+
+on: [push]
+
+jobs:
+  test-lint:
+    name: Test, Build, Push
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test logistics API
+        working-directory: ./code
+        run: docker-compose up --build -d && docker-compose run --rm --service-ports logistics-api sh -c "npm test"
+      - name: Test storage API
+        run: docker-compose up --build -d && docker-compose run --rm open-dt-api sh -c "pytest --exitfirst && flake8"
+      - name: Test SPA
+        run: docker-compose up --build -d && docker-compose run --rm --service-ports spa sh -c "npm run test:unit"
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d%M%S')"
+      - name: Build the logistics Docker image
+        working-directory: ./code
+        run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:node-16-slim-${{ steps.date.outputs.date }}
+      - name: Docker Push Current
+        run: docker push pdrivom/open-dt-api:alpine-${{ steps.date.outputs.date }}
+      - name: Build Latest Docker image
+        working-directory: ./code
+        run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:node-16-slim:latest
+      - name: Docker Push Latest
+        run: docker push 1180910/logistics-api:node-16-slim:latest
