@@ -14,5 +14,4 @@ CMD ["npm", "run", "start"]
 
 FROM base as dev
 RUN npm ci
-RUN npm install -g ts-node typescript
 CMD ["npm", "run", "dev"]

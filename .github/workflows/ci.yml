@@ -15,11 +15,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Prepare Tests
-        run: npm install -g mocha
       - name: Test logistics API
         working-directory: ./code
-        run: docker-compose run --rm --service-ports logistics-api sh -c "npm test"
+        run: docker-compose run logistics-api npm run test
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d%M%S')"
