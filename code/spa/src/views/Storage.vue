@@ -47,7 +47,8 @@ onBeforeMount(() => {
           <Column field="Address" header="Address">
             <template #body="slotProps">
               {{
-                slotProps.data.Location.address.street
+                
+                slotProps.data.Location.address.street +", "+ slotProps.data.Location.address.city.name + ", " + slotProps.data.Location.address.postalCode
                 
               }}
             </template>
