@@ -1,8 +1,15 @@
 FROM node:16-slim as base
 WORKDIR /logistics
+
 COPY package*.json ./
+COPY tsconfig.json ./
+COPY tsoa.json ./
+
+COPY ./src ./src
+COPY ./public ./public
+COPY ./tests ./tests
+
 RUN npm install -g npm@latest
-COPY . ./
 RUN npm config set cache /tmp --global
 EXPOSE 3000
 
