@@ -22,12 +22,12 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d%M%S')"
       - name: Build the logistics Docker image
-        working-directory: ./code
-        run: docker build ./logistics --file Dockerfile --target production --tag 1180910/logistics-api:node-16-slim-${{ steps.date.outputs.date }}
+        working-directory: ./code/logistics
+        run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:node-16-slim-${{ steps.date.outputs.date }}
       - name: Docker Push Current
-        run: docker push pdrivom/open-dt-api:alpine-${{ steps.date.outputs.date }}
+        run: docker push 1180910/logistics-api:node-16-slim-${{ steps.date.outputs.date }}
       - name: Build Latest Docker image
-        working-directory: ./code
-        run: docker build ./logistics --file Dockerfile --target production --tag 1180910/logistics-api:node-16-slim:latest
+        working-directory: ./code/logistics
+        run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:latest
       - name: Docker Push Latest
-        run: docker push 1180910/logistics-api:node-16-slim:latest
+        run: docker push 1180910/logistics-api:latest
