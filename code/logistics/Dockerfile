@@ -1,6 +1,9 @@
 FROM node:16-slim as base
 WORKDIR /logistics
 COPY package*.json ./
+RUN rm -rf node_modules
+RUN rm -f package-lock.json
+RUN npm cache clean --force
 RUN npm install
 COPY . ./
 RUN npm config set cache /tmp --global
@@ -13,5 +16,5 @@ CMD ["npm", "run", "start"]
 
 FROM base as dev
 RUN npm install -g mocha
-RUN npm install --save-dev ts-node typescript
+RUN npm install -g ts-node typescript
 CMD ["npm", "run", "dev"]
