@@ -15,8 +15,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Prepare Tests
-        run: npm install -g mocha
       - name: Test logistics API
         working-directory: ./code
         run: docker-compose run --rm --service-ports logistics-api sh -c "npm test"
