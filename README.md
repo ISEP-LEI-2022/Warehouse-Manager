@@ -26,7 +26,11 @@
 
 ## To Run storage API directly on Docker Container:
 
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports storage-api sh -c "dotnet EletricGo.dll"`
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports storage-api dotnet EletricGo.dll`
+
+## To Run storage API directly on Docker Container:
+
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports storage-api dotnet test`
 
 
 # Usage

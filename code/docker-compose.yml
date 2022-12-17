@@ -52,8 +52,8 @@ services:
     hostname: storage-api
     image: storage-api:dev
     build:
-      context: ./storage/src
-      dockerfile: Dockerfile.dev
+      context: ./storage
+      dockerfile: Dockerfile
       target: final
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -62,6 +62,36 @@ services:
       - mynet
     ports:
       - 8000:80
+    depends_on:
+      - sqlserver
+
+  storage-api-unit-tests:
+    container_name: storage-api-unit-tests
+    image: storage-api:dev
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+      target: unit_tests
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+    networks:
+      - mynet
+    depends_on:
+      - sqlserver
+
+  storage-api-integration-tests:
+    container_name: storage-api-integration-tests
+    image: storage-api:dev
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+      target: integration_tests
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+    networks:
+      - mynet
     depends_on:
       - sqlserver
 
