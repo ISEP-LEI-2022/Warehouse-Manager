@@ -1,7 +1,28 @@
 version: '3.8'
 services:
+
+  spa:
+    container_name: spa
+    image: spa:dev
+    build:
+      context: ./spa
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./spa:/spa
+    environment:
+      - VITE_STORAGE_API=http://storage-api:80/
+      - VITE_LOGISTICS_API=http://localhost:3000/
+    networks:
+      - mynet
+    ports:
+      - 8080:8080
+    depends_on:
+      - logistics-api
+      - storage-api
+
   logistics-api:
     container_name: logistics-api
+    hostname: logistics-api
     image: logistics-api:dev
     build:
       context: ./logistics
@@ -26,10 +47,10 @@ services:
       - mynet
     ports:
       - 27017:27017
-    restart: unless-stopped
 
   storage-api:
     container_name: storage-api
+    hostname: storage-api
     image: storage-api:dev
     build:
       context: ./storage/src
@@ -37,8 +58,7 @@ services:
       target: final
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ./storage/certs/https:/https:ro
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
     networks:
       - mynet
     ports:
@@ -47,13 +67,15 @@ services:
       - sqlserver
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      SA_PASSWORD: "SqlServer2019!"
-      ACCEPT_EULA: "Y"
-      MSSQL_PID: "Developer"
+    container_name: sqlserver
+    build:
+      context: ./storage/sqlserver
+      dockerfile: Dockerfile
+    hostname: local.sqlserver
+    networks:
+      - mynet
     ports:
-      - "1433:1433"
+      - 1433:1433
 
 
 networks:

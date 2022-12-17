@@ -26,7 +26,8 @@ services:
     image: logistics-api:dev
     build:
       context: ./logistics
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
+      target: dev
     volumes:
       - ./logistics:/logistics
     environment:
