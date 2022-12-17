@@ -11,13 +11,13 @@ const storages = ref([] as Storage[]);
 const storageService = new StorageService();
 
 const buildAddress = (
-  street: string,
-  door: string,
-  floor: string,
-  postalCode: string,
-  city: string
+  Street: string,
+  Door: string,
+  Floor: string,
+  PostalCode: string,
+  City: string
 ) => {
-  return `${street}, ${door} - ${floor}, ${postalCode}, ${city}`;
+  return `${Street}, ${Door} - ${Floor}, ${PostalCode}, ${City}`;
 };
 
 onBeforeMount(() => {
@@ -41,26 +41,21 @@ onBeforeMount(() => {
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="designation" header="Designation" :sortable="true">
             <template #body="slotProps">
-              {{ slotProps.data.designation }}
+              {{ slotProps.data.Designation }}
             </template>
           </Column>
-          <Column field="address" header="Address">
+          <Column field="Address" header="Address">
             <template #body="slotProps">
               {{
-                buildAddress(
-                  slotProps.data.location.address.street,
-                  slotProps.data.location.address.door,
-                  slotProps.data.location.address.floor,
-                  slotProps.data.location.address.postalCode,
-                  slotProps.data.location.address.city.name
-                )
+                slotProps.data.Location.address.street
+                
               }}
             </template>
           </Column>
           <Column field="location" header="Location" :sortable="true">
             <template #body="slotProps">
               {{
-                `(${slotProps.data.location.latitude},${slotProps.data.location.latitude},${slotProps.data.location.latitude})`
+                `(${slotProps.data.Location.Latitude},${slotProps.data.Location.Latitude},${slotProps.data.Location.Latitude})`
               }}
             </template>
           </Column>

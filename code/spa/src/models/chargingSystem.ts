@@ -1,4 +1,4 @@
-export default class CharginSystems {
+export default class ChargingSystems {
     ChargingTime: string;
 
     constructor(ChargingTime: string) {
