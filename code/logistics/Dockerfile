@@ -17,6 +17,6 @@ CMD ["npm", "run", "start"]
 
 FROM base as dev
 RUN npm install mocha
-RUN npm npm install @types/mocha
+RUN npm install @types/mocha
 RUN npm install -g ts-node typescript
 CMD ["npm", "run", "dev"]
