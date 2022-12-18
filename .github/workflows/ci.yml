@@ -26,7 +26,7 @@ jobs:
         run: docker-compose run storage-api-unit-tests dotnet test
       - name: Run SPA Unit Tests
         working-directory: ./code
-        run: docker-compose run spa npm run test:unit
+        run: docker-compose run spa npm run test:unit:ci
       - name: Build Latest Logistics API Docker image
         working-directory: ./code/logistics
         run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:latest
