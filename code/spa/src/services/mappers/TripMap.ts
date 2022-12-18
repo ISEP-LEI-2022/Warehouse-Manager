@@ -2,15 +2,21 @@ import Trip from "@/models/trip";
 import type TripDTO from "../dtos/TripDTO";
 
 export default class TripMap {
-  public static fromDTO(trip: TripDTO): Trip {
+  public static fromDTOArray(trips: TripDTO[]): Trip[] {
 
-    return new Trip(
-        trip.idTrip,
-        trip.registration,
-        trip.dateTrip,
-        trip.routes,
-        trip.deliveries
-      ); ;
+    const tripsList: Trip[] = [];
+    for (const trip of trips) {
+      tripsList.push(
+        new Trip(
+          trip.idTrip,
+          trip.registration,
+          trip.date,
+          trip.routes,
+          trip.deliveries
+        )
+      );
+    }
+    return tripsList;
   }
 
   public static empty(): Trip {

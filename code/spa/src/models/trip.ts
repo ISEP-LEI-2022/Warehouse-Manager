@@ -1,14 +1,14 @@
 export default class Trip {
     idTrip: string;
     registration: string;
-    dateTrip: Date;
+    date: Date;
     routes: SliceRouteType[];
     deliveries: string[];
 
-    constructor(idTrip: string, registration: string, dateTrip: Date, routes: SliceRouteType[], deliveries: string[]) {
+    constructor(idTrip: string, registration: string, date: Date, routes: SliceRouteType[], deliveries: string[]) {
         this.idTrip = idTrip;
         this.registration = registration;
-        this.dateTrip = dateTrip;
+        this.date = date;
         this.routes = routes;
         this.deliveries = deliveries;
     }

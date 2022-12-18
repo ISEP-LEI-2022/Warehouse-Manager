@@ -13,10 +13,11 @@ import TripMap from "@/services/mappers/TripMap";
 const toast = useToast();
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
-const trip = ref(TripMap.empty() as Trip);
+const trips = ref([] as Trip[]);
 const truck_Errors = ref([] as any[]);
 const route_Errors = ref([] as any[]);
 const trip_Errors = ref([] as any[]);
+const expandedRows = ref([]);
 
 const selectedDate = ref(null);
 const selectedTruck = ref(null);
@@ -111,12 +112,10 @@ const processResponse = (
 };
 const searchTrip = () => {
   loading.value = true;
-  setTimeout(() => (loading.value = false), 1000);
-  const val = LogisticsService.getTrip(selectedTruck.value.Registration,selectedDate.value,(errors: Array<any>) => {
-    route_Errors.value.push(errors);
-  }).then((data) => (trip.value = data));
-  console.log(`Selected Truck: ${selectedTruck.value}, Selected Date: ${selectedDate.value}`);
-  console.log(val);
+  LogisticsService.getTrips(selectedTruck.value?.Registration,selectedDate?.value,(errors: Array<any>) => {
+    trip_Errors.value.push(errors);
+  }).then((data) => (trips.value = data));
+  setTimeout(() => (loading.value = false), 500);
 };
 </script>
 
@@ -286,111 +285,63 @@ const searchTrip = () => {
         />
       </div>
       <div class="card">
-        <h5>Routes</h5>
-        <Message
-          v-for="msg of route_Errors"
-          :severity="msg.severity"
-          :key="msg.content"
-          >{{ msg.content }}</Message
-        >
         <DataTable
-          :value="routes"
+          :value="trips"
           :rows="10"
           :paginator="true"
+          v-model:expandedRows="expandedRows"
+          dataKey="idTrip"
           responsiveLayout="scroll"
         >
-          <Column field="Route" header="Route" style="width: 15%" />
-          <Column
-            field="Start"
-            header="Start"
-            :sortable="true"
-            style="width: 15%"
-          />
-          <Column
-            field="End"
-            header="End"
-            :sortable="true"
-            style="width: 10%"
-          />
-          <Column
-            field="Distance"
-            header="Distance [km]"
-            :sortable="true"
-            style="width: 15%"
-          />
-          <Column
-            field="TimeRequired"
-            header="Time [min]"
-            :sortable="true"
-            style="width: 15%"
-          />
-          <Column
-            field="EnergyConsumed"
-            header="En.Consumed [kW]"
-            :sortable="true"
-            style="width: 15%"
-          />
-          <Column
-            field="ExtraChargingTime"
-            header="Ex. Ch. Time [min]"
-            :sortable="true"
-            style="width: 20%"
-          />
-          <Column headerStyle="width:4rem">
+          <Column :expander="true" headerStyle="width: 3rem" />
+          <Column field="date" header="Date" :sortable="true">
             <template #body="slotProps">
-              <CrudDialog
-                :title="`Edit Route '${slotProps.data.Route}'`"
-                :model="slotProps.data"
-                :edit="true"
-                :help_text_fields="help_route_fields"
-                @submit="updateRoute"
-              />
+              {{ new Date(slotProps.data.date).toLocaleDateString() }}
             </template>
           </Column>
-        </DataTable>
-      </div>
-      <div class="card">
-        <h5>Deliveries</h5>
-        <DataTable
-          :value="trucks"
-          :rows="10"
-          :paginator="true"
-          responsiveLayout="scroll"
-        >
-          <Column
-            field="Registration"
-            header="Registration"
-            style="width: 25%"
-          ></Column>
-          <Column
-            field="Autonomy"
-            header="Autonomy [min]"
-            :sortable="true"
-            style="width: 25%"
-          ></Column>
-          <Column
-            field="Capacity"
-            header="Capacity [kg]"
-            :sortable="true"
-            style="width: 30%"
-          ></Column>
-          <Column
-            field="Tare"
-            header="Tare [kg]"
-            :sortable="true"
-            style="width: 20%"
-          ></Column>
-          <Column headerStyle="width:4rem">
+          <Column field="registration" header="Registration" :sortable="true">
             <template #body="slotProps">
-              <CrudDialog
-                :title="`Edit Truck '${slotProps.data.Registration}'`"
-                :model="slotProps.data"
-                :edit="true"
-                :help_text_fields="help_truck_fields"
-                @submit="updateTruck"
-              />
+              {{ slotProps.data.registration }}
             </template>
           </Column>
+          <Column field="idTrip" header="Description">
+            <template #body="slotProps">
+              {{ slotProps.data.idTrip }}
+            </template>
+          </Column>
+          <template #expansion="slotProps">
+            <div class="p-3">
+              <h5>Routes</h5>
+              <DataTable
+                :value="slotProps.data.routes"
+                responsiveLayout="scroll"
+              >
+                <Column field="idStart" header="Start" :sortable="true">
+                  <template #body="slotProps">
+                    {{ slotProps.data.idStart }}
+                  </template>
+                </Column>
+                <Column field="idEnd" header="End" :sortable="true">
+                  <template #body="slotProps">
+                    {{ slotProps.data.idEnd }}
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+            <div class="p-3">
+              <h5>Deliveries</h5>
+              <DataTable
+                :value="slotProps.data.deliveries"
+                responsiveLayout="scroll"
+              >
+                <Column header="Package" :sortable="true">
+                  <template #body="slotProps">
+                    {{ slotProps.data }}
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </template>
         </DataTable>
       </div>
     </TabPanel>
