@@ -25,7 +25,7 @@ export default class StorageService {
   }*/
 
   getDeliveries() {
-    return fetch("https://localhost:7067/api/Deliveries")
+    return fetch(import.meta.env.VITE_STORAGE_API + "api/Deliveries")
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -58,7 +58,7 @@ export default class StorageService {
 
 
   getStorages() {
-    return fetch("https://localhost:7067/api/Storages")
+    return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages")
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -88,7 +88,7 @@ export default class StorageService {
       body: DeliveryMap.toJson(delivery),
     };
     const response = await fetch(
-      "https://localhost:7067/api/deliveries/",
+      import.meta.env.VITE_STORAGE_API + "api/deliveries/",
       requestOptions
     );
     return await response.json();
@@ -101,14 +101,14 @@ export default class StorageService {
       body: StorageMap.toJson(storage),
     };
     const response = await fetch(
-      "https://localhost:7067/api/storages/",
+      import.meta.env.VITE_STORAGE_API + "api/storages/",
       requestOptions
     );
     return await response.json();
   }
 
   getStorageById(id: string) {
-    return fetch("https://localhost:7067/api/Storages/" + id)
+    return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages/" + id)
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -138,7 +138,7 @@ export default class StorageService {
       body: StorageMap.toJson(storage),
     };
     const response = await fetch(
-      "https://localhost:7067/api/Storages/" + storage.StorageId,
+      import.meta.env.VITE_STORAGE_API + "api/Storages/" + storage.StorageId,
       requestOptions
     );
     return await response.json();
