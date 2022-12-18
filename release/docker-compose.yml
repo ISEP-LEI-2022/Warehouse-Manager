@@ -40,7 +40,8 @@ services:
     ports:
       - 8000:80
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
 
   mongodb:
     image: mongo
@@ -55,6 +56,12 @@ services:
     container_name: sqlserver
     image: 1180910/local-sql-server:latest
     hostname: local.sqlserver
+    healthcheck:
+        test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "Adminxyz22#" -Q "SELECT 1" || exit 1
+        interval: 10s
+        timeout: 3s
+        retries: 10
+        start_period: 10s
     networks:
       - storage_net
     ports:
