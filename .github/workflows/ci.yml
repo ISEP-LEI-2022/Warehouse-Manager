@@ -24,6 +24,9 @@ jobs:
       - name: Run Storage API Integration Tests
         working-directory: ./code
         run: docker-compose run storage-api-unit-tests dotnet test
+      - name: Run SPA Unit Tests
+        working-directory: ./code
+        run: docker-compose run spa npm run test:unit
       - name: Build Latest Logistics API Docker image
         working-directory: ./code/logistics
         run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:latest
@@ -33,9 +36,14 @@ jobs:
       - name: Build Latest Storage API Docker image
         working-directory: ./code/storage
         run: docker build . --file Dockerfile --target final --tag 1180910/storage-api:latest
+      - name: Build Latest SPA Docker image
+        working-directory: ./code/spa
+        run: docker build . --file Dockerfile --tag 1180910/spa:latest
       - name: Docker Push Logistics API Latest Image
         run: docker push 1180910/logistics-api:latest
       - name: Docker Push SQL SERVER Latest Image
         run: docker push 1180910/local-sql-server:latest
       - name: Docker Push Storage API Latest Image
         run: docker push 1180910/storage-api:latest
+      - name: Docker Push SPA Latest Image
+        run: docker push 1180910/spa:latest

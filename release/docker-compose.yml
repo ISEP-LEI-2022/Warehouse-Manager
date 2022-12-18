@@ -1,14 +1,28 @@
 version: '3.8'
 
 services:
+  spa:
+    container_name: spa
+    image: 1180910/spa:latest
+    environment:
+      - VITE_STORAGE_API=http://localhost:8000/
+      - VITE_LOGISTICS_API=http://localhost:3000/
+    networks:
+      - storage_net
+      - logistics_net
+    ports:
+      - 8081:8080
+    depends_on:
+      - logistics-api
+      - storage-api
 
   logistics-api:
     container_name: logistics-api
-    image: 1180910/logistics-api:node-16-slim:latest
+    image: 1180910/logistics-api:latest
     environment:
       - database=mongodb://mongodb:27017/logistics
     networks:
-      - mynet
+      - logistics_net
     ports:
       - 3000:3000
     depends_on:
@@ -22,7 +36,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
     networks:
-      - mynet
+      - storage_net
     ports:
       - 8000:80
     depends_on:
@@ -31,10 +45,10 @@ services:
   mongodb:
     image: mongo
     hostname: mongodb
-    volumes:
-      - ./volumes/mongodb:/data/db
     networks:
-      - mynet
+      - logistics_net
+    ports:
+      - 27017:27017
     restart: unless-stopped
 
   sqlserver:
@@ -42,9 +56,12 @@ services:
     image: 1180910/local-sql-server:latest
     hostname: local.sqlserver
     networks:
-      - mynet
+      - storage_net
+    ports:
+      - 1433:1433
     restart: unless-stopped
 
 networks:
-  mynet:
+  logistics_net:
+  storage_net:
     driver: bridge

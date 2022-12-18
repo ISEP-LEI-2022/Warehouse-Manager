@@ -48,8 +48,6 @@ Manual test storage API: `http://localhost:8000/swagger`
 
 
 ## To Run SPA unit tests directly on Docker Container:
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa npm run test:unit`
+`Warehouse-Manager/code:` `docker-compose run --rm spa npm run test:unit`
 
 
-
-docker-compose run logistics-api npm run test

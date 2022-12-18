@@ -3,6 +3,7 @@ WORKDIR /logistics
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY tsoa.json ./
+COPY nodemon.json ./
 COPY ./src ./src
 COPY ./public ./public
 RUN npm install -g npm@latest
