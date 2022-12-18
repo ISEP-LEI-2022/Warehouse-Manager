@@ -45,6 +45,7 @@ export function isValidRegistration(registration: string): boolean {
  * @returns {boolean} true if valid, false otherwise
  * */
 export function isValidDate(date: Date): boolean {
+  date = new Date(date);
   return date instanceof Date && !isNaN(date.getTime())
 }
 

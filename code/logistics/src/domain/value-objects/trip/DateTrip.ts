@@ -2,7 +2,7 @@ import { isValidDate } from "../../utils/UtilityFunctions";
 import { businessRuleErrorFactory } from "../../utils/Err";
 
 export default class DateTrip {
-    private dateTrip = new Date("1900/01/01");
+    private dateTrip = new Date("2000/01/01");
   
     constructor(dateTrip: Date) {
       const error = businessRuleErrorFactory();
