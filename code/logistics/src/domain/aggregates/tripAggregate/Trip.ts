@@ -18,7 +18,7 @@ export default class Trip implements AggregateRoot<string> {
   constructor(
     idTrip: string,
     registration: string,
-    dateTrip: string,
+    dateTrip: Date,
     routes: SliceRouteType[],
     deliveries: string[]
   ) {
