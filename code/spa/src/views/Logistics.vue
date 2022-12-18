@@ -14,7 +14,7 @@ const routes = ref([] as Route[]);
 const truck_Errors = ref([] as any[]);
 const route_Errors = ref([] as any[]);
 
-const calendarValue = ref(null);
+const selectedDate = ref(null);
 const selectedTruck = ref(null);
 const autoFilteredValue = ref([] as any[]);
 const loading = ref(false);
@@ -108,6 +108,7 @@ const processResponse = (
 const searchTrip = () => {
   loading.value = true;
   setTimeout(() => (loading.value = false), 1000);
+  console.log(`Selected Truck: ${selectedTruck.value}, Selected Date: ${selectedDate.value}`);
 };
 </script>
 
@@ -265,7 +266,7 @@ const searchTrip = () => {
         <Calendar
           :showIcon="true"
           :showButtonBar="true"
-          v-model="calendarValue"
+          v-model="selectedDate"
           style="margin-right: 1rem"
         />
         <Button

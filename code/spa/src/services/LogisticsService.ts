@@ -12,7 +12,6 @@ export default class LogisticsService {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
         const json = await response.json();
-        console.log(json)
         var data: Array<TruckDTO> = json;
         if (!response.ok) {
           getErros({
