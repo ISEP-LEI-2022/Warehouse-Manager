@@ -14,12 +14,12 @@ const router = createRouter({
           component: () => import("@/views/MainDashboard.vue"),
         },
         {
-          path: "/uikit/logistics",
+          path: "/logistics",
           name: "logistics",
           component: () => import("@/views/Logistics.vue"),
         },
         {
-          path: "/uikit/storage",
+          path: "/storage",
           name: "storage",
           component: () => import("@/views/Storage.vue"),
         },

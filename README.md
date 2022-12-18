@@ -51,3 +51,8 @@ Manual test storage API: `http://localhost:8000/swagger`
 `Warehouse-Manager/code:` `docker-compose run --rm spa npm run test:unit`
 
 
+## To Run SPA e2e tests on CLI:
+`Warehouse-Manager/code/spa:` `npm run test:e2e`
+
+### Install Cypress dependencies:
+`apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb`

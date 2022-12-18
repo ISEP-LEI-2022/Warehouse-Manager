@@ -7,22 +7,15 @@ import RouteMap from "@/services/mappers/RouteMap";
 
 
 export default class LogisticsService {
-  Truck_Errors: Array<any>;
-  Route_Errors: Array<any>;
 
-  constructor() {
-    this.Truck_Errors = [];
-    this.Route_Errors = [];
-  }
-
-  getTrucks() {
+  public static getTrucks(getErros: Function = (errors: Array<any>)=> {}) {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
         var data: Array<TruckDTO> = json;
         if (!response.ok) {
-          this.Truck_Errors.push({
+          getErros({
             content: response.statusText,
             severity: "error",
           });
@@ -31,7 +24,7 @@ export default class LogisticsService {
         return TruckMap.fromDTOArray(data);
       })
       .catch((error) => {
-        this.Truck_Errors.push({
+        getErros({
           content: error,
           severity: "error",
         });
@@ -39,7 +32,7 @@ export default class LogisticsService {
       });
   }
 
-  async createTruck(truck: Truck) {
+  public static async createTruck(truck: Truck) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -52,13 +45,13 @@ export default class LogisticsService {
     return await response.json();
   }
 
-  getRoutes() {
+  public static getRoutes(getErros: Function = (errors: Array<any>)=> {}) {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
       .then(async (response) => {
         const json = await response.json();
         var data: Array<RouteDTO> = json
         if (!response.ok) {
-          this.Route_Errors.push({
+          getErros({
             content: response.statusText,
             severity: "error",
           });
@@ -68,7 +61,7 @@ export default class LogisticsService {
         return RouteMap.fromDTOArray(data);
       })
       .catch((error) => {
-        this.Route_Errors.push({
+        getErros({
           content: error,
           severity: "error",
         });
@@ -76,7 +69,7 @@ export default class LogisticsService {
       });
   }
 
-  async createRoute(route: Route) {
+  public static async createRoute(route: Route) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },

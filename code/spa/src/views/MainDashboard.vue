@@ -10,7 +10,10 @@ const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
 const deliveries = ref([]);
 const storages = ref([]);
-const logisticsService = new LogisticsService();
+const truck_Errors = ref([] as any[]);
+const route_Errors =  ref([] as any[]);
+
+
 const storageService = new StorageService();
 
 const formatDate = (value: string) => {
@@ -18,8 +21,8 @@ const formatDate = (value: string) => {
 };
 
 onMounted(() => {
-  logisticsService.getTrucks().then((data) => (trucks.value = data));
-  logisticsService.getRoutes().then((data) => (routes.value = data));
+  LogisticsService.getTrucks((errors: Array<any>)=>{truck_Errors.value.push(errors)}).then((data) => (trucks.value = data));
+  LogisticsService.getRoutes((errors: Array<any>)=>{route_Errors.value.push(errors)}).then((data) => (routes.value = data));
   storageService.getDeliveries().then((data) => (deliveries.value = data));
   storageService.getStorages().then((data) => (storages.value = data));
 });
@@ -35,7 +38,7 @@ onMounted(() => {
       <div class="card">
         <h5>Trucks</h5>
         <Message
-          v-for="msg of logisticsService.Truck_Errors"
+          v-for="msg of truck_Errors"
           :severity="msg.severity"
           :key="msg.content"
           >{{ msg.content }}</Message
@@ -45,6 +48,7 @@ onMounted(() => {
           :rows="3"
           :paginator="true"
           responsiveLayout="scroll"
+          id="trucks-table"
         >
           <Column
             field="Registration"
@@ -74,7 +78,7 @@ onMounted(() => {
       <div class="card">
         <h5>Routes</h5>
         <Message
-          v-for="msg of logisticsService.Route_Errors"
+          v-for="msg of route_Errors"
           :severity="msg.severity"
           :key="msg.content"
           >{{ msg.content }}</Message
@@ -84,6 +88,7 @@ onMounted(() => {
           :rows="3"
           :paginator="true"
           responsiveLayout="scroll"
+          id="routes-table"
         >
           <Column field="Route" header="Route" style="width: 15%" />
           <Column
@@ -121,6 +126,7 @@ onMounted(() => {
           :rows="3"
           :paginator="true"
           responsiveLayout="scroll"
+          id="deliveries-table"
         >
           <Column header="Date">
             <template #body="{ data }">
@@ -154,6 +160,7 @@ onMounted(() => {
           :rows="3"
           :paginator="true"
           responsiveLayout="scroll"
+          id="storages-table"
         >
           <Column
             field="designation"

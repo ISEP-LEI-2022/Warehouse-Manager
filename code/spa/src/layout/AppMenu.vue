@@ -14,12 +14,12 @@ const model = ref([
       {
         label: "Logistics",
         icon: "pi pi-fw pi-car",
-        to: "/uikit/logistics",
+        to: "/logistics",
       },
       {
         label: "Storage",
         icon: "pi pi-fw pi-box",
-        to: "/uikit/storage",
+        to: "/storage",
       },
     ],
   },

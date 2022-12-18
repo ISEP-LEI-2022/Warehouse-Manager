@@ -1,0 +1,80 @@
+{
+    "data": [
+        {
+            "id": "31c49e69-2465-4fdf-888e-1559c689245a",
+            "deliveryDate": "2022-11-30T18:25:43.511",
+            "deliveryWeight": 6,
+            "finalStorageId": "0c9f678a-e1f3-41dd-8e71-cef7d2ebaede",
+            "timeToLoad": 8,
+            "timeToUnload": 6,
+            "products": [
+                {
+                    "id": "0a6eda8a-8d89-41a3-9e0a-8151de65d0e7",
+                    "name": "P1 Integration Test",
+                    "weight": 2,
+                    "levelOfPolution": 2
+                }
+            ]
+        },
+        {
+            "id": "3f9f89ed-39ea-4743-b5cc-4f3f72c99e18",
+            "deliveryDate": "2022-10-31T18:25:43.511",
+            "deliveryWeight": 5,
+            "finalStorageId": "f71a85d6-e86a-413e-a6e5-8dd254917e4f",
+            "timeToLoad": 5,
+            "timeToUnload": 5,
+            "products": [
+                {
+                    "id": "5d79a390-6c09-4750-9905-1e4da8b21656",
+                    "name": "Catarina",
+                    "weight": 5,
+                    "levelOfPolution": 5
+                },
+                {
+                    "id": "9a04ecdd-d426-4013-8d32-5c02ebc2d687",
+                    "name": "Nuno",
+                    "weight": 1,
+                    "levelOfPolution": 1
+                }
+            ]
+        },
+        {
+            "id": "c329f12d-d7f3-4a6e-bbdb-d5a21fcd4140",
+            "deliveryDate": "2022-10-31T18:25:43.511",
+            "deliveryWeight": 5,
+            "finalStorageId": "0c9f678a-e1f3-41dd-8e71-cef7d2ebaede",
+            "timeToLoad": 5,
+            "timeToUnload": 5,
+            "products": [
+                {
+                    "id": "605fdaef-6335-4937-82f2-239e25d11ac7",
+                    "name": "Ana",
+                    "weight": 5,
+                    "levelOfPolution": 5
+                },
+                {
+                    "id": "b13c180d-e327-4fd3-8f59-a64d3bc0a782",
+                    "name": "Nuno",
+                    "weight": 1,
+                    "levelOfPolution": 1
+                }
+            ]
+        },
+        {
+            "id": "d4378ecb-c741-4fdb-b063-14353a434227",
+            "deliveryDate": "2022-05-02T00:00:00",
+            "deliveryWeight": 5.5,
+            "finalStorageId": "0c9f678a-e1f3-41dd-8e71-cef7d2ebaede",
+            "timeToLoad": 5,
+            "timeToUnload": 5,
+            "products": [
+                {
+                    "id": "10e85ebe-a52d-4ebc-807f-97e07c8c53af",
+                    "name": "P1 Integration Test",
+                    "weight": 2,
+                    "levelOfPolution": 2
+                }
+            ]
+        }
+    ]
+}
