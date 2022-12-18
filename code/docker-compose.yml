@@ -7,8 +7,6 @@ services:
     build:
       context: ./spa
       dockerfile: Dockerfile
-    volumes:
-      - ./spa:/spa
     environment:
       - VITE_STORAGE_API=http://localhost:8000/
       - VITE_LOGISTICS_API=http://localhost:3000/
