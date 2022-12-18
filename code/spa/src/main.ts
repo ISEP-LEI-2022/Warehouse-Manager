@@ -103,6 +103,7 @@ import CardItem from "@/components/CardItem.vue";
 import IconElement from "@/components/icons/IconElement.vue";
 import CrudDialog from "./components/CrudDialog.vue";
 import CrudTest from "./components/CrudDelivery.vue";
+import CrudChargingSystem from "./components/CrudChargingSystem.vue";
 
 import "@/assets/styles.scss";
 
@@ -214,5 +215,6 @@ app.component("CardItem", CardItem);
 app.component("IconElement", IconElement);
 app.component("CrudDialog", CrudDialog);
 app.component("CrudTest", CrudTest);
+app.component("CrudChargingSystem", CrudChargingSystem);
 
 app.mount("#app");

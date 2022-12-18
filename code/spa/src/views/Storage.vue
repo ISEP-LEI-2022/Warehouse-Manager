@@ -8,6 +8,7 @@ import { useToast } from "primevue/usetoast";
 import type Storage from "@/models/storage";
 import type Delivery from "@/models/delivery";
 import ChargingSystems from "@/models/chargingSystem";
+import CrudChargingSystem from "@/components/CrudChargingSystem.vue";
 
 const toast = useToast();
 const expandedRows = ref([]);
@@ -47,10 +48,10 @@ const addStorage = (storage: Array<any>) => {
   );
 };
 
-const addChargingSystem = (chargingSystems: Array<any>) => {
-  const chargingSystem = StorageMap.fromAnyArrayChargingSystem(chargingSystems);
+const addChargingSystem = (storageId: string, chargingSystems: ChargingSystems) => {
+  const chargingSystem = chargingSystems;
   var index: number;
-  index = storages.value.findIndex((item) => item.StorageId = chargingSystem.Storage);
+  index = storages.value.findIndex((item) => item.StorageId = storageId);
 
   storages.value[index].Chargingsystems.push(new ChargingSystems(chargingSystem.ChargingTime));
 
@@ -158,14 +159,16 @@ const processResponse = (
             <div class="p-3">
               <h5>Charging Systems</h5>
 
-              <CrudDialog 
-                v-if="storageService.Storage_Errors.length == 0"
+              <CrudChargingSystem
+                v-if="storageService.Delivery_Errors.length == 0"
                 title="Add new Charging System" 
                 :edit="false"
-                :model="StorageMap.emptyChargingSystem(`${slotProps.data.StorageId}`)"
-                :help_text_fields="help_storage_fields"
+                :model="StorageMap.emptyChargingSystem"
+                :storage="slotProps.data"
+                :help_text_fields="help_delivery_fields"
                 :disabled_fields="[]"
-                @submit="addChargingSystem"/>
+                @submit="addChargingSystem"
+                />
 
               <DataTable
                 :value="slotProps.data.Chargingsystems"

@@ -72,9 +72,7 @@ export default class StorageMap {
   public static fromAnyArrayChargingSystem(storage: Array<any>): ChargingSystems {
     let obj = Object.assign({}, ...storage.map((x) => ({ [x.name]: x.value })));
     return new ChargingSystems(
-              obj.ChargingTime,
-              obj.Storage
-    )
+              obj.ChargingTime,    )
             }
 
 
@@ -107,7 +105,7 @@ export default class StorageMap {
     return new Storage("","","","","","","","","",1,"",chargingSystems);
   }
 
-  public static emptyChargingSystem(storageId: string): ChargingSystems {
-    return new ChargingSystems("",storageId);
+  public static emptyChargingSystem(): ChargingSystems {
+    return new ChargingSystems("");
   }
 }

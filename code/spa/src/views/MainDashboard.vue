@@ -164,17 +164,20 @@ onMounted(() => {
             style="width: 35%"
           ></Column>
           <Column
-            field="location.address.street"
+            field="Name"
             header="Location"
             :sortable="true"
             style="width: 35%"
           ></Column>
           <Column
-            field="chargingSystems.count"
+            field="Chargingsystems"
             header="Charging Systems"
             :sortable="true"
             style="width: 35%"
           >
+          <template #body="slotProps">
+              {{ `(${slotProps.data.Chargingsystems.length})` }}
+            </template>
           </Column>
         </DataTable>
       </div>
