@@ -6,7 +6,7 @@
             "distance": 0,
             "idEnd": "string",
             "idStart": "string",
-            "idRoute": "string"
+            "idRoute": "Express24"
         },
         {
             "extraChargingTime": 0,
@@ -15,7 +15,7 @@
             "distance": 0,
             "idEnd": "string",
             "idStart": "string",
-            "idRoute": "string"
+            "idRoute": "FastAndFurious"
         },
         {
             "extraChargingTime": 0,
@@ -24,7 +24,7 @@
             "distance": 0,
             "idEnd": "string",
             "idStart": "string",
-            "idRoute": "string"
+            "idRoute": "Foobar"
         },
         {
             "extraChargingTime": 0,
@@ -33,7 +33,7 @@
             "distance": 0,
             "idEnd": "string",
             "idStart": "string",
-            "idRoute": "string"
+            "idRoute": "AwsomeRoute"
         },
         {
             "extraChargingTime": 0,
@@ -42,15 +42,6 @@
             "distance": 0,
             "idEnd": "string",
             "idStart": "string",
-            "idRoute": "string"
-        },
-        {
-            "extraChargingTime": 0,
-            "energyConsumed": 0,
-            "timeRequired": 0,
-            "distance": 0,
-            "idEnd": "string",
-            "idStart": "string",
-            "idRoute": "string"
+            "idRoute": "BadTripRoute"
         }
 ]

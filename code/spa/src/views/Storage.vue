@@ -130,7 +130,7 @@ onMounted(() => {
           </Column>
           <Column field="finalStorageId" header="Final Storage">
             <template #body="slotProps">
-              <a href="#/uikit/storage">
+              <a href="#/storage">
                 {{
                   storages.find((item) => {
                     return item?.id == slotProps.data.finalStorageId;
