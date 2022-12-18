@@ -1,8 +1,10 @@
+import { SliceRouteType } from "../../../domain/aggregates/tripAggregate/Trip";
+
 export type expectedBodyTrip = {
     idTrip: string;
     registration: string;
     date: string;
-    routes: string[];
+    routes: SliceRouteType[];
     deliveries: string[];
 }
 
@@ -10,7 +12,7 @@ export type expectedTripJSON = {
     idTrip: string;
     registration: string;
     date: string;
-    routes: string[];
+    routes: SliceRouteType[];
     deliveries: string[];
 }
 

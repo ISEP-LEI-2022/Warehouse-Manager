@@ -6,7 +6,7 @@ import TripMap from "../../../infrastructure/mappers/TripMap";
 import { Inject, Service } from "typedi";
 import config from "../../../config";
 import ITripRepository from "../../../infrastructure/repositories/IRepository";
-import IRouteRepository from "../../../infrastructure/repositories/IRepository";
+import IRouteRepository from "../../../infrastructure/repositories/route/IRouteRepository";
 import ITruckRepository from "../../../infrastructure/repositories/IRepository";
 import ITripService from "./ITripService";
 
@@ -33,8 +33,19 @@ export default class TripService implements ITripService {
 
       // Check if the routes exist
       for (const route in tripDTO.routes) {
-        if (!(await this.routeRepository.exists(tripDTO.routes[route]))) {
-          error.addError("Route " + tripDTO.routes[route] + " does not exist");
+        if (
+          !(await this.routeRepository.existsSlice(
+            tripDTO.routes[route].idStart,
+            tripDTO.routes[route].idEnd
+          ))
+        ) {
+          error.addError(
+            "Route starting in " +
+              tripDTO.routes[route].idStart +
+              " and ending in " +
+              tripDTO.routes[route].idEnd +
+              " does not exist."
+          );
           throw error;
         }
       }
@@ -47,19 +58,20 @@ export default class TripService implements ITripService {
         throw error;
       }
 
+      //TODO: Check if the delivery exists
       // Check if the delivery exists
-      for (const delivery in tripDTO.deliveries) {
-        fetch("http://localhost:8000/api/deliveries/" + tripDTO.deliveries[delivery]).then(
-          (response) => {
-            if (response.status === 404) {
-              error.addError(
-                "Delivery " + tripDTO.deliveries[delivery] + " does not exist"
-              );
-              throw error;
-            }
-          }
-        );
-      }
+      // for (const delivery in tripDTO.deliveries) {
+      //   fetch(
+      //     "http://localhost:8000/api/deliveries/" + tripDTO.deliveries[delivery]
+      //   ).then((response) => {
+      //     if (response.status === 404) {
+      //       error.addError(
+      //         "Delivery " + tripDTO.deliveries[delivery] + " does not exist"
+      //       );
+      //       throw error;
+      //     }
+      //   });
+      // }
 
       !!(await this.tripRepository.exists(tripDTO.idTrip)) === true
         ? error.addError("Trip with this idTrip already exists")

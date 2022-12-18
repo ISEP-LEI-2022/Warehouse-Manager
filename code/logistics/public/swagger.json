@@ -119,6 +119,21 @@
 				],
 				"type": "object"
 			},
+			"SliceRouteType": {
+				"properties": {
+					"idEnd": {
+						"type": "string"
+					},
+					"idStart": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"idEnd",
+					"idStart"
+				],
+				"type": "object"
+			},
 			"expectedTripJSON": {
 				"properties": {
 					"deliveries": {
@@ -129,7 +144,7 @@
 					},
 					"routes": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/SliceRouteType"
 						},
 						"type": "array"
 					},
@@ -162,7 +177,7 @@
 					},
 					"routes": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/SliceRouteType"
 						},
 						"type": "array"
 					},
