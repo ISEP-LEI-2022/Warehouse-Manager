@@ -1,7 +1,6 @@
 describe('New Storage', () => {
   it('Validate text button', () => {
-      cy.visit('http://localhost:8080/#/uikit/storage')
-      //cy.viewport(1500, 800)
+      cy.visit('http://localhost:8081/#/storage')
       cy.wait(1000);
       cy.contains('Storage')
     })

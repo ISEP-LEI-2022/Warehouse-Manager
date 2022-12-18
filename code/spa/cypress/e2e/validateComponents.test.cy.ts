@@ -11,7 +11,7 @@ describe('Validate dashboard components', () => {
       cy.contains('Storages')
     })
     it('Logistics exists', () => {
-      cy.visit("http://localhost:8081/#/uikit/logistics")
+      cy.visit("http://localhost:8081/#/logistics")
       cy.wait(1000);
       cy.contains('Logistics')
     })
@@ -20,7 +20,7 @@ describe('Validate dashboard components', () => {
       cy.contains('Routes')
     })
     it('Storage exists', () => {
-      cy.visit("http://localhost:8081/#/uikit/storage")
+      cy.visit("http://localhost:8081/#/storage")
       cy.wait(1000);
       cy.contains('Logistics')
     })
