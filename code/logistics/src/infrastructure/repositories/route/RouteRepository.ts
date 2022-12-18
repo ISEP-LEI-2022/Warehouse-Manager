@@ -9,7 +9,7 @@ import {
 import RouteMap from "../../mappers/RouteMap";
 import { RouteMongoose } from "../../schemas/RouteSchema";
 import Entity from "../../../domain/Entity";
-import RouteDTO from "src/domain/dto/RouteDTO";
+import RouteDTO from "../../../domain/dto/RouteDTO";
 
 @Service()
 export default class RouteRepository implements IRepository<string> {
@@ -101,6 +101,17 @@ export default class RouteRepository implements IRepository<string> {
     } catch (err) {
       error.addError("Error updating data");
       throw error;
+    }
+  }
+
+  async existsSlice(idStart: string, idEnd: string): Promise<boolean> {
+    
+    if (this.session) {
+      return !!(await RouteMongoose.exists({ idStart: idStart , idEnd:idEnd}).session(
+        this.session
+      ));
+    } else {
+      return !!await (RouteMongoose.exists({ idStart: idStart , idEnd:idEnd}));
     }
   }
 }
