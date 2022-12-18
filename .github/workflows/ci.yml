@@ -16,16 +16,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Logistics API Unit Tests
-        working-directory: ./code
+        working-directory: ./
         run: docker-compose -f docker-compose-ci.yml run logistics-api npm run test
       - name: Run Storage API Unit Tests
-        working-directory: ./code
+        working-directory: ./
         run: docker-compose -f docker-compose-ci.yml run storage-api-unit-tests dotnet test
       - name: Run Storage API Integration Tests
-        working-directory: ./code
+        working-directory: ./
         run: docker-compose -f docker-compose-ci.yml run storage-api-unit-tests dotnet test
       - name: Run SPA Unit Tests
-        working-directory: ./code
+        working-directory: ./
         run: docker-compose -f docker-compose-ci.yml run spa npm run test:unit:ci
       - name: Docker Push Logistics API Latest Image
         run: docker push 1180910/logistics-api:latest

@@ -5,7 +5,7 @@ services:
     container_name: spa
     image: 1180910/spa:latest
     build:
-      context: ./spa
+      context: ./code/spa
       dockerfile: Dockerfile
     environment:
       - VITE_STORAGE_API=http://localhost:8000/
@@ -24,7 +24,7 @@ services:
     hostname: logistics-api
     image: 1180910/logistics-api:latest
     build:
-      context: ./logistics
+      context: ./code/logistics
       dockerfile: Dockerfile
       target: dev
     environment:
@@ -39,8 +39,6 @@ services:
   mongodb:
     image: mongo
     hostname: mongodb
-    volumes:
-      - ./volumes/mongodb:/data/db
     networks:
       - logistics_net
     ports:
@@ -51,7 +49,7 @@ services:
     hostname: storage-api
     image: 1180910/storage-api:latest
     build:
-      context: ./storage
+      context: ./code/storage
       dockerfile: Dockerfile
       target: final
     environment:
@@ -68,7 +66,7 @@ services:
     container_name: storage-api-unit-tests
     image: storage-api:dev
     build:
-      context: ./storage
+      context: ./code/storage
       dockerfile: Dockerfile
       target: unit_tests
     environment:
@@ -83,7 +81,7 @@ services:
     container_name: storage-api-integration-tests
     image: storage-api:dev
     build:
-      context: ./storage
+      context: ./code/storage
       dockerfile: Dockerfile
       target: integration_tests
     environment:
@@ -99,7 +97,7 @@ services:
     hostname: local.sqlserver
     image: 1180910/local-sql-server:latest
     build:
-      context: ./storage/sqlserver
+      context: ./code/storage/sqlserver
       dockerfile: Dockerfile
     networks:
       - storage_net
