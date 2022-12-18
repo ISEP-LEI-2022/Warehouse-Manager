@@ -9,6 +9,7 @@ import type TripDTO from "./dtos/TripDTO";
 import TripMap from "./mappers/TripMap";
 
 export default class LogisticsService {
+
   public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
 
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
@@ -89,9 +90,9 @@ export default class LogisticsService {
     date: Date,
     getErros: Function = (errors: Array<any>) => {}
   ) {
-    const datereq = date.toISOString().slice(0,10);
+    const formatted_date = date.toISOString().slice(0,10);
     return fetch(
-      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + datereq
+      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + formatted_date
     )
       .then(async (response) => {
         const json = await response.json();

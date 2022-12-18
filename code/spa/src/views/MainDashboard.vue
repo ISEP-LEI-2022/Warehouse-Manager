@@ -54,6 +54,12 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="trucks-table"
         >
+        <template #empty>
+                No truck found.
+            </template>
+            <template #loading>
+                Loading truck data. Please wait.
+            </template>
           <Column
             field="Registration"
             header="Registration"
@@ -94,6 +100,12 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="routes-table"
         >
+        <template #empty>
+                No route found.
+            </template>
+            <template #loading>
+                Loading route data. Please wait.
+            </template>
           <Column field="Route" header="Route" style="width: 15%" />
           <Column
             field="Start"
@@ -132,6 +144,12 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="deliveries-table"
         >
+        <template #empty>
+                No deliveries found.
+            </template>
+            <template #loading>
+                Loading deliveries data. Please wait.
+            </template>
           <Column header="Date">
             <template #body="{ data }">
               {{ formatDate(data.DeliveryDate) }}
@@ -166,6 +184,12 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="storages-table"
         >
+        <template #empty>
+                No storages found.
+            </template>
+            <template #loading>
+                Loading storages data. Please wait.
+            </template>
           <Column
             field="Designation"
             header="Designation"
