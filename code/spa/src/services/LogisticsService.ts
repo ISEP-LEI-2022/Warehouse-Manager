@@ -5,11 +5,13 @@ import type RouteDTO from "@/services/dtos/RouteDTO";
 import TruckMap from "@/services/mappers/TruckMap";
 import RouteMap from "@/services/mappers/RouteMap";
 
-
+const contextPath = import.meta.env.BASE_URL;
 export default class LogisticsService {
   Truck_Errors: Array<any>;
   Route_Errors: Array<any>;
 
+
+  
   constructor() {
     this.Truck_Errors = [];
     this.Route_Errors = [];
@@ -53,27 +55,9 @@ export default class LogisticsService {
   }
 
   getRoutes() {
-    return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
-      .then(async (response) => {
-        const json = await response.json();
-        var data: Array<RouteDTO> = json
-        if (!response.ok) {
-          this.Route_Errors.push({
-            content: response.statusText,
-            severity: "error",
-          });
-          return RouteMap.fromDTOArray([]);
-        }
-
-        return RouteMap.fromDTOArray(data);
-      })
-      .catch((error) => {
-        this.Route_Errors.push({
-          content: error,
-          severity: "error",
-        });
-        return RouteMap.fromDTOArray([]);
-      });
+    return fetch(contextPath + "demo/data/routes.json")
+      .then((res) => res.json())
+      .then((d) => d.data);
   }
 
   async createRoute(route: Route) {

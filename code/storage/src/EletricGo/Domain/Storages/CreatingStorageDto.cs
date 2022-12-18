@@ -9,7 +9,7 @@
         public CreatingStorageDto() {
         }
 
-        public CreatingStorageDto(string designation, Location location, List<ChargingSystem> chargingSystems)
+        public CreatingStorageDto(string designation, Location location, List<ChargingSystem>? chargingSystems)
         {
             this.Designation = designation;
             this.Location = location;

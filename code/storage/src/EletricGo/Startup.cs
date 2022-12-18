@@ -117,6 +117,7 @@ namespace EletricGo
                     {
                         policy.WithOrigins("http://localhost:8080");
                         policy.AllowAnyOrigin();
+                        policy.AllowAnyHeader();
                     });
             });
 

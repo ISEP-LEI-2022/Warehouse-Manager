@@ -1,6 +1,7 @@
 import type Product from "./product";
 
 export default class Delivery {
+    DeliveryId: string;
     DeliveryDate: string;
     DeliveryWeight: number;
     FinalStorage: string;
@@ -8,7 +9,8 @@ export default class Delivery {
     TimeToUnload: number;
     Products: Array<Product>;
 
-    constructor(deliveryDate: string, deliveryWeight: number, finalStorage: string, timeToLoad: number, timetoUnload: number, products: Array<Product>) {
+    constructor(deliveryId: string, deliveryDate: string, deliveryWeight: number, finalStorage: string, timeToLoad: number, timetoUnload: number, products: Array<Product>) {
+        this.DeliveryId = deliveryId;
         this.DeliveryDate = deliveryDate;
         this.DeliveryWeight = deliveryWeight;
         this.FinalStorage = finalStorage;
@@ -16,4 +18,5 @@ export default class Delivery {
         this.TimeToUnload = timetoUnload
         this.Products = products;
     }
+
 }

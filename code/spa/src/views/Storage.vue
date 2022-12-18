@@ -3,12 +3,19 @@ import { ref, onBeforeMount } from "vue";
 import StorageService from "@/services/StorageService";
 import CrudDialog from "@/components/CrudDialog.vue";
 import StorageMap from "@/services/mappers/StorageMap";
+import DeliveryMap from "@/services/mappers/DeliveryMap";
+import { useToast } from "primevue/usetoast";
 import type Storage from "@/models/storage";
+import type Delivery from "@/models/delivery";
 
+const toast = useToast();
 const expandedRows = ref([]);
-const deliveries = ref([]);
+const deliveries = ref([] as Delivery[]);
 const storages = ref([] as Storage[]);
 const storageService = new StorageService();
+
+const help_delivery_fields = ref({  });
+const help_storage_fields = ref({  });
 
 const buildAddress = (
   Street: string,
@@ -22,13 +29,75 @@ const buildAddress = (
 
 onBeforeMount(() => {
   storageService.getStorages().then((data) => (storages.value = data));
+  storageService.getDeliveries().then((data) => (deliveries.value = data));
 });
+
+
+const addStorage = (storage: Array<any>) => {
+  const new_storage = StorageMap.fromAnyArray(storage);
+  storageService.createStorage(new_storage).then((response) =>
+    processResponse(
+      response,
+      "Create Storage",
+      () => {
+        storages.value.push(new_storage);
+      }
+    )
+  );
+};
+
+const addDelivery = (delivery: Array<any>) => {
+  const new_delivery = DeliveryMap.fromAnyArray(delivery);
+  storageService.createDelivery(new_delivery).then((response) =>
+    processResponse(
+      response,
+      "Create Delivery",
+      () => {
+        deliveries.value.push(new_delivery);
+      }
+    )
+  );
+};
+
+const processResponse = (
+  resp: any,
+  message: string = "",
+  onSuccess: Function,
+  onError: Function = ()=> {}
+) => {
+  if ("code" in resp) {
+    toast.add({
+      severity: "error",
+      summary: resp.message,
+      detail: resp.errors[0],
+      life: 3000,
+    });
+    onError();
+  } else {
+    toast.add({
+      severity: "success",
+      summary: message,
+      detail: "OK",
+      life: 3000,
+    });
+    onSuccess();
+  }
+};
+
 </script>
 
 <template>
   <TabView>
     <TabPanel header="Storages">
-      <CrudDialog title="Add new Storage" content="" :edit="false" />
+      <CrudDialog 
+      v-if="storageService.Storage_Errors.length == 0"
+      title="Add new Storage" 
+      :edit="false"
+      :model="StorageMap.empty()"
+      :help_text_fields="help_storage_fields"
+      :disabled_fields="[]"
+      @submit="addStorage"/>
+
       <div class="card">
         <DataTable
           :value="storages"
@@ -48,7 +117,7 @@ onBeforeMount(() => {
             <template #body="slotProps">
               {{
                 
-                slotProps.data.Location.address.street +", "+ slotProps.data.Location.address.city.name + ", " + slotProps.data.Location.address.postalCode
+                slotProps.data.Street +", "+ slotProps.data.Name + ", " + slotProps.data.PostalCode
                 
               }}
             </template>
@@ -56,14 +125,14 @@ onBeforeMount(() => {
           <Column field="location" header="Location" :sortable="true">
             <template #body="slotProps">
               {{
-                `(${slotProps.data.Location.Latitude},${slotProps.data.Location.Latitude},${slotProps.data.Location.Latitude})`
+                `(${slotProps.data.Latitude},${slotProps.data.Latitude},${slotProps.data.Latitude})`
               }}
             </template>
           </Column>
           <Column headerStyle="width:4rem">
             <template #body="slotProps">
               <CrudDialog
-                :title="`Edit Storage '${slotProps.data.designation}'`"
+                :title="`Edit Storage '${slotProps.data.Designation}'`"
                 :edit="true"
               />
             </template>
@@ -72,12 +141,12 @@ onBeforeMount(() => {
             <div class="p-3">
               <h5>Charging Systems</h5>
               <DataTable
-                :value="slotProps.data.chargingSystems"
+                :value="slotProps.data.ChargingSystems"
                 responsiveLayout="scroll"
               >
                 <Column field="id" header="Id" :sortable="true">
                   <template #body="slotProps">
-                    {{ slotProps.data.id.value }}
+                    {{ slotProps.data.ChargingSystems.ChargingTime }}
                   </template>
                 </Column>
                 <Column
@@ -86,13 +155,13 @@ onBeforeMount(() => {
                   :sortable="true"
                 >
                   <template #body="slotProps">
-                    {{ slotProps.data.chargingTime }}
+                    {{ slotProps.data.ChargingSystems.ChargingTime }}
                   </template>
                 </Column>
                 <Column headerStyle="width:4rem">
                   <template #body="slotProps">
                     <CrudDialog
-                      :title="`Edit Charging System '${slotProps.data.id.value}'`"
+                      :title="`Edit Charging System '${slotProps.data.ChargingSystems.ChargingTime}'`"
                       :edit="true"
                     />
                   </template>
@@ -104,7 +173,17 @@ onBeforeMount(() => {
       </div>
     </TabPanel>
     <TabPanel header="Deliveries">
-      <CrudDialog title="Add new Storage" content="" :edit="false" />
+      <CrudDialog 
+      v-if="storageService.Delivery_Errors.length == 0"
+      title="Add new Delivery" 
+      :edit="false"
+      :model="DeliveryMap.empty()"
+      :help_text_fields="help_delivery_fields"
+      :disabled_fields="[]"
+      @submit="addDelivery"
+      
+      
+      />
       <div class="card">
         <DataTable
           :value="deliveries"
@@ -117,12 +196,12 @@ onBeforeMount(() => {
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="deliveryDate" header="Date" :sortable="true">
             <template #body="slotProps">
-              {{ new Date(slotProps.data.deliveryDate).toLocaleString() }}
+              {{ new Date(slotProps.data.DeliveryDate).toLocaleString() }}
             </template>
           </Column>
           <Column field="deliveryWeight" header="Weight [kg]" :sortable="true">
             <template #body="slotProps">
-              {{ slotProps.data.deliveryWeight }}
+              {{ slotProps.data.DeliveryWeight }}
             </template>
           </Column>
           <Column field="finalStorageId" header="Final Storage">
@@ -130,69 +209,33 @@ onBeforeMount(() => {
               <a href="#/uikit/storage">
                 {{
                   storages.find((item) => {
-                    return item?.id == slotProps.data.finalStorageId;
-                  })?.designation
+                    return item?.StorageId == slotProps.data.FinalStorage;
+                  })?.Designation
                 }}
               </a>
             </template>
           </Column>
           <Column field="timeToLoad" header="Time To Load [min]">
             <template #body="slotProps">
-              {{ slotProps.data.timeToLoad }}
+              {{ slotProps.data.TimeToLoad }}
             </template>
           </Column>
           <Column field="timeToUnload" header="Time To Unload [min]">
             <template #body="slotProps">
-              {{ slotProps.data.timeToUnload }}
+              {{ slotProps.data.TimeToUnload }}
             </template>
           </Column>
           <Column headerStyle="width:4rem">
             <template #body="slotProps">
               <CrudDialog
                 :title="`Edit Delivery from ${new Date(
-                  slotProps.data.deliveryDate
+                  slotProps.data.DeliveryDate
                 ).toLocaleString()}`"
                 :edit="true"
               />
             </template>
           </Column>
-          <template #expansion="slotProps">
-            <div class="p-3">
-              <h5>Products</h5>
-              <DataTable
-                :value="slotProps.data.products"
-                responsiveLayout="scroll"
-              >
-                <Column field="name" header="Name" :sortable="true">
-                  <template #body="slotProps">
-                    {{ slotProps.data.name }}
-                  </template>
-                </Column>
-                <Column field="weight" header="Weight [kg]" :sortable="true">
-                  <template #body="slotProps">
-                    {{ slotProps.data.weight }}
-                  </template>
-                </Column>
-                <Column
-                  field="levelOfPolution"
-                  header="Level Of Polution"
-                  :sortable="true"
-                >
-                  <template #body="slotProps">
-                    {{ slotProps.data.levelOfPolution }}
-                  </template>
-                </Column>
-                <Column headerStyle="width:4rem">
-                  <template #body="slotProps">
-                    <CrudDialog
-                      :title="`Edit Product '${slotProps.data.name}'`"
-                      :edit="true"
-                    />
-                  </template>
-                </Column>
-              </DataTable>
-            </div>
-          </template>
+         
         </DataTable>
       </div>
     </TabPanel>

@@ -1,8 +1,9 @@
-//import type Storage from "@/models/storage";
+import type Storage from "@/models/storage";
 import type StorageDTO from "@/services/dtos/StorageDTO";
 import StorageMap from "@/services/mappers/StorageMap";
 import type DeliveryDTO from "@/services/dtos/DeliveryDTO";
 import DeliveryMap from "@/services/mappers/DeliveryMap";
+import type Delivery from "@/models/delivery";
 
 
 const contextPath = import.meta.env.BASE_URL;
@@ -80,7 +81,31 @@ export default class StorageService {
       });
   }
 
+  async createDelivery(delivery: Delivery) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: DeliveryMap.toJson(delivery),
+    };
+    const response = await fetch(
+      "https://localhost:7067/api/deliveries/",
+      requestOptions
+    );
+    return await response.json();
+  }
 
+  async createStorage(storage: Storage) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: StorageMap.toJson(storage),
+    };
+    const response = await fetch(
+      "https://localhost:7067/api/storages/",
+      requestOptions
+    );
+    return await response.json();
+  }
 
 
 

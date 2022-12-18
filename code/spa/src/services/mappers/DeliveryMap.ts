@@ -1,4 +1,5 @@
 import Delivery from "@/models/delivery";
+import type Product from "@/models/product";
 import type DeliveryDTO from "../dtos/DeliveryDTO";
 
 export default class DeliveryMap {
@@ -7,9 +8,10 @@ export default class DeliveryMap {
     for (const delivery of deliveries) {
         deliveryList.push(
         new Delivery(
+          delivery.id,
           delivery.deliveryDate,
           delivery.deliveryWeight,
-          delivery.idFinalStorage,
+          delivery.finalStorageId,
           delivery.timeToLoad,
           delivery.timeToUnload,
           delivery.products
@@ -19,4 +21,26 @@ export default class DeliveryMap {
     return deliveryList;
 
   }
+
+  public static fromAnyArray(delivery: Array<any>): Delivery {
+    let obj = Object.assign({}, ...delivery.map((x) => ({ [x.name]: x.value })));
+    return new Delivery(obj.id, obj.deliveryDate, obj.deliveryWeight, obj.finalStorageId, obj.timeToLoad, obj.timeToUnload, obj.products);
+  }
+
+  public static toJson(delivery: Delivery): string {
+    return JSON.stringify({
+      DeliveryDate: new Date(delivery.DeliveryDate),
+      DeliveryWeight: Number(delivery.DeliveryWeight),
+      FinalStorageId: delivery.FinalStorage,
+      TimeToLoad: Number(delivery.TimeToLoad),
+      TimeToUnload: Number(delivery.TimeToUnload),
+      Products: delivery.Products,
+    }, null, "\t");
+  }
+
+  public static empty(): Delivery {
+    var products: Product[] = [];
+    return new Delivery("","",1,"",1,1,products);
+  }
+
 }

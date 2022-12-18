@@ -1,10 +1,10 @@
 import type Product from "@/models/product";
 
 export default interface DeliveryDTO {
-    idDelivery: string,
+    id: string,
     deliveryDate: string,
     deliveryWeight: number,
-    idFinalStorage: string,
+    finalStorageId: string,
     timeToLoad: number,
     timeToUnload: number,
     products: Array<Product>
