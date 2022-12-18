@@ -17,7 +17,7 @@ export default class TripMap {
     return {
       idTrip: trip.identifier.value(),
       registration: trip.registration.value(),
-      date: trip.dateTrip.value(),
+      date: new Date(trip.dateTrip.value()),
       routes: slice,
       deliveries: trip.deliveries.map((delivery) => delivery.value()),
     } as TripDTO;
@@ -36,7 +36,7 @@ export default class TripMap {
     return {
       idTrip: trip.identifier.value(),
       registration: trip.registration.value(),
-      date: trip.dateTrip.value(),
+      date: new Date(trip.dateTrip.value()),
       routes: slice,
       deliveries: trip.deliveries.map((delivery) => delivery.value()),
     };

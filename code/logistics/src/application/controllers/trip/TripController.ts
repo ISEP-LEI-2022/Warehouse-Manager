@@ -43,6 +43,22 @@ export default class TripController implements ITripController {
   }
 
   /**
+   * @summary This method searches for a trip from the given registration and date
+   * @param registration registration of the truck
+   * @param {Date} date of the trip
+   * @returns {expectedTripJSON} Returns a JSON with the trip information
+   */
+  @Get("/:registration/:date")
+  async getTripByRegDate(
+    @Path() registration: string,
+    @Path() date: Date
+  ): Promise<expectedTripJSON> {
+    const tripDTO = await this.tripService.getTripByRegDate(registration, date);
+    return TripMap.toJSON(tripDTO);
+  }
+
+
+  /**
    * @summary Creates a new trip from the given body and returns the created trip
    * @returns {expectedBodyTrip} Returns a JSON with the created trip
    */
@@ -79,12 +95,7 @@ export default class TripController implements ITripController {
       !validateRequestParams(
         body,
         ["idTrip"],
-        [
-          "idRoute",
-          "date",
-          "deliveries",
-          "registration",
-        ]
+        ["idRoute", "date", "deliveries", "registration"]
       )
     ) {
       const error = badRequestErrorFactory();

@@ -1,32 +1,20 @@
-import { businessRuleErrorFactory } from "../../utils/Err";
 import { isValidDate } from "../../utils/UtilityFunctions";
-import ValueObject from "../interfaces/ValueObject";
+import { businessRuleErrorFactory } from "../../utils/Err";
 
-export default class DateTrip implements ValueObject<string> {
-    private dateTrip = "1900/01/01";
+export default class DateTrip {
+    private dateTrip = new Date("2000/01/01");
   
-    constructor(dateTrip: string) {
+    constructor(dateTrip: Date) {
       const error = businessRuleErrorFactory();
   
       isValidDate(dateTrip)
         ? (this.dateTrip = dateTrip)
-        : error.addError("Invalid date - must be in one of the following formats: yyyy-mm-dd, dd-mm-yyyy, yyyy/mm/dd, dd/mm/yyyy");
+        : error.addError("Invalid date - format needs to be YYYY/MM/DD | YYYY-MM-DD | MM/DD/YYYY | MM-DD-YYYY");
       if (error.hasErrors()) throw error;
     }
   
-    value(): string {
+    value(): Date {
       return this.dateTrip;
-    }
-  
-    equals(o: ValueObject<string>): boolean {
-      if (this === o) {
-        return true;
-      }
-      if (!(o instanceof DateTrip)) {
-        return false;
-      }
-  
-      return this.dateTrip === o.dateTrip;
     }
   }
   
