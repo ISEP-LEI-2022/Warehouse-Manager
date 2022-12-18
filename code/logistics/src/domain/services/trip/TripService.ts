@@ -5,7 +5,7 @@ import { businessRuleErrorFactory, getDataErrorFactory } from "../../utils/Err";
 import TripMap from "../../../infrastructure/mappers/TripMap";
 import { Inject, Service } from "typedi";
 import config from "../../../config";
-import ITripRepository from "../../../infrastructure/repositories/IRepository";
+import ITripRepository from "../../../infrastructure/repositories/trip/ITripRepository";
 import IRouteRepository from "../../../infrastructure/repositories/route/IRouteRepository";
 import ITruckRepository from "../../../infrastructure/repositories/IRepository";
 import ITripService from "./ITripService";
@@ -58,6 +58,21 @@ export default class TripService implements ITripService {
         throw error;
       }
 
+      // Check if the truck already has a trip in the same date
+      if (
+        await this.tripRepository.existsTripRegDate(
+          tripDTO.registration,
+          tripDTO.date
+        )
+      ) {
+        error.addError(
+          "Truck with " +
+            tripDTO.registration +
+            " registration already has a trip in the same date"
+        );
+        throw error;
+      }
+
       //TODO: Check if the delivery exists
       // Check if the delivery exists
       // for (const delivery in tripDTO.deliveries) {
@@ -92,6 +107,21 @@ export default class TripService implements ITripService {
       return TripMap.toDTO(trip);
     } catch (err) {
       error.addError("Error getting trip by id");
+      throw error;
+    }
+  }
+
+  async getTripByRegDate(registration: string, date: Date): Promise<TripDTO> {
+    const error = getDataErrorFactory();
+
+    try {
+      const trip = (await this.tripRepository.getTripByRegDate(
+        registration,
+        date
+      )) as Trip;
+      return TripMap.toDTO(trip);
+    } catch (err) {
+      error.addError("Error getting trip by registration and date");
       throw error;
     }
   }
