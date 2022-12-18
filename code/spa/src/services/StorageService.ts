@@ -25,7 +25,7 @@ export default class StorageService {
   }*/
 
   getDeliveries() {
-    return fetch(import.meta.env.VITE_STORAGE_API + "api/Deliveries")
+    return fetch("https://localhost:7067/" + "api/Deliveries")
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -58,7 +58,7 @@ export default class StorageService {
 
 
   getStorages() {
-    return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages")
+    return fetch("https://localhost:7067/" + "api/Storages")
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -88,7 +88,7 @@ export default class StorageService {
       body: DeliveryMap.toJson(delivery),
     };
     const response = await fetch(
-      import.meta.env.VITE_STORAGE_API + "api/deliveries/",
+      "https://localhost:7067/" + "api/deliveries/",
       requestOptions
     );
     return await response.json();
@@ -101,14 +101,14 @@ export default class StorageService {
       body: StorageMap.toJson(storage),
     };
     const response = await fetch(
-      import.meta.env.VITE_STORAGE_API + "api/storages/",
+      "https://localhost:7067/" + "api/storages/",
       requestOptions
     );
     return await response.json();
   }
 
   getStorageById(id: string) {
-    return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages/" + id)
+    return fetch("https://localhost:7067/" + "api/Storages/" + id)
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -138,7 +138,20 @@ export default class StorageService {
       body: StorageMap.toJson(storage),
     };
     const response = await fetch(
-      import.meta.env.VITE_STORAGE_API + "api/Storages/" + storage.StorageId,
+      "https://localhost:7067/" + "api/Storages/" + storage.StorageId,
+      requestOptions
+    );
+    return await response.json();
+  }
+
+  async updateDelivery(delivery: Delivery) {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: DeliveryMap.toJson(delivery),
+    };
+    const response = await fetch(
+      "https://localhost:7067/" + "api/Deliveries/" + delivery.DeliveryId,
       requestOptions
     );
     return await response.json();
