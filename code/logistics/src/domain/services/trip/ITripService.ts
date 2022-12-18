@@ -1,4 +1,4 @@
-import TripDTO from "src/domain/dto/TripDTO";
+import TripDTO from "../../dto/TripDTO";
 
 export default interface ITripService {
     createTrip(trip: TripDTO): Promise<TripDTO>;

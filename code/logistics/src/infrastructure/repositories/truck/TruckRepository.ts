@@ -8,8 +8,8 @@ import {
 } from "../../../domain/utils/Err";
 import TruckMap from "../../mappers/TruckMap";
 import { TruckMongoose } from "../../schemas/TruckSchema";
-import Entity from "src/domain/Entity";
-import TruckDTO from "src/domain/dto/TruckDTO";
+import Entity from "../../../domain/Entity";
+import TruckDTO from "../../../domain/dto/TruckDTO";
 
 @Service()
 export default class TruckRepository implements IRepository<string> {

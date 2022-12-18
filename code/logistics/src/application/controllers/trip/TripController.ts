@@ -81,12 +81,9 @@ export default class TripController implements ITripController {
         ["idTrip"],
         [
           "idRoute",
-          "idVehicle",
-          "idDriver",
-          "idAssistant",
           "date",
-          "time",
-          "status",
+          "deliveries",
+          "registration",
         ]
       )
     ) {

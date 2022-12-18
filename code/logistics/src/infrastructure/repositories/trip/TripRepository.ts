@@ -67,7 +67,7 @@ export default class TripRepository implements IRepository<string> {
   async getDataById(identifier: string): Promise<Entity<string>> {
     const error = getDataErrorFactory();
     try {
-      const data = await TripMongoose.findOne({ idRoute: identifier })
+      const data = await TripMongoose.findOne({ idTrip: identifier })
         .session(this.session)
         .orFail();
       return TripMap.toDomain(data);
