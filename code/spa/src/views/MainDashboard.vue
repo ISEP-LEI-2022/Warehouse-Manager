@@ -11,9 +11,9 @@ import type Delivery from "@/models/delivery";
 
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
+const deliveries = ref([] as Delivery[]);
+const storages = ref([] as Storage[]);
 
-const deliveries = ref([]);
-const storages = ref([]);
 const truck_Errors = ref([] as any[]);
 const route_Errors =  ref([] as any[]);
 

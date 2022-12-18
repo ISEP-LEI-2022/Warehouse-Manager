@@ -8,7 +8,6 @@ import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
 import LogisticsService from "@/services/LogisticsService";
 import type Trip from "@/models/trip";
-import TripMap from "@/services/mappers/TripMap";
 
 const toast = useToast();
 const trucks = ref([] as Truck[]);
