@@ -39,16 +39,14 @@ export function isValidRegistration(registration: string): boolean {
   return regex.test(registration);
 }
 
-/*
- * Function validates if the date is valid (yyyy-mm-dd | dd-mm-yyyy | yyyy/mm/dd | dd/mm/yyyy)
- * @param {string} date
+/** 
+ * Function validates if the date is valid
+ * @param {date} date
  * @returns {boolean} true if valid, false otherwise
  * */
-export function isValidDate(date: string): boolean {
-  // regex that validates yyyy-mm-dd | dd-mm-yyyy | yyyy/mm/dd | dd/mm/yyyy
-  const regex =
-    /^((19|20)\d{2})(-|\/)([1-9]|0[1-9]|1[012])(-|\/)([1-9]|0[1-9]|[12][0-9]|3[01])|(([1-9]|0[1-9]|[12][0-9]|3[01])(-|\/)([1-9]|0[1-9]|1[012])(-|\/)((19|20)\d{2}))$/;
-  return regex.test(date);
+export function isValidDate(date: Date): boolean {
+  date = new Date(date);
+  return date instanceof Date && !isNaN(date.getTime())
 }
 
 /**

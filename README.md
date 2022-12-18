@@ -4,7 +4,8 @@
 
 ## To Run logistics API directly on Docker Container:
 
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports logistics-api sh -c "npm run dev"`
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports logistics-api npm run dev`
+
 
 ## To Run on CMD
 `Warehouse-Manager/code/logistics:` `npm i && npm run dev`
@@ -16,7 +17,7 @@
 
 ## To Run logistics API tests directly on Docker Container:
 
-`Warehouse-Manager/code:` `docker-compose -f Docker-compose.yml run --rm --service-ports logistics-api sh -c "npm test"`
+`Warehouse-Manager/code:` `docker-compose run logistics-api npm run test`
 
 ## To Run tests on CMD
 `Warehouse-Manager/code/logistics:` `npm test`
@@ -25,7 +26,11 @@
 
 ## To Run storage API directly on Docker Container:
 
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports storage-api sh -c "dotnet EletricGo.dll"`
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports storage-api dotnet EletricGo.dll`
+
+## To Run storage API directly on Docker Container:
+
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports storage-api dotnet test`
 
 
 # Usage
@@ -39,4 +44,15 @@ Manual test storage API: `http://localhost:8000/swagger`
 
 
 ## To Run SPA directly on Docker Container:
-`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa sh -c "npm run dev"`
+`Warehouse-Manager/code:` `docker-compose run --rm --service-ports spa npm run dev`
+
+
+## To Run SPA unit tests directly on Docker Container:
+`Warehouse-Manager/code:` `docker-compose run --rm spa npm run test:unit`
+
+
+## To Run SPA e2e tests on CLI:
+`Warehouse-Manager/code/spa:` `npm run test:e2e`
+
+### Install Cypress dependencies:
+`apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb`

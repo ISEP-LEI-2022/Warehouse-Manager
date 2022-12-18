@@ -6,7 +6,6 @@ import {
   Duration,
   Energy,
 } from "../../value-objects";
-import { businessRuleErrorFactory } from "../../utils/Err";
 import Entity from "../../Entity";
 
 export default class Route implements AggregateRoot<string> {

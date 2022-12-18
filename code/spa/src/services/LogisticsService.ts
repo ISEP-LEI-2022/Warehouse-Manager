@@ -5,26 +5,18 @@ import type RouteDTO from "@/services/dtos/RouteDTO";
 import TruckMap from "@/services/mappers/TruckMap";
 import RouteMap from "@/services/mappers/RouteMap";
 
-const contextPath = import.meta.env.BASE_URL;
+import type TripDTO from "./dtos/TripDTO";
+import TripMap from "./mappers/TripMap";
+
 export default class LogisticsService {
-  Truck_Errors: Array<any>;
-  Route_Errors: Array<any>;
+  public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
 
-
-  
-  constructor() {
-    this.Truck_Errors = [];
-    this.Route_Errors = [];
-  }
-
-  getTrucks() {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
         const json = await response.json();
-        console.log(json)
         var data: Array<TruckDTO> = json;
         if (!response.ok) {
-          this.Truck_Errors.push({
+          getErros({
             content: response.statusText,
             severity: "error",
           });
@@ -33,7 +25,7 @@ export default class LogisticsService {
         return TruckMap.fromDTOArray(data);
       })
       .catch((error) => {
-        this.Truck_Errors.push({
+        getErros({
           content: error,
           severity: "error",
         });
@@ -41,7 +33,7 @@ export default class LogisticsService {
       });
   }
 
-  async createTruck(truck: Truck) {
+  public static async createTruck(truck: Truck) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -54,13 +46,32 @@ export default class LogisticsService {
     return await response.json();
   }
 
-  getRoutes() {
-    return fetch(contextPath + "demo/data/routes.json")
-      .then((res) => res.json())
-      .then((d) => d.data);
+
+  public static getRoutes(getErros: Function = (errors: Array<any>) => {}) {
+    return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
+      .then(async (response) => {
+        const json = await response.json();
+        var data: Array<RouteDTO> = json;
+        if (!response.ok) {
+          getErros({
+            content: response.statusText,
+            severity: "error",
+          });
+          return RouteMap.fromDTOArray([]);
+        }
+
+        return RouteMap.fromDTOArray(data);
+      })
+      .catch((error) => {
+        getErros({
+          content: error,
+          severity: "error",
+        });
+        return RouteMap.fromDTOArray([]);
+      });
   }
 
-  async createRoute(route: Route) {
+  public static async createRoute(route: Route) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -71,5 +82,36 @@ export default class LogisticsService {
       requestOptions
     );
     return await response.json();
+  }
+
+  public static async getTrip(
+    registration: string,
+    date: Date,
+    getErros: Function = (errors: Array<any>) => {}
+  ) {
+    const datereq = date.toISOString().slice(0,10);
+    return fetch(
+      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + datereq
+    )
+      .then(async (response) => {
+        const json = await response.json();
+        var data: TripDTO = json;
+        if (!response.ok) {
+          getErros({
+            content: response.statusText,
+            severity: "error",
+          });
+          return TripMap.empty();
+        }
+
+        return TripMap.fromDTO(data);
+      })
+      .catch((error) => {
+        getErros({
+          content: error,
+          severity: "error",
+        });
+        return TripMap.empty();
+      });
   }
 }

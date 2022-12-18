@@ -1,0 +1,158 @@
+[
+    {
+        "id": "0c9f678a-e1f3-41dd-8e71-cef7d2ebaede",
+        "designation": "Armazem Porto 2",
+        "location": {
+            "latitude": "10",
+            "longitude": "10",
+            "altitude": "10",
+            "address": {
+                "street": "Rua de São Tomé",
+                "door": "10",
+                "floor": "5",
+                "postalCode": "4000-000",
+                "city": {
+                    "number": 10,
+                    "name": "Porto",
+                    "id": {
+                        "value": "3273cacb-9adb-457a-af0f-9407013bdbd2"
+                    }
+                },
+                "id": {
+                    "value": "6838fe74-7f1c-4efe-ae64-d0c338d18a76"
+                }
+            },
+            "id": {
+                "value": "b593544e-bbf5-4716-9b5d-b57649fa07bd"
+            }
+        },
+        "chargingSystems": [
+            {
+                "chargingTime": "10",
+                "id": {
+                    "value": "b6402ce1-2695-47b9-8ce8-4cd38bca9dfa"
+                }
+            },
+            {
+                "chargingTime": "20",
+                "id": {
+                    "value": "e91ff8fa-8aa9-4c42-803f-2effcbe16cb7"
+                }
+            }
+        ]
+    },
+    {
+        "id": "57702b38-74dd-4b86-87a0-02bb76bf53ba",
+        "designation": "Teste integração",
+        "location": {
+            "latitude": "15",
+            "longitude": "15",
+            "altitude": "15",
+            "address": {
+                "street": "rua 6",
+                "door": "7",
+                "floor": "5",
+                "postalCode": "4455-856",
+                "city": {
+                    "number": 123,
+                    "name": "Lisboa",
+                    "id": {
+                        "value": "d9aa157b-3d5f-4ffe-ba5d-170d993701da"
+                    }
+                },
+                "id": {
+                    "value": "4f30ce09-82f6-4de0-bd3c-be0b33403b59"
+                }
+            },
+            "id": {
+                "value": "5d9f5f5f-7897-42ad-b9fa-3ae8fb56bd83"
+            }
+        },
+        "chargingSystems": [
+            {
+                "chargingTime": "40",
+                "id": {
+                    "value": "976bb5c5-4596-48d5-a468-88ff5a4e326c"
+                }
+            }
+        ]
+    },
+    {
+        "id": "5bf4d2c4-a89b-451f-af30-ca3bef12c2c8",
+        "designation": "Teste integração",
+        "location": {
+            "latitude": "15",
+            "longitude": "15",
+            "altitude": "15",
+            "address": {
+                "street": "rua 6",
+                "door": "7",
+                "floor": "5",
+                "postalCode": "4455-856",
+                "city": {
+                    "number": 123,
+                    "name": "Lisboa",
+                    "id": {
+                        "value": "e702eb1c-1fee-4a90-92a2-043ad30c2646"
+                    }
+                },
+                "id": {
+                    "value": "c58bcf84-964c-4569-8943-795c47fa0200"
+                }
+            },
+            "id": {
+                "value": "8bc6e9ca-3d5d-4740-9961-74df0998095b"
+            }
+        },
+        "chargingSystems": [
+            {
+                "chargingTime": "40",
+                "id": {
+                    "value": "a38f8676-1f0d-43e8-a0f6-93dfd0a5779b"
+                }
+            }
+        ]
+    },
+    {
+        "id": "f71a85d6-e86a-413e-a6e5-8dd254917e4f",
+        "designation": "Armazem Gaia 2",
+        "location": {
+            "latitude": "8",
+            "longitude": "12",
+            "altitude": "13",
+            "address": {
+                "street": "Rua de São Tomé1",
+                "door": "10",
+                "floor": "5",
+                "postalCode": "4000-000",
+                "city": {
+                    "number": 11,
+                    "name": "Porto",
+                    "id": {
+                        "value": "a1da60f9-9b21-4a88-939b-d2200a230ece"
+                    }
+                },
+                "id": {
+                    "value": "81e4230e-3017-4536-8801-c1d024585945"
+                }
+            },
+            "id": {
+                "value": "119c1b31-434c-4e76-9b8d-e2af32ed89f8"
+            }
+        },
+        "chargingSystems": [
+            {
+                "chargingTime": "20",
+                "id": {
+                    "value": "7bad2646-7796-4cbe-9e08-dba2b724fad5"
+                }
+            },
+            {
+                "chargingTime": "10",
+                "id": {
+                    "value": "c28ba138-d3fc-4b4c-be3f-cb9150c8d3e2"
+                }
+            }
+        ]
+    }
+]

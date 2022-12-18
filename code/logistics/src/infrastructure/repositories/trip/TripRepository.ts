@@ -6,13 +6,13 @@ import {
 } from "../../../domain/utils/Err";
 import TripMap from "../../../infrastructure/mappers/TripMap";
 import { Trip } from "../../../domain/aggregates";
-import IRepository from "../IRepository";
 import { TripMongoose } from "../../../infrastructure/schemas/TripSchema";
 import Entity from "../../../domain/Entity";
 import TripDTO from "../../../domain/dto/TripDTO";
+import ITripRepository from "./ITripRepository";
 
 @Service()
-export default class TripRepository implements IRepository<string> {
+export default class TripRepository implements ITripRepository<string> {
   private session: ClientSession | null;
   constructor() {}
 
@@ -52,6 +52,16 @@ export default class TripRepository implements IRepository<string> {
     }
   }
 
+  async existsTripRegDate(registration:string, date:Date): Promise<boolean> {
+    if (this.session) {
+      return !!(await TripMongoose.exists({ registration:registration,date:date }).session(
+        this.session
+      ));
+    } else {
+      return !!(await TripMongoose.exists({ registration:registration,date:date }));
+    }
+  }
+
   async getData(): Promise<Entity<string>[]> {
     const error = getDataErrorFactory();
     let data: mongoose.Document[] = [];
@@ -67,12 +77,25 @@ export default class TripRepository implements IRepository<string> {
   async getDataById(identifier: string): Promise<Entity<string>> {
     const error = getDataErrorFactory();
     try {
-      const data = await TripMongoose.findOne({ idRoute: identifier })
+      const data = await TripMongoose.findOne({ idTrip: identifier })
         .session(this.session)
         .orFail();
       return TripMap.toDomain(data);
     } catch (err) {
       error.addError("Error searching data");
+      throw error;
+    }
+  }
+
+  async getTripByRegDate(registration: string, date: Date ): Promise<Entity<string>> {
+    const error = getDataErrorFactory();
+    try {
+      const data = await TripMongoose.findOne({ registration: registration, date: date })
+        .session(this.session)
+        .orFail();
+      return TripMap.toDomain(data);
+    } catch (err) {
+      error.addError("No trip found for this registration and date");
       throw error;
     }
   }

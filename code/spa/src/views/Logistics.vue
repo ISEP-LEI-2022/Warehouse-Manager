@@ -1,17 +1,27 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
-import LogisticsService from "@/services/LogisticsService";
 import CrudDialog from "@/components/CrudDialog.vue";
 import type Truck from "@/models/truck";
 import type Route from "@/models/route";
 import RouteMap from "@/services/mappers/RouteMap";
 import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
+import LogisticsService from "@/services/LogisticsService";
+import type Trip from "@/models/trip";
+import TripMap from "@/services/mappers/TripMap";
 
 const toast = useToast();
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
-const logisticsService = new LogisticsService();
+const trip = ref(TripMap.empty() as Trip);
+const truck_Errors = ref([] as any[]);
+const route_Errors = ref([] as any[]);
+const trip_Errors = ref([] as any[]);
+
+const selectedDate = ref(null);
+const selectedTruck = ref(null);
+const autoFilteredValue = ref([] as any[]);
+const loading = ref(false);
 
 const help_truck_fields = ref({ Registration: "Format: XX-00-XX" });
 const help_route_fields = ref({
@@ -22,20 +32,20 @@ const help_route_fields = ref({
 });
 
 onBeforeMount(() => {
-  logisticsService.getTrucks().then((data) => (trucks.value = data));
-  logisticsService.getRoutes().then((data) => (routes.value = data));
+  LogisticsService.getTrucks((errors: Array<any>) => {
+    truck_Errors.value.push(errors);
+  }).then((data) => (trucks.value = data));
+  LogisticsService.getRoutes((errors: Array<any>) => {
+    route_Errors.value.push(errors);
+  }).then((data) => (routes.value = data));
 });
 
 const addTruck = (truck: Array<any>) => {
   const new_truck = TruckMap.fromAnyArray(truck);
-  logisticsService.createTruck(new_truck).then((response) =>
-    processResponse(
-      response,
-      "Create Truck",
-      () => {
-        trucks.value.push(new_truck);
-      }
-    )
+  LogisticsService.createTruck(new_truck).then((response) =>
+    processResponse(response, "Create Truck", () => {
+      trucks.value.push(new_truck);
+    })
   );
 };
 const updateTruck = () => {
@@ -46,16 +56,25 @@ const updateTruck = () => {
     life: 3000,
   });
 };
+const searchTruck = (event: any) => {
+  setTimeout(() => {
+    if (!event.query.trim().length) {
+      autoFilteredValue.value = [...trucks.value];
+    } else {
+      autoFilteredValue.value = trucks.value.filter((truck) => {
+        return truck.Registration.toLowerCase().startsWith(
+          event.query.toLowerCase()
+        );
+      });
+    }
+  }, 250);
+};
 const addRoute = (route: Array<any>) => {
   const new_route = RouteMap.fromAnyArray(route);
-  logisticsService.createRoute(new_route).then((response) =>
-    processResponse(
-      response,
-      "Create Route",
-      () => {
-        routes.value.push(new_route);
-      }
-    )
+  LogisticsService.createRoute(new_route).then((response) =>
+    processResponse(response, "Create Route", () => {
+      routes.value.push(new_route);
+    })
   );
 };
 const updateRoute = () => {
@@ -70,7 +89,7 @@ const processResponse = (
   resp: any,
   message: string = "",
   onSuccess: Function,
-  onError: Function = ()=> {}
+  onError: Function = () => {}
 ) => {
   if ("code" in resp) {
     toast.add({
@@ -90,14 +109,23 @@ const processResponse = (
     onSuccess();
   }
 };
+const searchTrip = () => {
+  loading.value = true;
+  setTimeout(() => (loading.value = false), 1000);
+  const val = LogisticsService.getTrip(selectedTruck.value.Registration,selectedDate.value,(errors: Array<any>) => {
+    route_Errors.value.push(errors);
+  }).then((data) => (trip.value = data));
+  console.log(`Selected Truck: ${selectedTruck.value}, Selected Date: ${selectedDate.value}`);
+  console.log(val);
+};
 </script>
 
 <template>
   <TabView>
-    <TabPanel header="Trucks">
+    <TabPanel id="trucks-panel" header="Trucks">
       <Toast />
       <CrudDialog
-        v-if="logisticsService.Truck_Errors.length == 0"
+        v-if="truck_Errors?.length == 0"
         title="Add
       new Truck"
         :edit="false"
@@ -108,7 +136,7 @@ const processResponse = (
       />
       <div class="card">
         <Message
-          v-for="msg of logisticsService.Truck_Errors"
+          v-for="msg of truck_Errors"
           :severity="msg.severity"
           :key="msg.content"
           >{{ msg.content }}</Message
@@ -156,10 +184,10 @@ const processResponse = (
         </DataTable>
       </div>
     </TabPanel>
-    <TabPanel header="Routes">
+    <TabPanel id="routes-panel" header="Routes">
       <Toast />
       <CrudDialog
-        v-if="logisticsService.Route_Errors.length == 0"
+        v-if="route_Errors?.length == 0"
         title="Add new Route"
         :edit="false"
         :model="RouteMap.empty()"
@@ -168,7 +196,7 @@ const processResponse = (
       />
       <div class="card">
         <Message
-          v-for="msg of logisticsService.Route_Errors"
+          v-for="msg of route_Errors"
           :severity="msg.severity"
           :key="msg.content"
           >{{ msg.content }}</Message
@@ -224,6 +252,142 @@ const processResponse = (
                 :edit="true"
                 :help_text_fields="help_route_fields"
                 @submit="updateRoute"
+              />
+            </template>
+          </Column>
+        </DataTable>
+      </div>
+    </TabPanel>
+    <TabPanel id="trips-panel" header="Trips">
+      <div class="card">
+        <AutoComplete
+          placeholder="Search"
+          id="dd"
+          :dropdown="true"
+          :multiple="false"
+          v-model="selectedTruck"
+          :suggestions="autoFilteredValue"
+          @complete="searchTruck($event)"
+          field="Registration"
+          style="margin-right: 1rem"
+        />
+        <Calendar
+          :showIcon="true"
+          :showButtonBar="true"
+          v-model="selectedDate"
+          style="margin-right: 1rem"
+        />
+        <Button
+          type="button"
+          label="Search"
+          icon="pi pi-search"
+          :loading="loading"
+          @click="searchTrip"
+        />
+      </div>
+      <div class="card">
+        <h5>Routes</h5>
+        <Message
+          v-for="msg of route_Errors"
+          :severity="msg.severity"
+          :key="msg.content"
+          >{{ msg.content }}</Message
+        >
+        <DataTable
+          :value="routes"
+          :rows="10"
+          :paginator="true"
+          responsiveLayout="scroll"
+        >
+          <Column field="Route" header="Route" style="width: 15%" />
+          <Column
+            field="Start"
+            header="Start"
+            :sortable="true"
+            style="width: 15%"
+          />
+          <Column
+            field="End"
+            header="End"
+            :sortable="true"
+            style="width: 10%"
+          />
+          <Column
+            field="Distance"
+            header="Distance [km]"
+            :sortable="true"
+            style="width: 15%"
+          />
+          <Column
+            field="TimeRequired"
+            header="Time [min]"
+            :sortable="true"
+            style="width: 15%"
+          />
+          <Column
+            field="EnergyConsumed"
+            header="En.Consumed [kW]"
+            :sortable="true"
+            style="width: 15%"
+          />
+          <Column
+            field="ExtraChargingTime"
+            header="Ex. Ch. Time [min]"
+            :sortable="true"
+            style="width: 20%"
+          />
+          <Column headerStyle="width:4rem">
+            <template #body="slotProps">
+              <CrudDialog
+                :title="`Edit Route '${slotProps.data.Route}'`"
+                :model="slotProps.data"
+                :edit="true"
+                :help_text_fields="help_route_fields"
+                @submit="updateRoute"
+              />
+            </template>
+          </Column>
+        </DataTable>
+      </div>
+      <div class="card">
+        <h5>Deliveries</h5>
+        <DataTable
+          :value="trucks"
+          :rows="10"
+          :paginator="true"
+          responsiveLayout="scroll"
+        >
+          <Column
+            field="Registration"
+            header="Registration"
+            style="width: 25%"
+          ></Column>
+          <Column
+            field="Autonomy"
+            header="Autonomy [min]"
+            :sortable="true"
+            style="width: 25%"
+          ></Column>
+          <Column
+            field="Capacity"
+            header="Capacity [kg]"
+            :sortable="true"
+            style="width: 30%"
+          ></Column>
+          <Column
+            field="Tare"
+            header="Tare [kg]"
+            :sortable="true"
+            style="width: 20%"
+          ></Column>
+          <Column headerStyle="width:4rem">
+            <template #body="slotProps">
+              <CrudDialog
+                :title="`Edit Truck '${slotProps.data.Registration}'`"
+                :model="slotProps.data"
+                :edit="true"
+                :help_text_fields="help_truck_fields"
+                @submit="updateTruck"
               />
             </template>
           </Column>

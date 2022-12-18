@@ -1,33 +1,34 @@
-import Entity from "src/domain/Entity";
-import { businessRuleErrorFactory } from "../../utils/Err";
+import Entity from "../../Entity";
 import {
   Registration,
-  RouteIdentifier,
   TripIdentifier,
   DateTrip,
   DeliveryIdentifier,
 } from "../../value-objects";
 import AggregateRoot from "../AggregateRoot";
+import SliceRoute from "./SliceRoute";
 
 export default class Trip implements AggregateRoot<string> {
   private idTrip: TripIdentifier;
   private registrationProp: Registration;
   private dateTripProp: DateTrip;
-  private routesProp: RouteIdentifier[];
+  private routesProp: SliceRoute[];
   private deliveriesProp: DeliveryIdentifier[];
 
   constructor(
     idTrip: string,
     registration: string,
-    dateTrip: string,
-    routes: string[],
+    dateTrip: Date,
+    routes: SliceRouteType[],
     deliveries: string[]
   ) {
     try {
       this.idTrip = new TripIdentifier(idTrip);
       this.registrationProp = new Registration(registration);
       this.dateTripProp = new DateTrip(dateTrip);
-      this.routesProp = routes.map((route) => new RouteIdentifier(route));
+      this.routesProp = routes.map(
+        (route) => new SliceRoute(route.idStart, route.idEnd)
+      );
       this.deliveriesProp = deliveries.map(
         (delivery) => new DeliveryIdentifier(delivery)
       );
@@ -60,3 +61,8 @@ export default class Trip implements AggregateRoot<string> {
     return this.deliveriesProp;
   }
 }
+
+export type SliceRouteType = {
+  idStart: string;
+  idEnd: string;
+};

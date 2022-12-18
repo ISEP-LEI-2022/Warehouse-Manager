@@ -1,61 +1,77 @@
 version: '3.8'
+
 services:
+  spa:
+    container_name: spa
+    image: 1180910/spa:latest
+    environment:
+      - VITE_STORAGE_API=https://dotnet.fhsan.com/
+      - VITE_LOGISTICS_API=https://node.fhsan.com/
+    networks:
+      - storage_net
+      - logistics_net
+    ports:
+      - 8081:8081
+    depends_on:
+      - logistics-api
+      - storage-api
+    restart: unless-stopped
+
   logistics-api:
     container_name: logistics-api
-    image: logistics-api:dev
-    build:
-      context: ./logistics
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./logistics:/logistics
+    image: 1180910/logistics-api:latest
     environment:
       - database=mongodb://mongodb:27017/logistics
     networks:
-      - mynet
+      - logistics_net
     ports:
       - 3000:3000
     depends_on:
       - mongodb
-
-  mongodb:
-    image: mongo
-    hostname: mongodb
-    volumes:
-      - ./volumes/mongodb:/data/db
-    networks:
-      - mynet
-    ports:
-      - 27017:27017
     restart: unless-stopped
 
   storage-api:
     container_name: storage-api
-    image: storage-api:dev
-    build:
-      context: ./storage/src
-      dockerfile: Dockerfile.dev
-      target: final
+    hostname: storage-api
+    image: 1180910/storage-api:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ./storage/certs/https:/https:ro
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
     networks:
-      - mynet
+      - storage_net
     ports:
       - 8000:80
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo
+    hostname: mongodb
+    networks:
+      - logistics_net
+    ports:
+      - 27017:27017
+    restart: unless-stopped
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      SA_PASSWORD: "SqlServer2019!"
-      ACCEPT_EULA: "Y"
-      MSSQL_PID: "Developer"
+    container_name: sqlserver
+    image: 1180910/local-sql-server:latest
+    hostname: local.sqlserver
+    healthcheck:
+        test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "Adminxyz22#" -Q "SELECT 1" || exit 1
+        interval: 10s
+        timeout: 3s
+        retries: 10
+        start_period: 10s
+    networks:
+      - storage_net
     ports:
-      - "1433:1433"
-
+      - 1433:1433
+    restart: unless-stopped
 
 networks:
-  mynet:
+  logistics_net:
+  storage_net:
     driver: bridge

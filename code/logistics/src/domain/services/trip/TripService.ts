@@ -5,8 +5,8 @@ import { businessRuleErrorFactory, getDataErrorFactory } from "../../utils/Err";
 import TripMap from "../../../infrastructure/mappers/TripMap";
 import { Inject, Service } from "typedi";
 import config from "../../../config";
-import ITripRepository from "../../../infrastructure/repositories/IRepository";
-import IRouteRepository from "../../../infrastructure/repositories/IRepository";
+import ITripRepository from "../../../infrastructure/repositories/trip/ITripRepository";
+import IRouteRepository from "../../../infrastructure/repositories/route/IRouteRepository";
 import ITruckRepository from "../../../infrastructure/repositories/IRepository";
 import ITripService from "./ITripService";
 
@@ -33,8 +33,19 @@ export default class TripService implements ITripService {
 
       // Check if the routes exist
       for (const route in tripDTO.routes) {
-        if (!(await this.routeRepository.exists(tripDTO.routes[route]))) {
-          error.addError("Route " + tripDTO.routes[route] + " does not exist");
+        if (
+          !(await this.routeRepository.existsSlice(
+            tripDTO.routes[route].idStart,
+            tripDTO.routes[route].idEnd
+          ))
+        ) {
+          error.addError(
+            "Route starting in " +
+              tripDTO.routes[route].idStart +
+              " and ending in " +
+              tripDTO.routes[route].idEnd +
+              " does not exist."
+          );
           throw error;
         }
       }
@@ -47,19 +58,35 @@ export default class TripService implements ITripService {
         throw error;
       }
 
-      // Check if the delivery exists
-      for (const delivery in tripDTO.deliveries) {
-        fetch("http://localhost:8000/api/deliveries/" + tripDTO.deliveries[delivery]).then(
-          (response) => {
-            if (response.status === 404) {
-              error.addError(
-                "Delivery " + tripDTO.deliveries[delivery] + " does not exist"
-              );
-              throw error;
-            }
-          }
+      // Check if the truck already has a trip in the same date
+      if (
+        await this.tripRepository.existsTripRegDate(
+          tripDTO.registration,
+          tripDTO.date
+        )
+      ) {
+        error.addError(
+          "Truck with " +
+            tripDTO.registration +
+            " registration already has a trip in the same date"
         );
+        throw error;
       }
+
+      //TODO: Check if the delivery exists
+      // Check if the delivery exists
+      // for (const delivery in tripDTO.deliveries) {
+      //   fetch(
+      //     "http://localhost:8000/api/deliveries/" + tripDTO.deliveries[delivery]
+      //   ).then((response) => {
+      //     if (response.status === 404) {
+      //       error.addError(
+      //         "Delivery " + tripDTO.deliveries[delivery] + " does not exist"
+      //       );
+      //       throw error;
+      //     }
+      //   });
+      // }
 
       !!(await this.tripRepository.exists(tripDTO.idTrip)) === true
         ? error.addError("Trip with this idTrip already exists")
@@ -80,6 +107,21 @@ export default class TripService implements ITripService {
       return TripMap.toDTO(trip);
     } catch (err) {
       error.addError("Error getting trip by id");
+      throw error;
+    }
+  }
+
+  async getTripByRegDate(registration: string, date: Date): Promise<TripDTO> {
+    const error = getDataErrorFactory();
+
+    try {
+      const trip = (await this.tripRepository.getTripByRegDate(
+        registration,
+        date
+      )) as Trip;
+      return TripMap.toDTO(trip);
+    } catch (err) {
+      error.addError("Error getting trip by registration and date");
       throw error;
     }
   }

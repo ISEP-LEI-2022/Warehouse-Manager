@@ -119,6 +119,21 @@
 				],
 				"type": "object"
 			},
+			"SliceRouteType": {
+				"properties": {
+					"idEnd": {
+						"type": "string"
+					},
+					"idStart": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"idEnd",
+					"idStart"
+				],
+				"type": "object"
+			},
 			"expectedTripJSON": {
 				"properties": {
 					"deliveries": {
@@ -129,12 +144,13 @@
 					},
 					"routes": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/SliceRouteType"
 						},
 						"type": "array"
 					},
 					"date": {
-						"type": "string"
+						"type": "string",
+						"format": "date-time"
 					},
 					"registration": {
 						"type": "string"
@@ -162,12 +178,13 @@
 					},
 					"routes": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/SliceRouteType"
 						},
 						"type": "array"
 					},
 					"date": {
-						"type": "string"
+						"type": "string",
+						"format": "date-time"
 					},
 					"registration": {
 						"type": "string"
@@ -500,6 +517,49 @@
 						"name": "idTrip",
 						"required": true,
 						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/trips/{registration}/{date}": {
+			"get": {
+				"operationId": "GetTripByRegDate",
+				"responses": {
+					"200": {
+						"description": "Returns a JSON with the trip information",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedTripJSON"
+								}
+							}
+						}
+					}
+				},
+				"summary": "This method searches for a trip from the given registration and date",
+				"tags": [
+					"Trips"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "registration of the truck",
+						"in": "path",
+						"name": "registration",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "of the trip",
+						"in": "path",
+						"name": "date",
+						"required": true,
+						"schema": {
+							"format": "date-time",
 							"type": "string"
 						}
 					}

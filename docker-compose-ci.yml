@@ -3,13 +3,10 @@ services:
 
   spa:
     container_name: spa
-    image: spa:dev
-    volumes:
-      - ./spa:/spa
+    image: 1180910/spa:latest
     build:
-      context: ./spa
+      context: ./code/spa
       dockerfile: Dockerfile
-      target: dev
     environment:
       - VITE_STORAGE_API=http://localhost:8000/
       - VITE_LOGISTICS_API=http://localhost:3000/
@@ -17,7 +14,7 @@ services:
       - storage_net
       - logistics_net
     ports:
-      - 8081:8081
+      - 8081:8080
     depends_on:
       - logistics-api
       - storage-api
@@ -25,13 +22,11 @@ services:
   logistics-api:
     container_name: logistics-api
     hostname: logistics-api
-    image: logistics-api:dev
+    image: 1180910/logistics-api:latest
     build:
-      context: ./logistics
+      context: ./code/logistics
       dockerfile: Dockerfile
       target: dev
-    volumes:
-      - ./logistics:/logistics
     environment:
       - database=mongodb://mongodb:27017/logistics
     networks:
@@ -44,8 +39,6 @@ services:
   mongodb:
     image: mongo
     hostname: mongodb
-    volumes:
-      - ./volumes/mongodb:/data/db
     networks:
       - logistics_net
     ports:
@@ -54,9 +47,9 @@ services:
   storage-api:
     container_name: storage-api
     hostname: storage-api
-    image: storage-api:dev
+    image: 1180910/storage-api:latest
     build:
-      context: ./storage
+      context: ./code/storage
       dockerfile: Dockerfile
       target: final
     environment:
@@ -69,12 +62,42 @@ services:
     depends_on:
       - sqlserver
 
+  storage-api-unit-tests:
+    container_name: storage-api-unit-tests
+    image: storage-api:dev
+    build:
+      context: ./code/storage
+      dockerfile: Dockerfile
+      target: unit_tests
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+    networks:
+      - storage_net
+    depends_on:
+      - sqlserver
+
+  storage-api-integration-tests:
+    container_name: storage-api-integration-tests
+    image: storage-api:dev
+    build:
+      context: ./code/storage
+      dockerfile: Dockerfile
+      target: integration_tests
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+    networks:
+      - storage_net
+    depends_on:
+      - sqlserver
 
   sqlserver:
     container_name: sqlserver
     hostname: local.sqlserver
+    image: 1180910/local-sql-server:latest
     build:
-      context: ./storage/sqlserver
+      context: ./code/storage/sqlserver
       dockerfile: Dockerfile
     networks:
       - storage_net
