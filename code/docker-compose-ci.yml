@@ -3,9 +3,7 @@ services:
 
   spa:
     container_name: spa
-    image: spa:dev
-    volumes:
-      - ./spa:/spa
+    image: 1180910/spa:latest
     build:
       context: ./spa
       dockerfile: Dockerfile
@@ -24,13 +22,11 @@ services:
   logistics-api:
     container_name: logistics-api
     hostname: logistics-api
-    image: logistics-api:dev
+    image: 1180910/logistics-api:latest
     build:
       context: ./logistics
       dockerfile: Dockerfile
       target: dev
-    volumes:
-      - ./logistics:/logistics
     environment:
       - database=mongodb://mongodb:27017/logistics
     networks:
@@ -53,7 +49,7 @@ services:
   storage-api:
     container_name: storage-api
     hostname: storage-api
-    image: storage-api:dev
+    image: 1180910/storage-api:latest
     build:
       context: ./storage
       dockerfile: Dockerfile
@@ -68,10 +64,40 @@ services:
     depends_on:
       - sqlserver
 
+  storage-api-unit-tests:
+    container_name: storage-api-unit-tests
+    image: storage-api:dev
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+      target: unit_tests
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+    networks:
+      - storage_net
+    depends_on:
+      - sqlserver
+
+  storage-api-integration-tests:
+    container_name: storage-api-integration-tests
+    image: storage-api:dev
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+      target: integration_tests
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE=Server=tcp:local.sqlserver,1433;Database=ARQSI;User ID=SA;Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;
+    networks:
+      - storage_net
+    depends_on:
+      - sqlserver
 
   sqlserver:
     container_name: sqlserver
     hostname: local.sqlserver
+    image: 1180910/local-sql-server:latest
     build:
       context: ./storage/sqlserver
       dockerfile: Dockerfile

@@ -17,28 +17,16 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Logistics API Unit Tests
         working-directory: ./code
-        run: docker-compose run logistics-api npm run test
+        run: docker-compose -f docker-compose-ci.yml run logistics-api npm run test
       - name: Run Storage API Unit Tests
         working-directory: ./code
-        run: docker-compose run storage-api-unit-tests dotnet test
+        run: docker-compose -f docker-compose-ci.yml run storage-api-unit-tests dotnet test
       - name: Run Storage API Integration Tests
         working-directory: ./code
-        run: docker-compose run storage-api-unit-tests dotnet test
+        run: docker-compose -f docker-compose-ci.yml run storage-api-unit-tests dotnet test
       - name: Run SPA Unit Tests
         working-directory: ./code
-        run: docker-compose run spa npm run test:unit:ci
-      - name: Build Latest Logistics API Docker image
-        working-directory: ./code/logistics
-        run: docker build . --file Dockerfile --target production --tag 1180910/logistics-api:latest
-      - name: Build Latest SQL SERVER Docker image
-        working-directory: ./code/storage/sqlserver
-        run: docker build . --file Dockerfile --tag 1180910/local-sql-server:latest
-      - name: Build Latest Storage API Docker image
-        working-directory: ./code/storage
-        run: docker build . --file Dockerfile --target final --tag 1180910/storage-api:latest
-      - name: Build Latest SPA Docker image
-        working-directory: ./code/spa
-        run: docker build . --file Dockerfile --tag 1180910/spa:latest
+        run: docker-compose -f docker-compose-ci.yml run spa npm run test:unit:ci
       - name: Docker Push Logistics API Latest Image
         run: docker push 1180910/logistics-api:latest
       - name: Docker Push SQL SERVER Latest Image
