@@ -7,6 +7,7 @@ import DeliveryMap from "@/services/mappers/DeliveryMap";
 import { useToast } from "primevue/usetoast";
 import type Storage from "@/models/storage";
 import type Delivery from "@/models/delivery";
+import ChargingSystems from "@/models/chargingSystem";
 
 const toast = useToast();
 const expandedRows = ref([]);
@@ -45,6 +46,18 @@ const addStorage = (storage: Array<any>) => {
     )
   );
 };
+
+const addChargingSystem = (chargingSystems: Array<any>) => {
+  const chargingSystem = StorageMap.fromAnyArrayChargingSystem(chargingSystems);
+  var index: number;
+  index = storages.value.findIndex((item) => item.StorageId = chargingSystem.Storage);
+
+  storages.value[index].Chargingsystems.push(new ChargingSystems(chargingSystem.ChargingTime));
+
+  storageService.updateStorage(storages.value[index]);
+
+};
+
 
 const addDelivery = (delivery: Array<any>) => {
   const new_delivery = DeliveryMap.fromAnyArray(delivery);
@@ -134,34 +147,43 @@ const processResponse = (
               <CrudDialog
                 :title="`Edit Storage '${slotProps.data.Designation}'`"
                 :edit="true"
-              />
+                :model="storageService.getStorageById(`${slotProps.data.StorageId}`)"
+                :help_text_fields="help_storage_fields"
+                :disabled_fields="[]"
+                @submit="addStorage"/>
+              
             </template>
           </Column>
           <template #expansion="slotProps">
             <div class="p-3">
               <h5>Charging Systems</h5>
+
+              <CrudDialog 
+                v-if="storageService.Storage_Errors.length == 0"
+                title="Add new Charging System" 
+                :edit="false"
+                :model="StorageMap.emptyChargingSystem(`${slotProps.data.StorageId}`)"
+                :help_text_fields="help_storage_fields"
+                :disabled_fields="[]"
+                @submit="addChargingSystem"/>
+
               <DataTable
-                :value="slotProps.data.ChargingSystems"
+                :value="slotProps.data.Chargingsystems"
                 responsiveLayout="scroll"
               >
-                <Column field="id" header="Id" :sortable="true">
-                  <template #body="slotProps">
-                    {{ slotProps.data.ChargingSystems.ChargingTime }}
-                  </template>
-                </Column>
                 <Column
                   field="chargingTime"
                   header="Charging Time [min]"
                   :sortable="true"
                 >
                   <template #body="slotProps">
-                    {{ slotProps.data.ChargingSystems.ChargingTime }}
+                    {{ slotProps.data.chargingTime }}
                   </template>
                 </Column>
                 <Column headerStyle="width:4rem">
                   <template #body="slotProps">
                     <CrudDialog
-                      :title="`Edit Charging System '${slotProps.data.ChargingSystems.ChargingTime}'`"
+                      :title="`Edit Charging System '${slotProps.data.chargingTime}'`"
                       :edit="true"
                     />
                   </template>
@@ -235,6 +257,52 @@ const processResponse = (
               />
             </template>
           </Column>
+
+          <template #expansion="slotProps">
+            <div class="p-3">
+              <h5>Products</h5>
+              <DataTable
+                :value="slotProps.data.Products"
+                responsiveLayout="scroll"
+              >
+                <Column
+                  field="productName"
+                  header="Name"
+                  :sortable="true"
+                >
+                  <template #body="slotProps">
+                    {{ slotProps.data.name }}
+                  </template>
+                </Column>
+                <Column
+                  field="productWeight"
+                  header="Weight"
+                  :sortable="true"
+                >
+                  <template #body="slotProps">
+                    {{ slotProps.data.weight }}
+                  </template>
+                </Column>
+                <Column
+                  field="productLevelOfPolution"
+                  header="Level Of Polution"
+                  :sortable="true"
+                >
+                  <template #body="slotProps">
+                    {{ slotProps.data.levelOfPolution }}
+                  </template>
+                </Column>
+                <Column headerStyle="width:4rem">
+                  <template #body="slotProps">
+                    <CrudDialog
+                      :title="`Edit Product '${slotProps.data.name}'`"
+                      :edit="true"
+                    />
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </template>
          
         </DataTable>
       </div>

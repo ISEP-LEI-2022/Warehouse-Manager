@@ -51,7 +51,18 @@ namespace EletricGo.Domain.Storages
         }
         public void changeChargingSystems(List<ChargingSystem> chargingSystems)
         {
-            this.ChargingSystems = chargingSystems;
+            if (chargingSystems?.Any() == true)
+            {
+                this.ChargingSystems.Clear();
+                foreach (var chargingSystem in chargingSystems)
+                {
+                    var newChargingSystem = new ChargingSystem(chargingSystem.ChargingTime);
+                    this.ChargingSystems.Add(newChargingSystem);
+                }
+
+            }
+                
+
         }
     }
 }

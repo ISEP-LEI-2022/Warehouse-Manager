@@ -3,7 +3,7 @@ import Location from "@/models/location";
 import type StorageDTO from "../dtos/StorageDTO";
 import Address from "@/models/address";
 import City from "@/models/city";
-import type ChargingSystems from "@/models/chargingSystem";
+import ChargingSystems from "@/models/chargingSystem";
 
 export default class StorageMap {
   public static fromDTOArray(storages: Array<StorageDTO>): Storage[] {
@@ -31,6 +31,26 @@ export default class StorageMap {
     return storageList;
   }
 
+
+  public static fromDTO(storageDTO: StorageDTO): Storage {
+    return new Storage(
+      storageDTO.id,
+      storageDTO.designation, 
+      storageDTO.location.latitude,
+      storageDTO.location.longitude,
+      storageDTO.location.altitude,
+      storageDTO.location.address.street,
+      storageDTO.location.address.door,
+      storageDTO.location.address.floor,
+      storageDTO.location.address.postalCode,
+      storageDTO.location.address.city.number,
+      storageDTO.location.address.city.name,
+      storageDTO.chargingSystems
+    )
+  }
+
+
+
   public static fromAnyArray(storage: Array<any>): Storage {
     let obj = Object.assign({}, ...storage.map((x) => ({ [x.name]: x.value })));
     return new Storage(
@@ -48,8 +68,19 @@ export default class StorageMap {
               obj.ChargingSystems);
   }
 
+
+  public static fromAnyArrayChargingSystem(storage: Array<any>): ChargingSystems {
+    let obj = Object.assign({}, ...storage.map((x) => ({ [x.name]: x.value })));
+    return new ChargingSystems(
+              obj.ChargingTime,
+              obj.Storage
+    )
+            }
+
+
   public static toJson(storage: Storage): string {
     return JSON.stringify({
+      id: storage.StorageId,
       designation: storage.Designation,
       location: {
         latitude: storage.Latitude,
@@ -74,5 +105,9 @@ export default class StorageMap {
   public static empty(): Storage {
     var chargingSystems: ChargingSystems[] = [];
     return new Storage("","","","","","","","","",1,"",chargingSystems);
+  }
+
+  public static emptyChargingSystem(storageId: string): ChargingSystems {
+    return new ChargingSystems("",storageId);
   }
 }
