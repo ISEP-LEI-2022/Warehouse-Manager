@@ -29,6 +29,7 @@ export default class DeliveryMap {
 
   public static toJson(delivery: Delivery): string {
     return JSON.stringify({
+      Id: delivery.DeliveryId,
       DeliveryDate: new Date(delivery.DeliveryDate),
       DeliveryWeight: Number(delivery.DeliveryWeight),
       FinalStorageId: delivery.FinalStorage,

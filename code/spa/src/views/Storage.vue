@@ -11,6 +11,7 @@ import ChargingSystems from "@/models/chargingSystem";
 import CrudChargingSystem from "@/components/CrudChargingSystem.vue";
 import CrudProduct from "@/components/CrudProduct.vue";
 import Product from "@/models/product";
+import CrudStorage from "@/components/CrudStorage.vue";
 
 const toast = useToast();
 const expandedRows = ref([]);
@@ -37,8 +38,8 @@ onBeforeMount(() => {
 });
 
 
-const addStorage = (storage: Array<any>) => {
-  const new_storage = StorageMap.fromAnyArray(storage);
+const addStorage = (storage: Storage) => {
+  const new_storage = storage;
   storageService.createStorage(new_storage).then((response) =>
     processResponse(
       response,
@@ -117,7 +118,7 @@ const processResponse = (
 <template>
   <TabView>
     <TabPanel header="Storages">
-      <CrudDialog 
+      <CrudStorage
       v-if="storageService.Storage_Errors.length == 0"
       title="Add new Storage" 
       :edit="false"
