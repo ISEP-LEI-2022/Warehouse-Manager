@@ -7,12 +7,16 @@ import RouteMap from "@/services/mappers/RouteMap";
 import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
 import LogisticsService from "@/services/LogisticsService";
+import type Trip from "@/models/trip";
+import TripMap from "@/services/mappers/TripMap";
 
 const toast = useToast();
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
+const trip = ref(TripMap.empty() as Trip);
 const truck_Errors = ref([] as any[]);
 const route_Errors = ref([] as any[]);
+const trip_Errors = ref([] as any[]);
 
 const selectedDate = ref(null);
 const selectedTruck = ref(null);
@@ -108,7 +112,11 @@ const processResponse = (
 const searchTrip = () => {
   loading.value = true;
   setTimeout(() => (loading.value = false), 1000);
+  const val = LogisticsService.getTrip(selectedTruck.value.Registration,selectedDate.value,(errors: Array<any>) => {
+    route_Errors.value.push(errors);
+  }).then((data) => (trip.value = data));
   console.log(`Selected Truck: ${selectedTruck.value}, Selected Date: ${selectedDate.value}`);
+  console.log(val);
 };
 </script>
 
