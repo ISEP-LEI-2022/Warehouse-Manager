@@ -5,8 +5,8 @@ services:
     container_name: spa
     image: 1180910/spa:latest
     environment:
-      - VITE_STORAGE_API=http://localhost:8000/
-      - VITE_LOGISTICS_API=http://localhost:3000/
+      - VITE_STORAGE_API=https://dotnet.fhsan.com/
+      - VITE_LOGISTICS_API=https://node.fhsan.com/
     networks:
       - storage_net
       - logistics_net
