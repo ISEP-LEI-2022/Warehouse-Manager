@@ -53,18 +53,27 @@ namespace EletricGo.Domain.Deliveries
 
             if (delivery == null)
                 return null;
-
+            
             // change all fields
             delivery.changeDeliveryDate(dto.DeliveryDate);
             delivery.changeDeliveryWeight(dto.DeliveryWeight);
             delivery.changeTimeToLoad(dto.TimeToLoad);
             delivery.changeTimeToUnload(dto.TimeToUnload);
+            var productsList = new List<Product>();
+            foreach(ProductDto product in dto.Products) {
+                productsList.Add(new Product(product.Name, product.Weight, product.LevelOfPolution));
+            }
+            delivery.changeProducts(productsList);
 
             await this._unitOfWork.CommitAsync();
 
             List<ProductDto> products = delivery.Products.ConvertAll<ProductDto>(product => new ProductDto(product.Id.AsGuid(), product.Name, product.Weight, product.LevelOfPolution));
 
-            return new DeliveryDto(delivery.Id.AsGuid(),delivery.DeliveryDate,delivery.DeliveryWeight, delivery.FinalStorageId.AsGuid(), delivery.TimeToLoad,delivery.TimeToUnload, products);
+            var productsListDto = new List<ProductDto>();
+            foreach (Product product in delivery.Products) {
+                productsListDto.Add(new ProductDto(product.Id.AsGuid(), product.Name, product.Weight, product.LevelOfPolution));
+            }
+            return new DeliveryDto(delivery.Id.AsGuid(),delivery.DeliveryDate,delivery.DeliveryWeight, delivery.FinalStorageId.AsGuid(), delivery.TimeToLoad,delivery.TimeToUnload, productsListDto);
         }
     }
 }

@@ -144,6 +144,19 @@ export default class StorageService {
     return await response.json();
   }
 
+  async updateDelivery(delivery: Delivery) {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: DeliveryMap.toJson(delivery),
+    };
+    const response = await fetch(
+      import.meta.env.VITE_STORAGE_API + "api/Deliveries/" + delivery.DeliveryId,
+      requestOptions
+    );
+    return await response.json();
+  }
+
 
   /*getStorageById(id: string) {
     return fetch(contextPath + "demo/data/storages.json")

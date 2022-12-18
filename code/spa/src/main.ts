@@ -104,6 +104,8 @@ import IconElement from "@/components/icons/IconElement.vue";
 import CrudDialog from "./components/CrudDialog.vue";
 import CrudTest from "./components/CrudDelivery.vue";
 import CrudChargingSystem from "./components/CrudChargingSystem.vue";
+import CrudProduct from "./components/CrudProduct.vue";
+import CrudStorage from "./components/CrudStorage.vue";
 
 import "@/assets/styles.scss";
 
@@ -216,5 +218,7 @@ app.component("IconElement", IconElement);
 app.component("CrudDialog", CrudDialog);
 app.component("CrudTest", CrudTest);
 app.component("CrudChargingSystem", CrudChargingSystem);
+app.component("CrudProduct", CrudProduct);
+app.component("CrudStorage", CrudStorage);
 
 app.mount("#app");
