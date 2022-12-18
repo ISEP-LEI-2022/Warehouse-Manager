@@ -102,6 +102,7 @@ import VirtualScroller from "primevue/virtualscroller";
 import CardItem from "@/components/CardItem.vue";
 import IconElement from "@/components/icons/IconElement.vue";
 import CrudDialog from "./components/CrudDialog.vue";
+import CrudTest from "./components/CrudDelivery.vue";
 
 import "@/assets/styles.scss";
 
@@ -212,5 +213,6 @@ app.component("VirtualScroller", VirtualScroller);
 app.component("CardItem", CardItem);
 app.component("IconElement", IconElement);
 app.component("CrudDialog", CrudDialog);
+app.component("CrudTest", CrudTest);
 
 app.mount("#app");

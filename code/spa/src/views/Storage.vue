@@ -59,14 +59,14 @@ const addChargingSystem = (chargingSystems: Array<any>) => {
 };
 
 
-const addDelivery = (delivery: Array<any>) => {
-  const new_delivery = DeliveryMap.fromAnyArray(delivery);
-  storageService.createDelivery(new_delivery).then((response) =>
+const addDelivery = (delivery: Delivery) => {
+  //const new_delivery = DeliveryMap.fromAnyArray(delivery);
+  storageService.createDelivery(delivery).then((response) =>
     processResponse(
       response,
       "Create Delivery",
       () => {
-        deliveries.value.push(new_delivery);
+        deliveries.value.push(delivery);
       }
     )
   );
@@ -195,11 +195,12 @@ const processResponse = (
       </div>
     </TabPanel>
     <TabPanel header="Deliveries">
-      <CrudDialog 
+      <CrudTest
       v-if="storageService.Delivery_Errors.length == 0"
       title="Add new Delivery" 
       :edit="false"
       :model="DeliveryMap.empty()"
+      :dropdownStorage="storages"
       :help_text_fields="help_delivery_fields"
       :disabled_fields="[]"
       @submit="addDelivery"
