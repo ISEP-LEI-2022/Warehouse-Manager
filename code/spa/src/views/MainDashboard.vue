@@ -5,9 +5,13 @@ import StorageService from "@/services/StorageService";
 import CardItem from "@/components/CardItem.vue";
 import type Truck from "@/models/truck";
 import type Route from "@/models/route";
+import type Storage from "@/models/storage";
+import type Delivery from "@/models/delivery";
+
 
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
+
 const deliveries = ref([]);
 const storages = ref([]);
 const truck_Errors = ref([] as any[]);
@@ -130,23 +134,23 @@ onMounted(() => {
         >
           <Column header="Date">
             <template #body="{ data }">
-              {{ formatDate(data.deliveryDate) }}
+              {{ formatDate(data.DeliveryDate) }}
             </template>
           </Column>
           <Column
-            field="deliveryWeight"
+            field="DeliveryWeight"
             header="Weight [T]"
             :sortable="true"
             style="width: 20%"
           />
           <Column
-            field="timeToLoad"
+            field="TimeToLoad"
             header="Load [min]"
             :sortable="true"
             style="width: 25%"
           />
           <Column
-            field="timeToUnload"
+            field="TimeToUnload"
             header="Unload [min]"
             :sortable="true"
             style="width: 25%"
@@ -163,22 +167,25 @@ onMounted(() => {
           id="storages-table"
         >
           <Column
-            field="designation"
+            field="Designation"
             header="Designation"
             style="width: 35%"
           ></Column>
           <Column
-            field="location.address.street"
+            field="Name"
             header="Location"
             :sortable="true"
             style="width: 35%"
           ></Column>
           <Column
-            field="chargingSystems.count"
+            field="Chargingsystems"
             header="Charging Systems"
             :sortable="true"
             style="width: 35%"
           >
+          <template #body="slotProps">
+              {{ `(${slotProps.data.Chargingsystems.length})` }}
+            </template>
           </Column>
         </DataTable>
       </div>

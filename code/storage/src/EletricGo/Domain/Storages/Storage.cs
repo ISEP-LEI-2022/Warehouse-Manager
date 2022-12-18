@@ -24,11 +24,14 @@ namespace EletricGo.Domain.Storages
             this.Active = true;
             this.Location = new Location(loc.Latitude, loc.Longitude, loc.Altitude, loc.Address);
             this.ChargingSystems = new List<ChargingSystem>();
-            foreach(var chargingSystem in chargingSystems)
-            {
-                var newChargingSystem = new ChargingSystem(chargingSystem.ChargingTime);
-                this.ChargingSystems.Add(newChargingSystem);
+            if (chargingSystems?.Any() == true) {
+                foreach (var chargingSystem in chargingSystems)
+                {
+                    var newChargingSystem = new ChargingSystem(chargingSystem.ChargingTime);
+                    this.ChargingSystems.Add(newChargingSystem);
+                }
             }
+            
         } 
 
 
@@ -47,7 +50,18 @@ namespace EletricGo.Domain.Storages
         }
         public void changeChargingSystems(List<ChargingSystem> chargingSystems)
         {
-            this.ChargingSystems = chargingSystems;
+            if (chargingSystems?.Any() == true)
+            {
+                this.ChargingSystems.Clear();
+                foreach (var chargingSystem in chargingSystems)
+                {
+                    var newChargingSystem = new ChargingSystem(chargingSystem.ChargingTime);
+                    this.ChargingSystems.Add(newChargingSystem);
+                }
+
+            }
+                
+
         }
     }
 }

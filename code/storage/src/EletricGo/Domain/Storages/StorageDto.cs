@@ -7,9 +7,9 @@ namespace EletricGo.Domain.Storages
         public string Designation { get; set; }
         public Location Location { get; set; }
 
-        public List<ChargingSystem> ChargingSystems { get; set; }
+        public List<ChargingSystem>? ChargingSystems { get; set; }
 
-        public StorageDto(Guid id, string designation, Location location, List<ChargingSystem> chargingSystems)
+        public StorageDto(Guid id, string designation, Location location, List<ChargingSystem>? chargingSystems)
         {
             this.Id = id;
             this.Designation = designation;
