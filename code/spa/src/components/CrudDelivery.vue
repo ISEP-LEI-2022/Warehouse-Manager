@@ -99,7 +99,10 @@ const timeToUnloadType = "number";
                 <Calendar
                     :id="delivDateId"
                     :type="delivDateType"
+                    :showIcon="true"
+                    :showButtonBar="true"
                     v-model="properties.DeliveryDate"
+                    style="margin-right: 1rem"
                 />
         </div>
 

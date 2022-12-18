@@ -9,6 +9,9 @@ import type Storage from "@/models/storage";
 import type Delivery from "@/models/delivery";
 import ChargingSystems from "@/models/chargingSystem";
 import CrudChargingSystem from "@/components/CrudChargingSystem.vue";
+import CrudProduct from "@/components/CrudProduct.vue";
+import Product from "@/models/product";
+import CrudStorage from "@/components/CrudStorage.vue";
 
 const toast = useToast();
 const expandedRows = ref([]);
@@ -35,8 +38,8 @@ onBeforeMount(() => {
 });
 
 
-const addStorage = (storage: Array<any>) => {
-  const new_storage = StorageMap.fromAnyArray(storage);
+const addStorage = (storage: Storage) => {
+  const new_storage = storage;
   storageService.createStorage(new_storage).then((response) =>
     processResponse(
       response,
@@ -58,6 +61,18 @@ const addChargingSystem = (storageId: string, chargingSystems: ChargingSystems) 
   storageService.updateStorage(storages.value[index]);
 
 };
+
+const addProduct = (deliveryId: string, products: Product) => {
+  const product = products;
+  var index: number;
+  index = deliveries.value.findIndex((item) => item.DeliveryId = deliveryId);
+
+  deliveries.value[index].Products.push(product);
+
+  storageService.updateDelivery(deliveries.value[index]);
+
+};
+
 
 
 const addDelivery = (delivery: Delivery) => {
@@ -103,7 +118,7 @@ const processResponse = (
 <template>
   <TabView>
     <TabPanel header="Storages">
-      <CrudDialog 
+      <CrudStorage
       v-if="storageService.Storage_Errors.length == 0"
       title="Add new Storage" 
       :edit="false"
@@ -232,7 +247,7 @@ const processResponse = (
           </Column>
           <Column field="finalStorageId" header="Final Storage">
             <template #body="slotProps">
-              <a href="#/storage">
+              <a href="#/uikit/storage">
                 {{
                   storages.find((item) => {
                     return item?.StorageId == slotProps.data.FinalStorage;
@@ -265,6 +280,18 @@ const processResponse = (
           <template #expansion="slotProps">
             <div class="p-3">
               <h5>Products</h5>
+
+              <CrudProduct
+                v-if="storageService.Delivery_Errors.length == 0"
+                title="Add new Product" 
+                :edit="false"
+                :model="DeliveryMap.emptyProduct()"
+                :delivery="slotProps.data"
+                :help_text_fields="help_delivery_fields"
+                :disabled_fields="[]"
+                @submit="addProduct"
+                />
+
               <DataTable
                 :value="slotProps.data.Products"
                 responsiveLayout="scroll"

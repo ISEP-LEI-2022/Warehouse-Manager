@@ -1,5 +1,5 @@
 import Delivery from "@/models/delivery";
-import type Product from "@/models/product";
+import Product from "@/models/product";
 import type DeliveryDTO from "../dtos/DeliveryDTO";
 
 export default class DeliveryMap {
@@ -29,6 +29,7 @@ export default class DeliveryMap {
 
   public static toJson(delivery: Delivery): string {
     return JSON.stringify({
+      Id: delivery.DeliveryId,
       DeliveryDate: new Date(delivery.DeliveryDate),
       DeliveryWeight: Number(delivery.DeliveryWeight),
       FinalStorageId: delivery.FinalStorage,
@@ -41,6 +42,10 @@ export default class DeliveryMap {
   public static empty(): Delivery {
     var products: Product[] = [];
     return new Delivery("","",1,"",1,1,products);
+  }
+
+  public static emptyProduct(): Product {
+    return new Product("",0,0,"");
   }
 
 }

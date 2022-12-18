@@ -84,7 +84,7 @@ export default class LogisticsService {
     return await response.json();
   }
 
-  public static async getTrip(
+  public static async getTrips(
     registration: string,
     date: Date,
     getErros: Function = (errors: Array<any>) => {}
@@ -95,23 +95,24 @@ export default class LogisticsService {
     )
       .then(async (response) => {
         const json = await response.json();
-        var data: TripDTO = json;
+        console.log(json)
+        var data: Array<TripDTO> = json;
         if (!response.ok) {
           getErros({
             content: response.statusText,
             severity: "error",
           });
-          return TripMap.empty();
+          return TripMap.fromDTOArray([]);
         }
 
-        return TripMap.fromDTO(data);
+        return TripMap.fromDTOArray(data);
       })
       .catch((error) => {
         getErros({
           content: error,
           severity: "error",
         });
-        return TripMap.empty();
+        return TripMap.fromDTOArray([]);
       });
   }
 }
