@@ -6,8 +6,6 @@ import DeliveryMap from "@/services/mappers/DeliveryMap";
 import type Delivery from "@/models/delivery";
 
 
-const contextPath = import.meta.env.BASE_URL;
-
 export default class StorageService {
 
   Storage_Errors: Array<any>;
@@ -17,12 +15,6 @@ export default class StorageService {
     this.Storage_Errors = [];
     this.Delivery_Errors = [];
   }
-
-  /*getDeliveries() {
-    return fetch(contextPath + "demo/data/deliveries.json")
-      .then((res) => res.json())
-      .then((d) => d.data);
-  }*/
 
   getDeliveries() {
     return fetch(import.meta.env.VITE_STORAGE_API + "api/Deliveries")
@@ -47,15 +39,6 @@ export default class StorageService {
         return DeliveryMap.fromDTOArray([]);
       });
   }
-
-  /*getStorages() {
-    return fetch(contextPath + "demo/data/storages.json")
-      .then((res) => res.json())
-      .then((d) => d.data);
-  }*/
-
-
-
 
   getStorages() {
     return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages")
@@ -157,15 +140,4 @@ export default class StorageService {
     return await response.json();
   }
 
-
-  /*getStorageById(id: string) {
-    return fetch(contextPath + "demo/data/storages.json")
-      .then((res) => res.json())
-      .then(
-        (d) =>
-          d.data.find((item: { storage: { id: string } }) => {
-            return item.storage.id == id;
-          }).designation
-      );
-  }*/
 }

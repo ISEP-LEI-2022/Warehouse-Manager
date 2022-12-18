@@ -120,7 +120,7 @@ const processResponse = (
     <TabPanel header="Storages">
       <CrudStorage
       v-if="storageService.Storage_Errors.length == 0"
-      title="Add new Storage" 
+      title="Add new Storage"
       :edit="false"
       :model="StorageMap.empty()"
       :help_text_fields="help_storage_fields"
@@ -136,6 +136,12 @@ const processResponse = (
           dataKey="id"
           responsiveLayout="scroll"
         >
+        <template #empty>
+                No storages found.
+            </template>
+            <template #loading>
+                Loading storages data. Please wait.
+            </template>
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="designation" header="Designation" :sortable="true">
             <template #body="slotProps">
@@ -145,9 +151,9 @@ const processResponse = (
           <Column field="Address" header="Address">
             <template #body="slotProps">
               {{
-                
+
                 slotProps.data.Street +", "+ slotProps.data.Name + ", " + slotProps.data.PostalCode
-                
+
               }}
             </template>
           </Column>
@@ -167,7 +173,7 @@ const processResponse = (
                 :help_text_fields="help_storage_fields"
                 :disabled_fields="[]"
                 @submit="addStorage"/>
-              
+
             </template>
           </Column>
           <template #expansion="slotProps">
@@ -176,7 +182,7 @@ const processResponse = (
 
               <CrudChargingSystem
                 v-if="storageService.Delivery_Errors.length == 0"
-                title="Add new Charging System" 
+                title="Add new Charging System"
                 :edit="false"
                 :model="StorageMap.emptyChargingSystem"
                 :storage="slotProps.data"
@@ -215,15 +221,15 @@ const processResponse = (
     <TabPanel header="Deliveries">
       <CrudTest
       v-if="storageService.Delivery_Errors.length == 0"
-      title="Add new Delivery" 
+      title="Add new Delivery"
       :edit="false"
       :model="DeliveryMap.empty()"
       :dropdownStorage="storages"
       :help_text_fields="help_delivery_fields"
       :disabled_fields="[]"
       @submit="addDelivery"
-      
-      
+
+
       />
       <div class="card">
         <DataTable
@@ -234,6 +240,12 @@ const processResponse = (
           dataKey="id"
           responsiveLayout="scroll"
         >
+        <template #empty>
+                No deliveries found.
+            </template>
+            <template #loading>
+                Loading deliveries data. Please wait.
+            </template>
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="deliveryDate" header="Date" :sortable="true">
             <template #body="slotProps">
@@ -283,7 +295,7 @@ const processResponse = (
 
               <CrudProduct
                 v-if="storageService.Delivery_Errors.length == 0"
-                title="Add new Product" 
+                title="Add new Product"
                 :edit="false"
                 :model="DeliveryMap.emptyProduct()"
                 :delivery="slotProps.data"
@@ -334,7 +346,7 @@ const processResponse = (
               </DataTable>
             </div>
           </template>
-         
+
         </DataTable>
       </div>
     </TabPanel>

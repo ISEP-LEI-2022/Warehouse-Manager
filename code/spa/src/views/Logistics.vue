@@ -145,6 +145,12 @@ const searchTrip = () => {
           :paginator="true"
           responsiveLayout="scroll"
         >
+        <template #empty>
+                No truck found.
+            </template>
+            <template #loading>
+                Loading truck data. Please wait.
+            </template>
           <Column
             field="Registration"
             header="Registration"
@@ -205,6 +211,12 @@ const searchTrip = () => {
           :paginator="true"
           responsiveLayout="scroll"
         >
+        <template #empty>
+                No routes found.
+            </template>
+            <template #loading>
+                Loading routes data. Please wait.
+            </template>
           <Column field="Route" header="Route" style="width: 15%" />
           <Column
             field="Start"
@@ -292,6 +304,12 @@ const searchTrip = () => {
           dataKey="idTrip"
           responsiveLayout="scroll"
         >
+        <template #empty>
+                No trips found.
+            </template>
+            <template #loading>
+                Loading trips data. Please wait.
+            </template>
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="date" header="Date" :sortable="true">
             <template #body="slotProps">
