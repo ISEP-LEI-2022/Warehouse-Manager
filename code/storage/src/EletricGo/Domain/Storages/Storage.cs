@@ -24,8 +24,7 @@ namespace EletricGo.Domain.Storages
             this.Active = true;
             this.Location = new Location(loc.Latitude, loc.Longitude, loc.Altitude, loc.Address);
             this.ChargingSystems = new List<ChargingSystem>();
-            if(chargingSystems != null || chargingSystems.Count > 0)
-            {
+            if (chargingSystems?.Any() == true) {
                 foreach (var chargingSystem in chargingSystems)
                 {
                     var newChargingSystem = new ChargingSystem(chargingSystem.ChargingTime);
