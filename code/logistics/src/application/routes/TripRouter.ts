@@ -54,15 +54,11 @@ router.get("/:registration/:date", async (req: Request, res: Response) => {
       container.get(config.controllers.TripController.name)
     );
 
-    if (req.params.idTrip !== undefined) {
-      const trip = await getTripInstance.getTripById(
-        req.params.idTrip as string
+      const trip = await getTripInstance.getTripByRegDate(
+        req.params.registration as string,
+        new Date(req.params.date)
       );
       res.status(200).json(trip);
-    } else {
-      const listTrips = await getTripInstance.getTrips();
-      res.status(200).json(listTrips);
-    }
   } catch (err) {
     if (err instanceof Err) {
       res.status(err.code).send(err.object());
