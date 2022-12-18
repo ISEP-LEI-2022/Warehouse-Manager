@@ -1,6 +1,6 @@
 describe('New Storage', () => {
   it('Validate text button', () => {
-      cy.visit('http://localhost:8081/#/uikit/storage')
+      cy.visit('http://localhost:8080/#/uikit/storage')
       //cy.viewport(1500, 800)
       cy.wait(1000);
       cy.contains('Storage')
@@ -21,13 +21,13 @@ describe('New Storage', () => {
       cy.contains('Add new Storage')
       cy.wait(3000)
       cy.get('input#Designation').type('Designacao teste')
-      cy.get('input#Latitude').type('Latitude teste')
-      cy.get('input#Longitude').type('Longitude teste')
-      cy.get('input#Altitude').type('Altitude teste')
-      cy.get('input#Street').type('Street teste')
-      cy.get('input#Door').type('Door teste')
-      cy.get('input#Floor').type('Floor teste')
-      cy.get('input#PostalCode').type('Postal Code teste')
+      cy.get('input#Latitude').type('2')
+      cy.get('input#Longitude').type('2')
+      cy.get('input#Altitude').type('2')
+      cy.get('input#Street').type('Street 2')
+      cy.get('input#Door').type('2')
+      cy.get('input#Floor').type('2')
+      cy.get('input#PostalCode').type('2')
       cy.get('input#Name').type('Name teste')
 
       cy.get('div.p-dialog-footer button').click()
