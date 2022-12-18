@@ -26,8 +26,8 @@ namespace EletricGo
         public IConfiguration Configuration { get; }
 
         //string ConnectionString = "Server=tcp:arqsi.database.windows.net,1433;Database= ARQSI;Persist Security Info=False;User ID=dba;Password=123qweASD@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        //string ConnectionString = "Server = localhost; Database= EletricGo; Integrated Security = SSPI;";
-        string ConnectionString = "tcp:local.sqlserver,1433;Database=ARQSI;User ID = SA; Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;";
+        string ConnectionString = "Server = localhost; Database= EletricGo; Integrated Security = SSPI;";
+        //string ConnectionString = "tcp:local.sqlserver,1433;Database=ARQSI;User ID = SA; Password=Adminxyz22#;Trusted_Connection=False;Connection Timeout=10;";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,6 +38,8 @@ namespace EletricGo
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+
         {
             if (env.IsDevelopment())
             {
@@ -54,6 +56,8 @@ namespace EletricGo
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
@@ -106,11 +110,26 @@ namespace EletricGo
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ARQSI_1", Version = "v1" });
             });
 
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:8080");
+                        policy.AllowAnyOrigin();
+                        policy.AllowAnyHeader();
+                        policy.AllowAnyMethod();
+                    });
+            });
+
+
+
+            /*services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
                 builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader();
-            }));
+            }));*/
+
         }
     }
 }

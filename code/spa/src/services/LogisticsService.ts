@@ -4,11 +4,13 @@ import type TruckDTO from "@/services/dtos/TruckDTO";
 import type RouteDTO from "@/services/dtos/RouteDTO";
 import TruckMap from "@/services/mappers/TruckMap";
 import RouteMap from "@/services/mappers/RouteMap";
+
 import type TripDTO from "./dtos/TripDTO";
 import TripMap from "./mappers/TripMap";
 
 export default class LogisticsService {
   public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
+
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
         const json = await response.json();
@@ -43,6 +45,7 @@ export default class LogisticsService {
     );
     return await response.json();
   }
+
 
   public static getRoutes(getErros: Function = (errors: Array<any>) => {}) {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
