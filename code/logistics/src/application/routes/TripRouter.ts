@@ -58,7 +58,7 @@ router.get("/:registration/:date", async (req: Request, res: Response) => {
         req.params.registration as string,
         new Date(req.params.date)
       );
-      res.status(200).json(trip);
+      res.status(200).json([trip]);
   } catch (err) {
     if (err instanceof Err) {
       res.status(err.code).send(err.object());
