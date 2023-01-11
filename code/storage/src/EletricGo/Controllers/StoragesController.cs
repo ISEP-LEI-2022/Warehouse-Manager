@@ -1,6 +1,7 @@
 ﻿using EletricGo.Domain.Shared;
 using EletricGo.Domain.Storages;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace EletricGo.Controllers
 {
@@ -17,9 +18,27 @@ namespace EletricGo.Controllers
 
         // GET: api/Storages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll()
-        {
+        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll() {
             return await _service.GetAllAsync();
+        }
+
+
+
+        // GET: api/Storages
+        [HttpGet("{page}/{pageResults}")]
+        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll(int page, int pageResults) {
+            if(_service.GetAllAsync == null)
+                return NotFound();
+
+            //var pageResults = 3f;
+            var pageCount = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
+           
+            var storages = _service.GetAllAsync().Result
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
+                .ToList();
+
+            return Ok(storages);
         }
 
         // GET: api/Storages/5

@@ -18,9 +18,25 @@ namespace EletricGo.Controllers
 
         // GET: api/Deliveries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetAll()
-        {
+        public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetAll() {
             return await _service.GetAllAsync();
+        }
+
+
+        [HttpGet("{page}/{pageResults}")]
+        public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetAll(int page, int pageResults) {
+            if (_service.GetAllAsync == null)
+                return NotFound();
+
+            //var pageResults = 3f;
+            var pageCount = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
+
+            var storages = _service.GetAllAsync().Result
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
+                .ToList();
+
+            return Ok(storages);
         }
 
         // GET: api/Deliveries/5
