@@ -22,6 +22,7 @@ export default interface StorageDTO {
     }
   ,
     chargingSystems: Array<ChargingSystems>;
+    active: boolean;
 
 
 

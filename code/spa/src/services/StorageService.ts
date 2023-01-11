@@ -1,4 +1,4 @@
-import type Storage from "@/models/storage";
+import Storage from "@/models/storage";
 import type StorageDTO from "@/services/dtos/StorageDTO";
 import StorageMap from "@/services/mappers/StorageMap";
 import type DeliveryDTO from "@/services/dtos/DeliveryDTO";
@@ -17,7 +17,7 @@ export default class StorageService {
   }
 
   getDeliveries() {
-    return fetch(import.meta.env.VITE_STORAGE_API + "api/Deliveries")
+    return fetch("https://localhost:7067/" + "api/Deliveries")
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -41,16 +41,16 @@ export default class StorageService {
   }
 
   getStorages() {
-    return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages")
+    return fetch("https://localhost:7067/" + "api/Storages")
       .then(async (response) => {
         const json = await response.json();
-        console.log(json)
         var data: Array<StorageDTO> = json;
         if (!response.ok) {
           this.Storage_Errors.push({
             content: response.statusText,
             severity: "error",
           });
+          
           return StorageMap.fromDTOArray([]);
         }
         return StorageMap.fromDTOArray(data);
@@ -71,7 +71,7 @@ export default class StorageService {
       body: DeliveryMap.toJson(delivery),
     };
     const response = await fetch(
-      import.meta.env.VITE_STORAGE_API + "api/deliveries/",
+      "https://localhost:7067/" + "api/deliveries/",
       requestOptions
     );
     return await response.json();
@@ -84,14 +84,14 @@ export default class StorageService {
       body: StorageMap.toJson(storage),
     };
     const response = await fetch(
-      import.meta.env.VITE_STORAGE_API + "api/storages/",
+      "https://localhost:7067/" + "api/storages/",
       requestOptions
     );
     return await response.json();
   }
 
   getStorageById(id: string) {
-    return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages/" + id)
+    return fetch("https://localhost:7067/" + "api/Storages/" + id)
       .then(async (response) => {
         const json = await response.json();
         console.log(json)
@@ -121,10 +121,36 @@ export default class StorageService {
       body: StorageMap.toJson(storage),
     };
     const response = await fetch(
-      import.meta.env.VITE_STORAGE_API + "api/Storages/" + storage.StorageId,
+      "https://localhost:7067/" + "api/Storages/" + storage.StorageId,
       requestOptions
     );
     return await response.json();
+  }
+
+
+  async updateStorageStatus(storageId: string) {
+    fetch("https://localhost:7067/" + "api/Storages/" + storageId)
+      .then(async (response) => {
+        const json = await response.json();
+        var data: StorageDTO = json;
+        if (!response.ok) {
+          this.Storage_Errors.push({
+            content: response.statusText,
+            severity: "error",
+          });
+          return null;
+        }
+        const storage = StorageMap.fromDTO(data)
+        storage.Active = !storage.Active
+        this.updateStorage(storage).then(async (response) => {return response})
+      })
+      .catch((error) => {
+        this.Storage_Errors.push({
+          content: error,
+          severity: "error",
+        });
+        return null;
+      });
   }
 
   async updateDelivery(delivery: Delivery) {
@@ -134,7 +160,7 @@ export default class StorageService {
       body: DeliveryMap.toJson(delivery),
     };
     const response = await fetch(
-      import.meta.env.VITE_STORAGE_API + "api/Deliveries/" + delivery.DeliveryId,
+      "https://localhost:7067/" + "api/Deliveries/" + delivery.DeliveryId,
       requestOptions
     );
     return await response.json();

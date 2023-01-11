@@ -138,6 +138,24 @@ const openNewProduct = (deliveryId: string) => {
   displayProduct.value = true;
 };
 
+const updateStorageStatus = (StorageId : string) => {
+  const update = storageService.updateStorageStatus(StorageId)
+  toast.add({
+      severity: "success",
+      summary: "Storage Status Updated",
+      detail: "OK",
+      life: 3000,
+  });
+  var index = 0;
+  index = storages.value.findIndex((item) => item.StorageId = StorageId);
+  storageService.getStorageById(StorageId).then((response) => {
+    console.log(response)
+    if(response) {
+    storages.value[index].Active = !storages.value[index].Active;
+    }
+  })
+};
+
 var storage = StorageMap.empty();
 var chargingSystem = StorageMap.emptyChargingSystem();
 var chargingSystem_storageId = "";
@@ -147,7 +165,7 @@ var delivery = DeliveryMap.empty();
 var product = DeliveryMap.emptyProduct();
 var product_deliveryId = "";
 
-var date = new Date()
+
 </script>
 
 
@@ -276,9 +294,22 @@ var date = new Date()
             </template>
           </Column>
 
+          <Column field="active" header="Available" sortable>
+            <template #body="slotProps" sortable>
+              <span v-if="slotProps.data.Active == true">Available</span>
+              <span v-else>Not Available</span>
+            </template>
+          </Column>
+
           <Column headerStyle="width:4rem">
             <template #body>
               <Button icon="pi pi-pencil" />
+            </template>
+          </Column>
+          <Column headerStyle="width:4rem">
+            <template #body="slotProps">
+              <Button v-if="slotProps.data.Active == true" label="Close Storage" @click="updateStorageStatus(slotProps.data.StorageId)"/>
+              <Button v-else label="Open Storage" @click="updateStorageStatus(slotProps.data.StorageId)"/>
             </template>
           </Column>
 
@@ -338,9 +369,9 @@ var date = new Date()
                 <Dropdown
                     id="dfinal"
                     v-model="delivery.FinalStorage"
-                    :options="storages"
-                    option-label="Designation"
-                    option-value="Id"
+                    :options="list"
+                    option-label="designation"
+                    option-value="id"
                     placeholder="Select a Storage"/>
             </div>
 
