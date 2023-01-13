@@ -60,7 +60,7 @@ export default class TruckController implements ITruckController {
         "tare",
         "capacity",
         "autonomy",
-      ])
+      ],["active"])
     ) {
       const error = badRequestErrorFactory();
       error.addError("Invalid request body");
@@ -85,7 +85,7 @@ export default class TruckController implements ITruckController {
       !validateRequestParams(
         body,
         ["registration"],
-        ["tare", "capacity", "autonomy"]
+        ["tare", "capacity", "autonomy","active"]
       )
     ) {
 

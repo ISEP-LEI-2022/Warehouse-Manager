@@ -204,6 +204,9 @@
 			},
 			"expectedTruckJSON": {
 				"properties": {
+					"active": {
+						"type": "boolean"
+					},
 					"autonomy": {
 						"type": "number",
 						"format": "double"
@@ -221,6 +224,7 @@
 					}
 				},
 				"required": [
+					"active",
 					"autonomy",
 					"capacity",
 					"tare",
@@ -230,6 +234,9 @@
 			},
 			"expectedBodyTruck": {
 				"properties": {
+					"active": {
+						"type": "boolean"
+					},
 					"autonomy": {
 						"type": "number",
 						"format": "double"
@@ -247,6 +254,7 @@
 					}
 				},
 				"required": [
+					"active",
 					"autonomy",
 					"capacity",
 					"tare",

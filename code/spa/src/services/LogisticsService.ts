@@ -9,9 +9,7 @@ import type TripDTO from "./dtos/TripDTO";
 import TripMap from "./mappers/TripMap";
 
 export default class LogisticsService {
-
   public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
-
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
         const json = await response.json();
@@ -46,7 +44,6 @@ export default class LogisticsService {
     );
     return await response.json();
   }
-
 
   public static getRoutes(getErros: Function = (errors: Array<any>) => {}) {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
@@ -90,13 +87,17 @@ export default class LogisticsService {
     date: Date,
     getErros: Function = (errors: Array<any>) => {}
   ) {
-    const formatted_date = date.toISOString().slice(0,10);
+    const formatted_date = date.toISOString().slice(0, 10);
     return fetch(
-      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + formatted_date
+      import.meta.env.VITE_LOGISTICS_API +
+        "trips/" +
+        registration +
+        "/" +
+        formatted_date
     )
       .then(async (response) => {
         const json = await response.json();
-        console.log(json)
+        console.log(json);
         var data: Array<TripDTO> = json;
         if (!response.ok) {
           getErros({
@@ -115,5 +116,39 @@ export default class LogisticsService {
         });
         return TripMap.fromDTOArray([]);
       });
+  }
+
+  public static async updateActiveStatus(
+    registration: string,
+    getErros: Function = (errors: Array<any>) => {}
+  ) {
+    const requestOptions = {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+    };
+    const response = await fetch(
+      import.meta.env.VITE_LOGISTICS_API + "trucks" + "/status/" + registration,
+      requestOptions
+    )
+      .then(async (response) => {
+        const json = await response.json();
+        var data: TruckDTO = json;
+        if (!response.ok) {
+          getErros({
+            content: response.statusText,
+            severity: "error",
+          });
+          return null;
+        }
+        return TruckMap.fromDTO(data);
+      })
+      .catch((error) => {
+        getErros({
+          content: error,
+          severity: "error",
+        });
+        return null;
+      });
+    return await response;
   }
 }
