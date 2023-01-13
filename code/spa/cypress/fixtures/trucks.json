@@ -3,18 +3,21 @@
         "autonomy": 400,
         "capacity": 5000,
         "tare": 4280,
-        "registration": "AA-02-AM"
+        "registration": "AA-02-AM",
+        "active": true
     },
     {
         "autonomy": 600,
         "capacity": 3000,
         "tare": 3740,
-        "registration": "IT-47-TH"
+        "registration": "IT-47-TH",
+        "active": true
     },
     {
         "autonomy": 650,
         "capacity": 4000,
         "tare": 4000,
-        "registration": "GF-11-AM"
+        "registration": "GF-11-AM",
+        "active": false
     }
 ]
