@@ -696,6 +696,39 @@
 					}
 				]
 			}
+		},
+		"/trucks/status/{registration}": {
+			"post": {
+				"operationId": "ChangeActiveStatus",
+				"responses": {
+					"200": {
+						"description": "Returns a JSON with the updated truck",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/expectedTruckJSON"
+								}
+							}
+						}
+					}
+				},
+				"summary": "Changes the active status of a truck",
+				"tags": [
+					"Trucks"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The registration of the truck",
+						"in": "path",
+						"name": "registration",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
 		}
 	},
 	"servers": [
