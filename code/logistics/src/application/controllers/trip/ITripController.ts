@@ -21,5 +21,6 @@ export interface ITripController {
     getTripById(id: string): Promise<expectedTripJSON>;
     getTripByRegDate(registration: string, date: Date): Promise<expectedTripJSON>;
     getTrips(): Promise<expectedTripJSON[]>;
+    getTripsByPagination(page:number, pageRecords:number): Promise<{tripList: expectedTripJSON[], totalRecords: number}>;
     updateTripById(req: expectedBodyTrip): Promise<expectedTripJSON>;
 }

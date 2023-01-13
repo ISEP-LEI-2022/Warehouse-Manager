@@ -84,4 +84,25 @@ router.put("/", async (req: Request, res: Response) => {
   }
 });
 
+
+router.get("/records/pagination/data/", async (req: Request, res: Response) => {
+  
+  try{
+    
+    const getTripInstance = <ITripController>(
+      container.get(config.controllers.TripController.name)
+    );
+
+    const listTrips = await getTripInstance.getTripsByPagination(Number(req.query.page), Number(req.query.pageRecords));
+    res.status(200).json(listTrips);
+  }catch(err){
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
+    });
+
+
 export default router;

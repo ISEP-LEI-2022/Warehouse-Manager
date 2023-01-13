@@ -4,7 +4,7 @@ import ITripService from "../../../domain/services/trip/ITripService";
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import { validateRequestParams } from "../../../domain/utils/UtilityFunctions";
 import TripMap from "../../../infrastructure/mappers/TripMap";
-import { Body, Get, Path, Post, Put, Route, Tags } from "tsoa";
+import { Body, Get, Path, Post, Put, Query, Route, Tags } from "tsoa";
 import { Inject, Service } from "typedi";
 import {
   expectedBodyTrip,
@@ -29,6 +29,23 @@ export default class TripController implements ITripController {
   public async getTrips(): Promise<expectedTripJSON[]> {
     const tripDTO = await this.tripService.getTrips();
     return TripMap.toJSONArray(tripDTO);
+  }
+
+  @Get("/records/pagination/data/")
+  public async getTripsByPagination(@Query() page:number, @Query() pageRecords:number): Promise<{tripList: expectedTripJSON[], totalRecords: number}> {
+    
+    const tripDTO = await this.tripService.getTrips();
+    let totalRecords = tripDTO.length;
+    const startIndex = (page - 1) * pageRecords;
+    const endIndex = startIndex + pageRecords;
+    const dataToReturn = tripDTO.slice(startIndex, endIndex);
+
+    const result =  {
+      tripList: TripMap.toJSONArray(dataToReturn) as [],
+      totalRecords: totalRecords as number
+    };
+    
+    return result;
   }
 
   /**

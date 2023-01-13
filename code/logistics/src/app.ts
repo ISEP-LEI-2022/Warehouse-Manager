@@ -7,7 +7,7 @@ async function startApp() {
   const PORT = process.env.PORT || 3000;
   const app: Application = express();
 
-  let url = "mongodb://localhost:27017/logistics";
+  let url = "mongodb+srv://admin:arqsi@arqsi2223.h43fevx.mongodb.net/?retryWrites=true&w=majority";
   if (env.database) url = env.database;
 
   await appLoader({

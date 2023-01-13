@@ -67,4 +67,24 @@ router.patch("/:idRoute", async (req: Request, res: Response) => {
   }
 });
 
+
+router.get("/pag/ination", async (req: Request, res: Response) => {
+  
+  try{
+    
+    const getRouteInstance = <IRouteController>(
+      container.get(config.controllers.RouteController.name)
+    );
+
+    const listTrucks = await getRouteInstance.getRoutesByPagination(Number(req.query.page), Number(req.query.pageRecords));
+    res.status(200).json(listTrucks);
+  }catch(err){
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
+    });
+
 export default router;

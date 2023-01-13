@@ -11,7 +11,7 @@ import {
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import RouteDTO from "../../../domain/dto/RouteDTO";
 import RouteMap from "../../../infrastructure/mappers/RouteMap";
-import { Get, Route, Tags, Post, Body, Path, Patch } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Patch, Query } from "tsoa";
 
 @Route("/routes")
 @Tags("Routes")
@@ -30,6 +30,25 @@ export default class RouteController implements IRouteController {
   async getRoutes(): Promise<expectedRouteJSON[]> {
     const routeDTO = await this.routeService.getRoutes();
     return RouteMap.toJSONArray(routeDTO);
+  }
+
+
+  @Get("/pag/ination")
+  public async getRoutesByPagination(@Query() page:number, @Query() pageRecords:number): Promise<{routesList: expectedRouteJSON[], totalRecords: number}> {
+    
+    const routeDTO = await this.routeService.getRoutes();
+
+    let totalRecords = routeDTO.length;
+    const startIndex = (page - 1) * pageRecords;
+    const endIndex = startIndex + pageRecords;
+    const dataToReturn = routeDTO.slice(startIndex, endIndex);
+
+    const result =  {
+      routesList: RouteMap.toJSONArray(dataToReturn) as [],
+      totalRecords: totalRecords as number
+    };
+    
+    return result;
   }
 
   /**
@@ -108,3 +127,6 @@ export default class RouteController implements IRouteController {
     return RouteMap.toJSON(routeDTO);
   }
 }
+
+
+

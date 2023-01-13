@@ -10,7 +10,8 @@ import {
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import TruckDTO from "../../../domain/dto/TruckDTO";
 import TruckMap from "../../../infrastructure/mappers/TruckMap";
-import { Get, Route, Tags, Post, Body, Path, Put } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Put, Query } from "tsoa";
+
 
 @Route("/trucks")
 @Tags("Trucks")
@@ -29,6 +30,24 @@ export default class TruckController implements ITruckController {
   public async getTrucks(): Promise<expectedTruckJSON[]> {
     const truckDTO = await this.truckService.getTrucks();
     return TruckMap.toJSONArray(truckDTO);
+  }
+
+  @Get("/pag/ination")
+  public async getTrucksByPagination(@Query() page:number, @Query() pageRecords:number): Promise<{trucksList: expectedTruckJSON[], totalRecords: number}> {
+    
+    const truckDTO = await this.truckService.getTrucks();
+
+    let totalRecords = truckDTO.length;
+    const startIndex = (page - 1) * pageRecords;
+    const endIndex = startIndex + pageRecords;
+    const dataToReturn = truckDTO.slice(startIndex, endIndex);
+
+    const result =  {
+      trucksList: TruckMap.toJSONArray(dataToReturn) as [],
+      totalRecords: totalRecords as number
+    };
+    
+    return result;
   }
 
   /**

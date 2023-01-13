@@ -12,7 +12,7 @@ export default class LogisticsService {
 
   public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
 
-    return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
+    return fetch("http://localhost:3000/" + "trucks")
       .then(async (response) => {
         const json = await response.json();
         var data: Array<TruckDTO> = json;
@@ -41,7 +41,7 @@ export default class LogisticsService {
       body: TruckMap.toJson(truck),
     };
     const response = await fetch(
-      import.meta.env.VITE_LOGISTICS_API + "trucks",
+      "http://localhost:3000/" + "trucks",
       requestOptions
     );
     return await response.json();
@@ -49,7 +49,7 @@ export default class LogisticsService {
 
 
   public static getRoutes(getErros: Function = (errors: Array<any>) => {}) {
-    return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
+    return fetch("http://localhost:3000/" + "routes")
       .then(async (response) => {
         const json = await response.json();
         var data: Array<RouteDTO> = json;
@@ -79,7 +79,7 @@ export default class LogisticsService {
       body: RouteMap.toJson(route),
     };
     const response = await fetch(
-      import.meta.env.VITE_LOGISTICS_API + "routes",
+      "http://localhost:3000/" + "routes",
       requestOptions
     );
     return await response.json();
@@ -92,7 +92,7 @@ export default class LogisticsService {
   ) {
     const formatted_date = date.toISOString().slice(0,10);
     return fetch(
-      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + formatted_date
+      "http://localhost:3000/" + "trips/" + registration + "/" + formatted_date
     )
       .then(async (response) => {
         const json = await response.json();
