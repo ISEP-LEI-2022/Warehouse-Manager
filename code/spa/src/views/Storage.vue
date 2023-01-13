@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
 import StorageService from "@/services/StorageService";
-import CrudDialog from "@/components/CrudDialog.vue";
 import StorageMap from "@/services/mappers/StorageMap";
 import DeliveryMap from "@/services/mappers/DeliveryMap";
 import { useToast } from "primevue/usetoast";
 import type Storage from "@/models/storage";
 import type Delivery from "@/models/delivery";
 import ChargingSystems from "@/models/chargingSystem";
-import CrudChargingSystem from "@/components/CrudChargingSystem.vue";
-import CrudProduct from "@/components/CrudProduct.vue";
-import Product from "@/models/product";
-import CrudStorage from "@/components/CrudStorage.vue";
-import CrudDeliveryTest from "@/components/CrudDeliveryTest.vue";
+
 
 const toast = useToast();
 const expandedRows = ref([]);
 const deliveries = ref([] as Delivery[]);
 const storages = ref([] as Storage[]);
+const storagesDropdown = ref([] as Storage[]);
 const storageService = new StorageService();
 
 const help_delivery_fields = ref({  });
@@ -34,7 +30,7 @@ const buildAddress = (
 };
 
 onBeforeMount(() => {
-  storageService.getStorages().then((data) => (storages.value = data));
+  storageService.getStoragesPagination(page,perPage).then((data) => (storages.value = data));
   storageService.getDeliveries().then((data) => (deliveries.value = data));
 });
 
@@ -56,7 +52,12 @@ const addStorage = () => {
 const addChargingSystem = () => {
   const chargingSystemToCreate = chargingSystem;
   var index: number;
+  console.log(chargingSystem)
+  console.log(chargingSystem_storageId)
+
   index = storages.value.findIndex((item) => item.StorageId = chargingSystem_storageId);
+  console.log(index)
+
   storages.value[index].Chargingsystems.push(new ChargingSystems(chargingSystemToCreate.ChargingTime));
   storageService.updateStorage(storages.value[index]);
 
@@ -64,6 +65,7 @@ const addChargingSystem = () => {
 
 const addProduct = () => {
   const productToCreate = product;
+  console.log(product)
   var index: number;
   index = deliveries.value.findIndex((item) => item.DeliveryId = product_deliveryId);
 
@@ -165,7 +167,37 @@ var delivery = DeliveryMap.empty();
 var product = DeliveryMap.emptyProduct();
 var product_deliveryId = "";
 
+var page = 1;
+const perPage = 3
+var totalRecords = 10
 
+const onPage = (event) => {
+  page = event.page + 1;
+  storageService.getStoragesPagination(page,perPage).then((data) => (storages.value = data));
+}
+
+const handleChangeDropdownValue = (event) => {
+  delivery.FinalStorage = event.value.StorageId;
+  console.log(delivery.FinalStorage)
+}
+const handleChangeDeliveryDate = (event) => {
+  delivery.DeliveryDate = event;
+  console.log(delivery.DeliveryDate)
+}
+
+const showDeliveryDialog = () => {
+  storageService.getStorages().then((data) => (storagesDropdown.value = data));
+}
+
+var selectedOption = ref(null);
+
+const currentDate = new Date()
+
+const formatDate = (date) => {
+  return new Date(date).toDateString()
+}
+
+const selectedDate = ref(null);
 </script>
 
 
@@ -275,7 +307,7 @@ var product_deliveryId = "";
 
         
 
-        <DataTable :value="storages" v-model:expandedRows="expandedRows" dataKey="StorageId">
+        <DataTable :value="storages" v-model:expandedRows="expandedRows" dataKey="StorageId" :rows="perPage" >
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="desig" header="Designation" sortable>
             <template #body="slotProps" sortable>
@@ -338,25 +370,27 @@ var product_deliveryId = "";
                   </div>
               </template>
         </DataTable>
+        <Paginator :rows="perPage" :totalRecords="totalRecords" @page="onPage($event)"></Paginator>
       </div> 
     </TabPanel>
 
     <TabPanel header="Deliveries">
       <div class = "card">
+        
         <Dialog 
           v-model:visible="displayNewDelivery"
           :style="{ width: '30vw' }" 
           :modal="true" 
           class="p-fluid"
           :value="delivery"   
-          header="Add New Delivery">
+          header="Add New Delivery"
+          @show="showDeliveryDialog">
         
           <div class = "card p-fluid">
             <div class="field">
               <strong><label for="ddate">Delivery Date</label></strong>
-              <Calendar inputId="basic" v-model="date" autocomplete="off" />
-              
-            
+              <Calendar inputId="basic" v-model="selectedDate" placeholder="Select a Date" @date-select="handleChangeDeliveryDate" :min-date="currentDate"/>
+                          
             </div>
 
             <div class="field">
@@ -366,13 +400,14 @@ var product_deliveryId = "";
 
             <div class="field">
               <strong><label for="lon">Final Storage</label></strong>
-                <Dropdown
-                    id="dfinal"
-                    v-model="delivery.FinalStorage"
-                    :options="list"
-                    option-label="designation"
-                    option-value="id"
-                    placeholder="Select a Storage"/>
+              <Dropdown
+                id="dfinal"
+                v-model="selectedOption"
+                :options="storagesDropdown"
+                option-label="Designation"
+                placeholder="Select a Storage"
+                @change="handleChangeDropdownValue"/>
+              
             </div>
 
             <div class="field">
@@ -439,7 +474,7 @@ var product_deliveryId = "";
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="ddate" header="Delivery Date" sortable>
             <template #body="slotProps" sortable>
-              {{ slotProps.data.DeliveryDate }}
+              {{ formatDate(slotProps.data.DeliveryDate) }}
             </template>
           </Column>
             

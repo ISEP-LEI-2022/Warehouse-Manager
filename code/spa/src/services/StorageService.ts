@@ -64,6 +64,30 @@ export default class StorageService {
       });
   }
 
+  getStoragesPagination(page: number, perpage: number) {
+    return fetch("https://localhost:7067/" + "api/Storages/" + page + "/" + perpage)
+      .then(async (response) => {
+        const json = await response.json();
+        var data: Array<StorageDTO> = json;
+        if (!response.ok) {
+          this.Storage_Errors.push({
+            content: response.statusText,
+            severity: "error",
+          });
+          
+          return StorageMap.fromDTOArray([]);
+        }
+        return StorageMap.fromDTOArray(data);
+      })
+      .catch((error) => {
+        this.Storage_Errors.push({
+          content: error,
+          severity: "error",
+        });
+        return StorageMap.fromDTOArray([]);
+      });
+  }
+
   async createDelivery(delivery: Delivery) {
     const requestOptions = {
       method: "POST",
