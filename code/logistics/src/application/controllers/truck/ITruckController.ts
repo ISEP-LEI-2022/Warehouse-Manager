@@ -3,6 +3,7 @@ export type expectedBodyTruck = {
     tare: number;
     capacity: number;
     autonomy: number;
+    active: boolean;
 }
 
 export type expectedTruckJSON = {
@@ -10,6 +11,7 @@ export type expectedTruckJSON = {
     tare: number;
     capacity: number;
     autonomy: number;
+    active: boolean;
 }
 
 export interface ITruckController {

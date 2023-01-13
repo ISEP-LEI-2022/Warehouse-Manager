@@ -8,7 +8,8 @@ export default class TruckMap{
             registration: truck.registration.value(),
             tare: truck.tare.value(),
             capacity: truck.capacity.value(),
-            autonomy: truck.autonomy.value()
+            autonomy: truck.autonomy.value(),
+            active: truck.active.value()
         } as TruckDTO;
     }
 
@@ -17,7 +18,8 @@ export default class TruckMap{
             registration: truck.registration.value(),
             tare: truck.tare.value(),
             capacity: truck.capacity.value(),
-            autonomy: truck.autonomy.value()
+            autonomy: truck.autonomy.value(),
+            active: truck.active.value()
         };
     }
 
@@ -27,6 +29,7 @@ export default class TruckMap{
             truckDTO.capacity,
             truckDTO.registration,
             truckDTO.tare,
+            truckDTO.active
         );
     }
 
@@ -35,7 +38,8 @@ export default class TruckMap{
             registration: truckDTO.registration,
             tare: truckDTO.tare,
             capacity: truckDTO.capacity,
-            autonomy: truckDTO.autonomy
+            autonomy: truckDTO.autonomy,
+            active: truckDTO.active
         };
     }
 
