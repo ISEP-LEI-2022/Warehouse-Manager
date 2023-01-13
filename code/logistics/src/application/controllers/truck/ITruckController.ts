@@ -19,4 +19,5 @@ export interface ITruckController {
     getTruckByRegistration(registration: string): Promise<expectedTruckJSON>;
     getTrucks(): Promise<expectedTruckJSON[]>;
     updateTruckByRegistration( req: expectedBodyTruck): Promise<expectedTruckJSON>;
+    changeActiveStatus(registration: string): Promise<expectedTruckJSON>;
 }

@@ -96,4 +96,17 @@ export default class TruckController implements ITruckController {
     const truckDTO = await this.truckService.updateTruckByRegistration(body as TruckDTO);
     return TruckMap.toJSON(truckDTO);
   }
+
+  /**
+   * @summary Changes the active status of a truck
+   * @param registration - The registration of the truck
+   * @returns Returns a JSON with the updated truck
+   */
+  @Post("/status/:registration")
+  async changeActiveStatus(
+    @Path() registration: string
+  ): Promise<expectedTruckJSON> {
+    const truckDTO = await this.truckService.changeActiveStatus(registration);
+    return TruckMap.toJSON(truckDTO);
+  } 
 }

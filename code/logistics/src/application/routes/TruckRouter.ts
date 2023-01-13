@@ -66,4 +66,21 @@ router.put("/", async (req: Request, res: Response) => {
   }
 });
 
+router.post("/status/:registration", async (req: Request, res: Response) => {
+  try {
+    const updateTruckInstance = <ITruckController>(
+      container.get(config.controllers.TruckController.name)
+    );
+    const updated = await updateTruckInstance.changeActiveStatus(
+      req.params.registration as string)
+    res.status(200).json(updated);
+  } catch (err) {
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
+});
+
 export default router;

@@ -14,6 +14,7 @@ const body = {
     tare: 2000,
     capacity: 5000,
     autonomy: 500,
+    active: true,
 };
 
 const update_body = {
@@ -21,6 +22,7 @@ const update_body = {
     tare: 1000,
     capacity: 5000,
     autonomy: 200,
+    active: true,
 };
 
 const bad_body = {
@@ -28,6 +30,7 @@ const bad_body = {
     tare: 2000,
     capacity: 5000,
     autonomy: 500,
+    active: true,
 };
 
 const dto = body as TruckDTO;
