@@ -8,6 +8,7 @@ import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
 import LogisticsService from "@/services/LogisticsService";
 import type Trip from "@/models/trip";
+import type TruckDTO from "@/services/dtos/TruckDTO";
 
 const toast = useToast();
 const trucks = ref([] as Truck[]);
@@ -111,10 +112,32 @@ const processResponse = (
 };
 const searchTrip = () => {
   loading.value = true;
-  LogisticsService.getTrips(selectedTruck.value?.Registration,selectedDate?.value,(errors: Array<any>) => {
-    trip_Errors.value.push(errors);
-  }).then((data) => (trips.value = data));
+  LogisticsService.getTrips(
+    selectedTruck.value?.Registration,
+    selectedDate?.value,
+    (errors: Array<any>) => {
+      trip_Errors.value.push(errors);
+    }
+  ).then((data) => (trips.value = data));
   setTimeout(() => (loading.value = false), 500);
+};
+const asyncUpdateActiveStatus = function updateStatus(
+  registration: string,
+  self: Truck
+) {
+  loading.value = true;
+  LogisticsService.updateActiveStatus(registration, (errors: Array<any>) => {
+    trip_Errors.value.push(errors);
+  })
+    .then((data) => (self.Active = !!data?.Active))
+    .catch((error) => {
+      toast.add({
+        severity: "error",
+        summary: "Not possible to update active status",
+        detail: error,
+        life: 3000,
+      });
+    });
 };
 </script>
 
@@ -145,12 +168,8 @@ const searchTrip = () => {
           :paginator="true"
           responsiveLayout="scroll"
         >
-        <template #empty>
-                No truck found.
-            </template>
-            <template #loading>
-                Loading truck data. Please wait.
-            </template>
+          <template #empty> No truck found. </template>
+          <template #loading> Loading truck data. Please wait. </template>
           <Column
             field="Registration"
             header="Registration"
@@ -166,7 +185,7 @@ const searchTrip = () => {
             field="Capacity"
             header="Capacity [kg]"
             :sortable="true"
-            style="width: 30%"
+            style="width: 20%"
           ></Column>
           <Column
             field="Tare"
@@ -174,6 +193,40 @@ const searchTrip = () => {
             :sortable="true"
             style="width: 20%"
           ></Column>
+          <Column
+            field="active"
+            header="Status"
+            dataType="boolean"
+            style="width: 10%"
+          >
+            <template #body="{ data }">
+              <span class="p-column-title">Active Status</span>
+              <span
+                v-on:mouseover=""
+                class="p-column-body"
+                v-on:click="asyncUpdateActiveStatus(data.Registration, data as Truck)"
+              >
+                <span
+                  class="p-tag"
+                  :class="{
+                    'p-tag-success': data.Active,
+                    'p-tag-danger': !data.Active,
+                  }"
+                >
+                  <i
+                    v-if="data.Active"
+                    class="pi pi-check cursor-pointer"
+                    style="font-size: 1rem"
+                  ></i>
+                  <i
+                    v-else
+                    class="pi pi-times cursor-pointer"
+                    style="font-size: 1rem"
+                  ></i>
+                </span>
+              </span>
+            </template>
+          </Column>
           <Column headerStyle="width:4rem">
             <template #body="slotProps">
               <CrudDialog
@@ -211,12 +264,8 @@ const searchTrip = () => {
           :paginator="true"
           responsiveLayout="scroll"
         >
-        <template #empty>
-                No routes found.
-            </template>
-            <template #loading>
-                Loading routes data. Please wait.
-            </template>
+          <template #empty> No routes found. </template>
+          <template #loading> Loading routes data. Please wait. </template>
           <Column field="Route" header="Route" style="width: 15%" />
           <Column
             field="Start"
@@ -304,12 +353,8 @@ const searchTrip = () => {
           dataKey="idTrip"
           responsiveLayout="scroll"
         >
-        <template #empty>
-                No trips found.
-            </template>
-            <template #loading>
-                Loading trips data. Please wait.
-            </template>
+          <template #empty> No trips found. </template>
+          <template #loading> Loading trips data. Please wait. </template>
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="date" header="Date" :sortable="true">
             <template #body="slotProps">
