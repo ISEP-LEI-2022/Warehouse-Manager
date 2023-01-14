@@ -108,7 +108,7 @@ export default class TripController implements ITripController {
 
   @Put("/optimize/:idTrip")
   async optimizeTrip(@Path() idTrip: string): Promise<expectedBodyTrip> {
-    const tripDTO = await this.tripService.optimizeTrip(idTrip);
+    const tripDTO = await this.tripService.getTripById(idTrip);
     return TripMap.toJSON(tripDTO);
   }
 }

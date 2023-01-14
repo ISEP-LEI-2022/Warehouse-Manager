@@ -94,7 +94,7 @@ router.put("/optimize/:idTrip", async (req: Request, res: Response) => {
       container.get(config.controllers.TripController.name)
     );
 
-    const notOptimized = await optimizeTripInstance.optimizeTrip(
+    const notOptimized = await optimizeTripInstance.getTripById(
       req.params.idTrip
     );
 
