@@ -3,10 +3,11 @@ using EletricGo.Domain.Deliveries;
 using EletricGo.Domain.Storages;
 using EletricGo.Infrastructure.Shared;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EletricGo.Infrastructure.Deliveries
 {
-    public class DeliveryRepository : BaseRepository<Delivery, DeliveryId>,IDeliveryRepository
+    public class DeliveryRepository : BaseRepository<Delivery, DeliveryId>, IDeliveryRepository
     {
         DDDSample1DbContext _context;
         public DeliveryRepository(DDDSample1DbContext context) : base(context.Delivery)
@@ -24,11 +25,9 @@ namespace EletricGo.Infrastructure.Deliveries
 
         public async Task<Delivery> GetByIdAsync(DeliveryId id)
         {
-            var query = _context.Set<Delivery>();
-            //query.Include(delivery => delivery._idFinalStorage).ThenInclude(storage => storage.Location).ThenInclude(location => location.Address).ThenInclude(address => address.City).ToList();
-            query.Include(delivery => delivery.Products).ToList();
+            var result = _context.Delivery.Where(x => id == x.Id).Include(products => products.Products).FirstAsync();
 
-            return await query.FirstOrDefaultAsync();
+            return await result;
         }
     }
 }
