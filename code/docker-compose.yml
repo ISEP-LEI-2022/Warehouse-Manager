@@ -21,6 +21,7 @@ services:
     depends_on:
       - logistics-api
       - storage-api
+      - pythonapi
 
   logistics-api:
     container_name: logistics-api
@@ -40,6 +41,7 @@ services:
       - 3000:3000
     depends_on:
       - mongodb
+      - pythonapi
 
   mongodb:
     image: mongo
@@ -81,8 +83,20 @@ services:
     ports:
       - 1433:1433
 
+  pythonapi:
+    container_name: pythonapi
+    hostname: pythonapi
+    build:
+      context: ./pythonapi
+      dockerfile: Dockerfile
+    networks:
+      - storage_net
+      - logistics_net
+    ports:
+      - 5151:5151
 
 networks:
   logistics_net:
+    driver: bridge
   storage_net:
     driver: bridge

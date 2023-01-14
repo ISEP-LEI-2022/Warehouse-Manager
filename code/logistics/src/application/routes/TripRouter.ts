@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
+import TripDTO from "src/domain/dto/TripDTO";
 import container from "typedi";
 import config from "../../config";
-import { Err } from "../../domain/utils/Err";
+import { Err, internetServerErrorFactory } from "../../domain/utils/Err";
 import { ITripController } from "../controllers/trip/ITripController";
+import fetch from "node-fetch";
 
 const router = express.Router();
 
@@ -54,11 +56,11 @@ router.get("/:registration/:date", async (req: Request, res: Response) => {
       container.get(config.controllers.TripController.name)
     );
 
-      const trip = await getTripInstance.getTripByRegDate(
-        req.params.registration as string,
-        new Date(req.params.date)
-      );
-      res.status(200).json([trip]);
+    const trip = await getTripInstance.getTripByRegDate(
+      req.params.registration as string,
+      new Date(req.params.date)
+    );
+    res.status(200).json([trip]);
   } catch (err) {
     if (err instanceof Err) {
       res.status(err.code).send(err.object());
@@ -75,6 +77,52 @@ router.put("/", async (req: Request, res: Response) => {
     );
     const updated = await updateTripInstance.updateTripById(req.body);
     res.status(200).json(updated);
+  } catch (err) {
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
+});
+
+router.put("/optimize/:idTrip", async (req: Request, res: Response) => {
+  const error = internetServerErrorFactory();
+
+  try {
+    const optimizeTripInstance = <ITripController>(
+      container.get(config.controllers.TripController.name)
+    );
+
+    const notOptimized = await optimizeTripInstance.getTripById(
+      req.params.idTrip
+    );
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(notOptimized),
+    };
+
+    const resp = await fetch("http://pythonapi:5151/optimize", options)
+      .then((response) => {
+        if (response.status === 404) {
+          error.addError("not found");
+          throw error;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        error.addError("Unexpected error" + err);
+        throw error;
+      });
+    res.status(200).json(resp as TripDTO);
   } catch (err) {
     if (err instanceof Err) {
       res.status(err.code).send(err.object());
