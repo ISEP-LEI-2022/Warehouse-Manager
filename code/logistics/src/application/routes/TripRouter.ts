@@ -86,7 +86,7 @@ router.put("/", async (req: Request, res: Response) => {
   }
 });
 
-router.put("/optimize/:idTrip", async (req: Request, res: Response) => {
+router.put("/optimize/:registration/:date", async (req: Request, res: Response) => {
   const error = internetServerErrorFactory();
 
   try {
@@ -94,8 +94,9 @@ router.put("/optimize/:idTrip", async (req: Request, res: Response) => {
       container.get(config.controllers.TripController.name)
     );
 
-    const notOptimized = await optimizeTripInstance.getTripById(
-      req.params.idTrip
+    const notOptimized = await optimizeTripInstance.getTripByRegDate(
+      req.params.registration as string,
+      new Date(req.params.date)
     );
 
     const options = {

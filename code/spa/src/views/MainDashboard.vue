@@ -99,14 +99,12 @@ onMounted(() => {
                 >
                   <i
                     v-if="data.Active"
-                    class="pi pi-check cursor-pointer"
-                    v-on:click="data.Active = false"
+                    class="pi pi-check"
                     style="font-size: 1rem"
                   ></i>
                   <i
                     v-else
-                    class="pi pi-times cursor-pointer"
-                    v-on:click="data.Active = true"
+                    class="pi pi-times"
                     style="font-size: 1rem"
                   ></i>
                 </span>
