@@ -152,6 +152,18 @@ export default class TripService implements ITripService {
       throw error;
     }
   }
+
+  async optimizeTrip(tripId: string): Promise<TripDTO> {
+    const error = businessRuleErrorFactory();
+
+    try {
+      const tripOg = await this.tripRepository.getDataById(tripId) as Trip;
+      return TripMap.toDTO(tripOg);
+    } catch (err) {
+      error.addError("Trip does not exist");
+      throw error;
+    }
+  }
 }
 
 function convertToObjDTO(tripList: Trip[]): TripDTO[] {

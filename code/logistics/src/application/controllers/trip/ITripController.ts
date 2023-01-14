@@ -22,4 +22,5 @@ export interface ITripController {
     getTripByRegDate(registration: string, date: Date): Promise<expectedTripJSON>;
     getTrips(): Promise<expectedTripJSON[]>;
     updateTripById(req: expectedBodyTrip): Promise<expectedTripJSON>;
+    optimizeTrip(req: string): Promise<expectedTripJSON>;
 }
