@@ -204,7 +204,9 @@ const asyncUpdateActiveStatus = function updateStatus(
               <span
                 v-on:mouseover=""
                 class="p-column-body"
-                v-on:click="asyncUpdateActiveStatus(data.Registration, data as Truck)"
+                v-on:click="
+                  asyncUpdateActiveStatus(data.Registration, data as Truck)
+                "
               >
                 <span
                   class="p-tag"
@@ -406,6 +408,61 @@ const asyncUpdateActiveStatus = function updateStatus(
           </template>
         </DataTable>
       </div>
+    </TabPanel>
+    <TabPanel id="optimization-panel" header="Optimization">
+      <div class="card">
+        <AutoComplete
+          placeholder="Search"
+          id="dd"
+          :dropdown="true"
+          :multiple="false"
+          v-model="selectedTruck"
+          :suggestions="autoFilteredValue"
+          @complete="searchTruck($event)"
+          field="Registration"
+          style="margin-right: 1rem"
+        />
+        <Calendar
+          :showIcon="true"
+          :showButtonBar="true"
+          v-model="selectedDate"
+          style="margin-right: 1rem"
+        />
+        <Button
+          type="button"
+          label="Search"
+          icon="pi pi-search"
+          :loading="loading"
+          @click="searchTrip"
+        />
+        <DataTable
+          :value="trips"
+          :rows="10"
+          :paginator="true"
+          v-model:expandedRows="expandedRows"
+          dataKey="idTrip"
+          responsiveLayout="scroll"
+        >
+          <template #empty> No trips found. </template>
+          <template #loading> Loading trips data. Please wait. </template>
+            <div class="p-3">
+              <h5>Routes</h5>
+              <DataTable :value="trips" dataKey="idTrip">
+                <Column field="idStart" header="Start" :sortable="true">
+                  <template #body="slotProps">
+                    {{ slotProps.data.idStart }}
+                  </template>
+                </Column>
+                <Column field="idEnd" header="End" :sortable="true">
+                  <template #body="slotProps">
+                    {{ slotProps.data.idEnd }}
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+        </DataTable>
+      </div>
+      <div class="card"></div>
     </TabPanel>
   </TabView>
 </template>
