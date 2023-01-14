@@ -72,6 +72,32 @@ export default class LogisticsService {
       });
   }
 
+
+  public static getRoutesPagination(page: number,perPage: number,getErros: Function = (errors: Array<any>) => {}) {
+    return fetch("http://localhost:3000/" + "routes/pag/ination?page=" + page + "&pageRecords=" + perPage)
+      .then(async (response) => {
+        const json = await response.json();
+        var data: Array<RouteDTO> = json.routesList;
+        var totalRecords = json.totalRecords;
+        if (!response.ok) {
+          getErros({
+            content: response.statusText,
+            severity: "error",
+          });
+          return {routesList: RouteMap.fromDTOArray([]), totalRecords: totalRecords};
+        }
+        return {routesList: RouteMap.fromDTOArray(data), totalRecords: totalRecords};
+      })
+      .catch((error) => {
+        getErros({
+          content: error,
+          severity: "error",
+        });
+        return {routesList: RouteMap.fromDTOArray([]), totalRecords: 0};
+      });
+  }
+
+
   public static async createRoute(route: Route) {
     const requestOptions = {
       method: "POST",
@@ -116,4 +142,42 @@ export default class LogisticsService {
         return TripMap.fromDTOArray([]);
       });
   }
+
+
+  public static async getTripsPagination(
+    registration: string,
+    date: Date,
+    page: number,
+    perpage: number,
+    getErros: Function = (errors: Array<any>) => {}
+  ) {
+    const formatted_date = date.toISOString().slice(0,10);
+    return fetch(
+      "http://localhost:3000/" + "trips/" + registration + "/" + formatted_date
+    )
+      .then(async (response) => {
+        const json = await response.json();
+        console.log(json)
+        var data: Array<TripDTO> = json;
+        var totalRecords = json.totalRecords;
+        if (!response.ok) {
+          getErros({
+            content: response.statusText,
+            severity: "error",
+          });
+          return { tripsList: TripMap.fromDTOArray([]), totalRecords: 0 };
+        }
+
+        return { tripsList: TripMap.fromDTOArray(data), totalRecords: totalRecords };
+      })
+      .catch((error) => {
+        getErros({
+          content: error,
+          severity: "error",
+        });
+        return { tripsList: TripMap.fromDTOArray([]), totalRecords: 0 };
+      });
+  }
+
+
 }

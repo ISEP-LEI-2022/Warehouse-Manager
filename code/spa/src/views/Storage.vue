@@ -7,11 +7,13 @@ import { useToast } from "primevue/usetoast";
 import type Storage from "@/models/storage";
 import type Delivery from "@/models/delivery";
 import ChargingSystems from "@/models/chargingSystem";
+import Product from "@/models/product";
 
 
 const toast = useToast();
 const expandedRows = ref([]);
 const deliveries = ref([] as Delivery[]);
+const allStorages = ref([] as Storage[]);
 const storages = ref([] as Storage[]);
 const storagesDropdown = ref([] as Storage[]);
 const storageService = new StorageService();
@@ -19,18 +21,9 @@ const storageService = new StorageService();
 const help_delivery_fields = ref({  });
 const help_storage_fields = ref({  });
 
-const buildAddress = (
-  Street: string,
-  Door: string,
-  Floor: string,
-  PostalCode: string,
-  City: string
-) => {
-  return `${Street}, ${Door} - ${Floor}, ${PostalCode}, ${City}`;
-};
-
 onBeforeMount(() => {
-  storageService.getStoragesPagination(page,perPage).then((data) => (storages.value = data));
+  storageService.getStorages().then((data) => (allStorages.value = data));
+  storageService.getStoragesPagination(page,perPage).then((data) => { storages.value = data.storageList, totalRecords = data.totalRecords; console.log(storages.value)} );
   storageService.getDeliveries().then((data) => (deliveries.value = data));
 });
 
@@ -43,7 +36,9 @@ const addStorage = () => {
       response,
       "Create Storage",
       () => {
-        storages.value.push(new_storage);
+        //storages.value.push(new_storage);
+        storageService.getStoragesPagination(page,perPage).then((data) => { storages.value = data.storageList, totalRecords = data.totalRecords; console.log(storages.value)} );
+        closeNewStorage()
       }
     )
   );
@@ -51,28 +46,53 @@ const addStorage = () => {
 
 const addChargingSystem = () => {
   const chargingSystemToCreate = chargingSystem;
-  var index: number;
-  console.log(chargingSystem)
   console.log(chargingSystem_storageId)
-
-  index = storages.value.findIndex((item) => item.StorageId = chargingSystem_storageId);
-  console.log(index)
-
-  storages.value[index].Chargingsystems.push(new ChargingSystems(chargingSystemToCreate.ChargingTime));
-  storageService.updateStorage(storages.value[index]);
-
+  var storage: Storage
+  storageService.getStorageById(chargingSystem_storageId).then((response) => {
+    if(response?.StorageId == "") {
+      return null;
+    }else{
+      storage = response;
+      console.log(storage)
+      storage.Chargingsystems.push(new ChargingSystems(chargingSystemToCreate.ChargingTime));
+      storageService.updateStorage(storage).then((response) => 
+      processResponse(
+          response,
+          "Add Charging System",
+          () => {
+            closeNewChargingSystem();
+          }
+        )
+      );
+    }
+    
+  })
 };
 
 const addProduct = () => {
   const productToCreate = product;
-  console.log(product)
-  var index: number;
-  index = deliveries.value.findIndex((item) => item.DeliveryId = product_deliveryId);
-
-  deliveries.value[index].Products.push(productToCreate);
-
-  storageService.updateDelivery(deliveries.value[index]);
-
+  console.log(productToCreate)
+  console.log(product_deliveryId)
+  var delivery: Delivery;
+  storageService.getDeliveryById(product_deliveryId).then((response) => {
+    if(response?.DeliveryId == "") {
+      console.log("No Delivery")
+      return null;
+    }else{
+      delivery = response;
+      console.log(delivery)
+      delivery.Products.push(new Product(productToCreate.Name, productToCreate.Weight, productToCreate.LevelOfPolution, product_deliveryId));
+      storageService.updateDelivery(delivery).then((response) => 
+      processResponse(
+          response,
+          "Add Product",
+          () => {
+            closeNewProduct();
+          }
+        )
+      );
+    }
+  })
 };
 
 
@@ -84,7 +104,9 @@ const addDelivery = () => {
       response,
       "Create Delivery",
       () => {
-        deliveries.value.push(delivery);
+        //deliveries.value.push(delivery);
+        storageService.getDeliveries().then((data) => (deliveries.value = data));
+        closeNewDelivery()
       }
     )
   );
@@ -115,6 +137,9 @@ const processResponse = (
   }
 };
  
+var page = 1;
+const perPage = 3
+var totalRecords = 0
 
 const displayNewStorage = ref(false);
 const displayChargingSystem = ref(false);
@@ -126,18 +151,45 @@ const openNewStorage = () => {
   displayNewStorage.value = true;
 };
 
+const closeNewStorage = () => {
+  storage = StorageMap.empty()
+  displayNewStorage.value = false;
+};
+
 const openNewChargingSystem = (storageId: string) => {
+  console.log(chargingSystem_storageId)
+  console.log(storageId)
   chargingSystem_storageId  = storageId;
   displayChargingSystem.value = true;
+};
+
+const closeNewChargingSystem = () => {
+  chargingSystem_storageId  = "";
+  chargingSystem = StorageMap.emptyChargingSystem();
+  displayChargingSystem.value = false;
+  storageService.getStoragesPagination(page,perPage).then((data) => { storages.value = data.storageList, totalRecords = data.totalRecords; console.log(storages.value)} );
 };
 
 const openNewDelivery = () => {
   displayNewDelivery.value = true;
 };
 
+const closeNewDelivery = () => {
+  delivery = DeliveryMap.empty();
+  displayNewDelivery.value = false;
+};
+
 const openNewProduct = (deliveryId: string) => {
+  console.log(deliveryId)
   product_deliveryId  = deliveryId;
   displayProduct.value = true;
+};
+
+const closeNewProduct = () => {
+  product_deliveryId  = "";
+  product = DeliveryMap.emptyProduct();
+  displayProduct.value = false;
+  storageService.getDeliveries().then((data) => ( deliveries.value = data ) );
 };
 
 const updateStorageStatus = (StorageId : string) => {
@@ -167,13 +219,11 @@ var delivery = DeliveryMap.empty();
 var product = DeliveryMap.emptyProduct();
 var product_deliveryId = "";
 
-var page = 1;
-const perPage = 3
-var totalRecords = 10
+
 
 const onPage = (event) => {
   page = event.page + 1;
-  storageService.getStoragesPagination(page,perPage).then((data) => (storages.value = data));
+  storageService.getStoragesPagination(page,perPage).then((data) => { storages.value = data.storageList, totalRecords = data.totalRecords } );
 }
 
 const handleChangeDropdownValue = (event) => {
@@ -206,6 +256,7 @@ const selectedDate = ref(null);
 
     <TabPanel header="Storages">
       <div class = "card">
+        <Toast /> 
         <Dialog 
           v-model:visible="displayNewStorage"
           :style="{ width: '30vw' }" 
@@ -217,52 +268,52 @@ const selectedDate = ref(null);
           <div class = "card p-fluid">
             <div class="field">
               <strong><label for="desig">Designation</label></strong>
-                <InputText id="desig" v-model.trim="storage.Designation" required="true" autofocus  />
+                <InputText id="desig" v-model.trim="storage.Designation" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="lat">Latitude</label></strong>
-                <InputText id="lat" v-model.trim="storage.Latitude" required="true" autofocus  />
+                <InputText id="lat" v-model.trim="storage.Latitude" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="lon">Longitude</label></strong>
-                <InputText id="lon" v-model.trim="storage.Longitude" required="true" autofocus  />
+                <InputText id="lon" v-model.trim="storage.Longitude" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="alt">Altitude</label></strong>
-                <InputText id="alt" v-model.trim="storage.Altitude" required="true" autofocus  />
+                <InputText id="alt" v-model.trim="storage.Altitude" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="str">Street</label></strong>
-                <InputText id="str" v-model.trim="storage.Street" required="true" autofocus  />
+                <InputText id="str" v-model.trim="storage.Street" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="door">Door</label></strong>
-                <InputText id="door" v-model.trim="storage.Door" required="true" autofocus  />
+                <InputText id="door" v-model.trim="storage.Door" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="floor">Floor</label></strong>
-                <InputText id="floor" v-model.trim="storage.Floor" required="true" autofocus  />
+                <InputText id="floor" v-model.trim="storage.Floor" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="pcode">PostalCode</label></strong>
-                <InputText id="pcode" v-model.trim="storage.PostalCode" required="true" autofocus  />
+                <InputText id="pcode" v-model.trim="storage.PostalCode" required="true"  />
             </div>
 
             <div class="field">
               <strong><label for="citynu">City Number</label></strong>
-                <InputNumber id="citynu" v-model.trim="storage.Number" required="true" autofocus  />
+                <InputText type="number" id="citynu" v-model.trim="storage.Number" required="true" :min="0"  />
             </div>
 
             <div class="field">
               <strong><label for="cityna">City Name</label></strong>
-                <InputText id="cityna" v-model.trim="storage.Name" required="true" autofocus  />
+                <InputText id="cityna" v-model.trim="storage.Name" required="true"  />
             </div>
           </div>
           <template #footer>
@@ -286,7 +337,7 @@ const selectedDate = ref(null);
           <div class = "card p-fluid">
             <div class="field">
               <strong><label for="ctime">Charging Time</label></strong>
-                <InputText id="ctime" v-model.trim="chargingSystem.ChargingTime" required="true" autofocus  />
+                <InputText id="ctime" v-model.trim="chargingSystem.ChargingTime" required="true"  />
             </div>
           </div>
           <template #footer>
@@ -308,6 +359,12 @@ const selectedDate = ref(null);
         
 
         <DataTable :value="storages" v-model:expandedRows="expandedRows" dataKey="StorageId" :rows="perPage" >
+          <template #empty>
+                No storages found.
+            </template>
+            <template #loading>
+                Loading storage data. Please wait.
+            </template>
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="desig" header="Designation" sortable>
             <template #body="slotProps" sortable>
@@ -330,12 +387,6 @@ const selectedDate = ref(null);
             <template #body="slotProps" sortable>
               <span v-if="slotProps.data.Active == true">Available</span>
               <span v-else>Not Available</span>
-            </template>
-          </Column>
-
-          <Column headerStyle="width:4rem">
-            <template #body>
-              <Button icon="pi pi-pencil" />
             </template>
           </Column>
           <Column headerStyle="width:4rem">
@@ -361,11 +412,6 @@ const selectedDate = ref(null);
                                 {{ slotProps.data.chargingTime }}
                               </template>
                           </Column>
-                          <Column headerStyle="width:4rem">
-                              <template #body>
-                                  <Button icon="pi pi-pencil" />
-                              </template>
-                          </Column>
                       </DataTable>
                   </div>
               </template>
@@ -376,7 +422,7 @@ const selectedDate = ref(null);
 
     <TabPanel header="Deliveries">
       <div class = "card">
-        
+        <Toast /> 
         <Dialog 
           v-model:visible="displayNewDelivery"
           :style="{ width: '30vw' }" 
@@ -389,13 +435,13 @@ const selectedDate = ref(null);
           <div class = "card p-fluid">
             <div class="field">
               <strong><label for="ddate">Delivery Date</label></strong>
-              <Calendar inputId="basic" v-model="selectedDate" placeholder="Select a Date" @date-select="handleChangeDeliveryDate" :min-date="currentDate"/>
+              <Calendar :showIcon="true" :showButtonBar="true" v-model="selectedDate" placeholder="Select a Date" @date-select="handleChangeDeliveryDate" :min-date="currentDate"/>
                           
             </div>
 
             <div class="field">
               <strong><label for="dw">Delivery Weight</label></strong>
-                <InputNumber id="dw" v-model.trim="delivery.DeliveryWeight" required="true" autofocus  />
+                <InputText type="number" id="dw" v-model.trim="delivery.DeliveryWeight" required="true" :min="0"  />
             </div>
 
             <div class="field">
@@ -412,12 +458,12 @@ const selectedDate = ref(null);
 
             <div class="field">
               <strong><label for="ttl">Time To Load</label></strong>
-                <InputNumber id="ttl" v-model.trim="delivery.TimeToLoad" required="true" autofocus  />
+              <InputText type="number" id="ttl" v-model.trim="delivery.TimeToLoad" required="true" :min="0"  />
             </div>
 
             <div class="field">
               <strong><label for="str">Time To Unload</label></strong>
-                <InputNumber id="str" v-model.trim="delivery.TimeToUnload" required="true" autofocus  />
+              <InputText type="number" id="str" v-model.trim="delivery.TimeToUnload" required="true" :min="0"  />
             </div>
           </div>
           <template #footer>
@@ -441,15 +487,15 @@ const selectedDate = ref(null);
           <div class = "card p-fluid">
             <div class="field">
               <strong><label for="n">Name</label></strong>
-                <InputText id="n" v-model.trim="product.Name" required="true" autofocus  />
+                <InputText id="n" v-model.trim="product.Name" required="true"   />
             </div>
             <div class="field">
               <strong><label for="w">Weight</label></strong>
-                <InputNumber id="w" v-model.trim="product.Weight" required="true" autofocus  />
+                <InputText type="number" id="w" v-model.trim="product.Weight" required="true" :min="0"  />
             </div>
             <div class="field">
               <strong><label for="lop">Level Of Polution</label></strong>
-                <InputNumber id="lop" v-model.trim="product.LevelOfPolution" required="true" autofocus  />
+                <InputText type="number" id="lop" v-model.trim="product.LevelOfPolution" required="true" :min="0"  />
             </div>
           </div>
           <template #footer>
@@ -471,6 +517,12 @@ const selectedDate = ref(null);
         
 
         <DataTable :value="deliveries" v-model:expandedRows="expandedRows" dataKey="DeliveryId">
+          <template #empty>
+                No Deliveries found.
+            </template>
+            <template #loading>
+                Loading deliveries data. Please wait.
+            </template>
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="ddate" header="Delivery Date" sortable>
             <template #body="slotProps" sortable>
@@ -486,7 +538,7 @@ const selectedDate = ref(null);
           <Column field="dstor" header="Final Storage" sortable>
             <template #body="slotProps" sortable>
               {{
-                  storages.find((item) => {
+                  allStorages.find((item) => {
                     return item?.StorageId == slotProps.data.FinalStorage;
                   })?.Designation
               }}
@@ -503,16 +555,10 @@ const selectedDate = ref(null);
             </template>
           </Column>
 
-          <Column headerStyle="width:4rem">
-            <template #body>
-              <Button icon="pi pi-pencil" />
-            </template>
-          </Column>
-
           <template #expansion="slotProps">
                   <div class="orders-subtable">
                       <h5>Products for  {{
-                                            storages.find((item) => {
+                                            allStorages.find((item) => {
                                               return item?.StorageId == slotProps.data.FinalStorage;
                                             })?.Designation
                                         }}</h5>
@@ -537,11 +583,6 @@ const selectedDate = ref(null);
                           <Column field="lop_col" header="Level Of Polution" sortable>
                               <template #body="slotProps" sortable>
                                 {{ slotProps.data.levelOfPolution }}
-                              </template>
-                          </Column>
-                          <Column headerStyle="width:4rem">
-                              <template #body>
-                                  <Button icon="pi pi-pencil" />
                               </template>
                           </Column>
                       </DataTable>

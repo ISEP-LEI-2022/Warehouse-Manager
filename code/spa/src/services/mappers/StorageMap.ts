@@ -106,7 +106,7 @@ export default class StorageMap {
 
   public static empty(): Storage {
     var chargingSystems: ChargingSystems[] = [];
-    return new Storage("","","","","","","","","",1,"",chargingSystems, true);
+    return new Storage("","","","","","","","","",0,"",chargingSystems, true);
   }
 
   public static emptyChargingSystem(): ChargingSystems {

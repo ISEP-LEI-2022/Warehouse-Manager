@@ -2,7 +2,7 @@
 import { ref, onBeforeMount } from "vue";
 import CrudDialog from "@/components/CrudDialog.vue";
 import type Truck from "@/models/truck";
-import type Route from "@/models/route";
+import Route from "@/models/route";
 import RouteMap from "@/services/mappers/RouteMap";
 import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
@@ -31,13 +31,24 @@ const help_route_fields = ref({
   ExtraChargingTime: "Bigger than 0",
 });
 
+var pageRoutes = 1;
+const perPageRoutes = 2
+const totalRecordsRoutes = ref(0)
+
+var pageTrips = 1;
+const perPageTrips = 2
+const totalRecordsTrips = ref(0)
+
 onBeforeMount(() => {
   LogisticsService.getTrucks((errors: Array<any>) => {
     truck_Errors.value.push(errors);
   }).then((data) => (trucks.value = data));
-  LogisticsService.getRoutes((errors: Array<any>) => {
+  LogisticsService.getRoutesPagination(pageRoutes,perPageRoutes,(errors: Array<any>) => {
     route_Errors.value.push(errors);
-  }).then((data) => (routes.value = data));
+  }).then((data) => {
+    routes.value = data.routesList,
+    totalRecordsRoutes.value = data.totalRecords
+  })
 });
 
 const addTruck = (truck: Array<any>) => {
@@ -45,6 +56,7 @@ const addTruck = (truck: Array<any>) => {
   LogisticsService.createTruck(new_truck).then((response) =>
     processResponse(response, "Create Truck", () => {
       trucks.value.push(new_truck);
+      totalRecordsRoutes.value += 1
     })
   );
 };
@@ -111,11 +123,38 @@ const processResponse = (
 };
 const searchTrip = () => {
   loading.value = true;
-  LogisticsService.getTrips(selectedTruck.value?.Registration,selectedDate?.value,(errors: Array<any>) => {
+  LogisticsService.getTripsPagination(selectedTruck.value?.Registration,selectedDate?.value,pageTrips,perPageTrips,(errors: Array<any>) => {
     trip_Errors.value.push(errors);
-  }).then((data) => (trips.value = data));
+  }).then((data) => {
+    trips.value = data.tripsList,
+    totalRecordsTrips.value = data.totalRecords
+  });
   setTimeout(() => (loading.value = false), 500);
 };
+
+
+
+const onPageRoutes = (event) => {
+  pageRoutes = event.page + 1;
+  LogisticsService.getRoutesPagination(pageRoutes,perPageRoutes,(errors: Array<any>) => {
+    route_Errors.value.push(errors);
+  }).then((data) => {
+    routes.value = data.routesList,
+    totalRecordsRoutes.value = data.totalRecords
+  })
+}
+
+const onPageTrips = (event) => {
+  pageTrips = event.page + 1;
+  LogisticsService.getTripsPagination(selectedTruck.value?.Registration,selectedDate?.value,pageTrips,perPageTrips,(errors: Array<any>) => {
+    route_Errors.value.push(errors);
+  }).then((data) => {
+    trips.value = data.tripsList,
+    totalRecordsTrips.value = data.totalRecords
+  })
+}
+
+
 </script>
 
 <template>
@@ -208,7 +247,6 @@ const searchTrip = () => {
         <DataTable
           :value="routes"
           :rows="10"
-          :paginator="true"
           responsiveLayout="scroll"
         >
         <template #empty>
@@ -266,6 +304,10 @@ const searchTrip = () => {
             </template>
           </Column>
         </DataTable>
+        <div v-if="totalRecordsRoutes > 0">
+          <Paginator :rows="perPageRoutes" :totalRecords="totalRecordsRoutes" @page="onPageRoutes($event)"></Paginator>
+        </div>
+        
       </div>
     </TabPanel>
     <TabPanel id="trips-panel" header="Trips">
@@ -360,6 +402,9 @@ const searchTrip = () => {
             </div>
           </template>
         </DataTable>
+        <div v-if="totalRecordsTrips > 0">
+          <Paginator :rows="perPageTrips" :totalRecords="totalRecordsTrips" @page="onPageTrips($event)"></Paginator>
+        </div>
       </div>
     </TabPanel>
   </TabView>

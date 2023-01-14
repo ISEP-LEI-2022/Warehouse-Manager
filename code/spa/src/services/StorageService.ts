@@ -65,26 +65,28 @@ export default class StorageService {
   }
 
   getStoragesPagination(page: number, perpage: number) {
-    return fetch("https://localhost:7067/" + "api/Storages/" + page + "/" + perpage)
+    return fetch("https://localhost:7067/" + "api/Storages/pagination?page=" + page + "&pageResults=" + perpage)
       .then(async (response) => {
+        
         const json = await response.json();
-        var data: Array<StorageDTO> = json;
+        var data: Array<StorageDTO> = json.storage;
+        var totalRecords = json.totalRecords;
         if (!response.ok) {
           this.Storage_Errors.push({
             content: response.statusText,
             severity: "error",
           });
           
-          return StorageMap.fromDTOArray([]);
+          return { storageList: StorageMap.fromDTOArray([]), totalRecords: 0 };
         }
-        return StorageMap.fromDTOArray(data);
+        return { storageList: StorageMap.fromDTOArray(data), totalRecords: totalRecords };
       })
       .catch((error) => {
         this.Storage_Errors.push({
           content: error,
           severity: "error",
         });
-        return StorageMap.fromDTOArray([]);
+        return { storageList: StorageMap.fromDTOArray([]), totalRecords: 0 };
       });
   }
 
@@ -188,6 +190,31 @@ export default class StorageService {
       requestOptions
     );
     return await response.json();
+  }
+
+
+  async getDeliveryById(id: string) {
+    return fetch("https://localhost:7067/" + "api/Deliveries/" + id)
+      .then(async (response) => {
+        const json = await response.json();
+        console.log(json)
+        var data: DeliveryDTO = json;
+        if (!response.ok) {
+          this.Storage_Errors.push({
+            content: response.statusText,
+            severity: "error",
+          });
+          return null;
+        }
+        return DeliveryMap.fromDTO(data);
+      })
+      .catch((error) => {
+        this.Storage_Errors.push({
+          content: error,
+          severity: "error",
+        });
+        return null;
+      });
   }
 
 }
