@@ -26,12 +26,14 @@ namespace EletricGo.Controllers
 
         // GET: api/Storages/pagination
         [HttpGet("pagination")]
-        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll(int page, int pageResults) {
+        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll([FromQuery] int page, [FromQuery]  int pageResults) {
             if(_service.GetAllAsync == null)
                 return NotFound();
 
+            var totalRecords = _service.GetAllAsync().Result.Count();
+
             //var pageResults = 3f;
-            var totalRecords = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
+            //var pageCount = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
            
             var storages = _service.GetAllAsync().Result
                 .Skip((page - 1) * (int)pageResults)
