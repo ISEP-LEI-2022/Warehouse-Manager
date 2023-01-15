@@ -106,18 +106,23 @@ import CrudTest from "./components/CrudDelivery.vue";
 import CrudChargingSystem from "./components/CrudChargingSystem.vue";
 import CrudProduct from "./components/CrudProduct.vue";
 import CrudStorage from "./components/CrudStorage.vue";
-
 import "@/assets/styles.scss";
-
+import { createPinia } from 'pinia'
+import vue3GoogleLogin from 'vue3-google-login'
 
 
 const app = createApp(App);
+const pinia = createPinia()
 
+app.use(vue3GoogleLogin, {
+    clientId: '637756518421-ajr3rrnkvgadpj56p2gml6lq7dub1cst.apps.googleusercontent.com'
+  })
 app.use(router);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
+app.use(pinia)
 
 app.directive("tooltip", Tooltip);
 app.directive("badge", BadgeDirective);
