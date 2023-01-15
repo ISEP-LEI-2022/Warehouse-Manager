@@ -2,6 +2,9 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useLayout } from "@/layout/composables/layout";
 import { useRouter } from "vue-router";
+import { signOut } from "firebase/auth";
+import { auth } from "../auth/UserAuth";
+import { userStore } from "@/stores/user";
 
 const { layoutConfig, onMenuToggle, contextPath } = useLayout();
 
@@ -63,6 +66,11 @@ const isOutsideClicked = (event) => {
     topbarEl.contains(event.target)
   );
 };
+const LogOut = async () => {
+  await signOut(auth);
+  userStore().update(null);
+  router.push("/login");
+};
 </script>
 
 <template>
@@ -85,6 +93,13 @@ const isOutsideClicked = (event) => {
     >
       <i class="pi pi-ellipsis-v"></i>
     </button>
+
+    <div class="layout-topbar-menu" :class="topbarMenuClasses">
+      <button @click="LogOut" class="p-link layout-topbar-button">
+        <i class="pi pi-user"></i>
+        <span>Profile</span>
+      </button>
+    </div>
   </div>
 </template>
 

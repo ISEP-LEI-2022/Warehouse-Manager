@@ -106,18 +106,19 @@ import CrudTest from "./components/CrudDelivery.vue";
 import CrudChargingSystem from "./components/CrudChargingSystem.vue";
 import CrudProduct from "./components/CrudProduct.vue";
 import CrudStorage from "./components/CrudStorage.vue";
-
 import "@/assets/styles.scss";
-
-
+import { createPinia } from 'pinia'
 
 const app = createApp(App);
+const pinia = createPinia()
+
 
 app.use(router);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
+app.use(pinia)
 
 app.directive("tooltip", Tooltip);
 app.directive("badge", BadgeDirective);
