@@ -75,7 +75,8 @@ services:
     restart: unless-stopped
 
   python-api:
-    container_name: 1180910/python-api:latest
+    container_name: python-api
+    image: 1180910/python-api:latest
     hostname: python-api
     networks:
       - storage_net
