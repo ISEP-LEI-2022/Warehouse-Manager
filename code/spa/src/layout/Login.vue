@@ -42,7 +42,7 @@
               class="mb-3"
             />
             <div class="text-900 text-3xl font-medium mb-3">Welcome!</div>
-            <span class="text-600 font-medium">Sign in to continue</span>
+            <GoogleLogin :callback="callback" prompt />
           </div>
 
           <div class="w-full md:w-10 mx-auto">
@@ -73,7 +73,6 @@
               inputStyle="padding:1rem"
             ></Password>
 
-
             <Button
               label="Sign In"
               @click="Login"
@@ -88,7 +87,6 @@
 
 <script>
 import { ref } from "vue";
-import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../auth/UserAuth";
@@ -100,9 +98,8 @@ export default {
     const email = ref("");
     const password = ref("");
     const error = ref(null);
-
-    const store = useStore();
     const router = useRouter();
+    const store = userStore();
 
     const Login = async () => {
       try {
@@ -112,7 +109,7 @@ export default {
           password.value
         );
         if (response) {
-          userStore().update(response.user)
+          store.update(response.user);
           router.push("/dashboard");
         } else {
           throw new Error("login failed");
@@ -121,6 +118,12 @@ export default {
         error.value = err.message;
       }
     };
+    const callback = (response) => {
+      // This callback will be triggered when the user selects or login to
+      // his Google account from the popup
+      console.log("Handle the response", response);
+    };
+
     return { Login, email, password, error };
   },
 };
