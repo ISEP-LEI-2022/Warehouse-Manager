@@ -5,12 +5,14 @@ import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
 import { auth } from "../auth/UserAuth";
 import { userStore } from "@/stores/user";
+import { useToast } from "primevue/usetoast";
+
 
 const { layoutConfig, onMenuToggle, contextPath } = useLayout();
-
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
+const toast = useToast();
 
 onMounted(() => {
   bindOutsideClickListener();
@@ -71,9 +73,18 @@ const LogOut = async () => {
   userStore().update(null);
   router.push("/login");
 };
+const ShowUser = async () => {
+  toast.add({
+      severity: "info",
+      summary: userStore().current_user.email,
+      detail: userStore().current_user.displayName,
+      life: 3000,
+    });
+};
 </script>
 
 <template>
+  <Toast />
   <div class="layout-topbar">
     <router-link to="/" class="layout-topbar-logo">
       <img :src="logoUrl" alt="logo" />
@@ -95,6 +106,7 @@ const LogOut = async () => {
     </button>
 
     <div class="layout-topbar-menu" :class="topbarMenuClasses">
+      <Button @click="ShowUser" icon="pi pi-user" class="p-button-rounded p-button-info p-button-outlined mr-2 mb-2" />
       <Button @click="LogOut" icon="pi pi-sign-out" class="p-button-rounded p-button-danger mr-2 mb-2" />
     </div>
   </div>

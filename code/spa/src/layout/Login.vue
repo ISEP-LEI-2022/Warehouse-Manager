@@ -140,13 +140,13 @@ const Login = async () => {
         password.value
       );
       if (response) {
+        console.log(response);
         store.update(response.user);
         router.push("/dashboard");
       } else {
         throw new Error("login failed");
       }
   } catch (error) {
-    console.log(error.code)
     switch (error.code) {
       case "auth/invalid-email":
         user_class.value = "p-invalid";
@@ -156,8 +156,6 @@ const Login = async () => {
         pass_class.value = "p-invalid";
         break;
     }
-    console.log(error.code)
-
     toast.add({
       severity: "error",
       summary: error.name,
@@ -174,7 +172,6 @@ const GoogleLogin = () => {
       router.push("/dashboard");
     })
     .catch((error) => {
-      console.log(error);
       toast.add({
       severity: "error",
       summary: error.name,
