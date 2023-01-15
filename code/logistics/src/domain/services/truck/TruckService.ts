@@ -66,6 +66,18 @@ export default class TruckService implements ITruckService {
     }
   }
 
+  async getTrucksWithPagination(page:number, numberRecords:number): Promise<TruckDTO[]> {
+    const error = getDataErrorFactory();
+
+    try {
+      const truck = (await this.truckRepository.getDataByPagination(page,numberRecords)) as Truck[];
+      return convertToObjDTO(truck);
+    } catch (err) {
+      error.addError(String(err));
+      throw error;
+    }
+  }
+
   async updateTruckByRegistration(truckDTO: TruckDTO): Promise<TruckDTO> {
     const error = persistanceErrorFactory();
 

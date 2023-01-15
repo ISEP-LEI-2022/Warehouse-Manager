@@ -36,15 +36,15 @@ export default class RouteController implements IRouteController {
   @Get("/pag/ination")
   public async getRoutesByPagination(@Query() page:number, @Query() pageRecords:number): Promise<{routesList: expectedRouteJSON[], totalRecords: number}> {
     
-    const routeDTO = await this.routeService.getRoutes();
+    const routeDTO = await this.routeService.getRoutesByPagination(page,pageRecords);
 
-    let totalRecords = routeDTO.length;
-    const startIndex = (page - 1) * pageRecords;
-    const endIndex = startIndex + pageRecords;
-    const dataToReturn = routeDTO.slice(startIndex, endIndex);
+    let totalRecords = await (await this.routeService.getRoutes()).length;
+    // const startIndex = (page - 1) * pageRecords;
+    // const endIndex = startIndex + pageRecords;
+    // const dataToReturn = routeDTO.slice(startIndex, endIndex);
 
     const result =  {
-      routesList: RouteMap.toJSONArray(dataToReturn) as [],
+      routesList: RouteMap.toJSONArray(routeDTO) as [],
       totalRecords: totalRecords as number
     };
     

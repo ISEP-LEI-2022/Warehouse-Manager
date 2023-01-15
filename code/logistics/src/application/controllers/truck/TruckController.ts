@@ -35,15 +35,12 @@ export default class TruckController implements ITruckController {
   @Get("/pag/ination")
   public async getTrucksByPagination(@Query() page:number, @Query() pageRecords:number): Promise<{trucksList: expectedTruckJSON[], totalRecords: number}> {
     
-    const truckDTO = await this.truckService.getTrucks();
+    const truckDTO = await this.truckService.getTrucksWithPagination(page, pageRecords);
 
-    let totalRecords = truckDTO.length;
-    const startIndex = (page - 1) * pageRecords;
-    const endIndex = startIndex + pageRecords;
-    const dataToReturn = truckDTO.slice(startIndex, endIndex);
+    let totalRecords = await (await this.truckService.getTrucks()).length;
 
     const result =  {
-      trucksList: TruckMap.toJSONArray(dataToReturn) as [],
+      trucksList: TruckMap.toJSONArray(truckDTO) as [],
       totalRecords: totalRecords as number
     };
     

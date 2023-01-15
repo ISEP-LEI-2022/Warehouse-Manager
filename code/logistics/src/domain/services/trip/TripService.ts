@@ -138,6 +138,18 @@ export default class TripService implements ITripService {
     }
   }
 
+  async getTripsByPagination(page:number, pageRecords:number): Promise<TripDTO[]> {
+    const error = getDataErrorFactory();
+
+    try {
+      const trip = (await this.tripRepository.getDataByPagination(page,pageRecords)) as Trip[];
+      return convertToObjDTO(trip);
+    } catch (err) {
+      error.addError("Error getting trips");
+      throw error;
+    }
+  }
+
   async updateTripById(tripDTO: TripDTO): Promise<TripDTO> {
     const error = businessRuleErrorFactory();
 

@@ -6,6 +6,7 @@ import { validateRequestParams } from "../../../domain/utils/UtilityFunctions";
 import TripMap from "../../../infrastructure/mappers/TripMap";
 import { Body, Get, Path, Post, Put, Query, Route, Tags } from "tsoa";
 import { Inject, Service } from "typedi";
+
 import {
   expectedBodyTrip,
   expectedTripJSON,
@@ -34,14 +35,11 @@ export default class TripController implements ITripController {
   @Get("/records/pagination/data/")
   public async getTripsByPagination(@Query() page:number, @Query() pageRecords:number): Promise<{tripList: expectedTripJSON[], totalRecords: number}> {
     
-    const tripDTO = await this.tripService.getTrips();
-    let totalRecords = tripDTO.length;
-    const startIndex = (page - 1) * pageRecords;
-    const endIndex = startIndex + pageRecords;
-    const dataToReturn = tripDTO.slice(startIndex, endIndex);
+    const tripDTO = await this.tripService.getTripsByPagination(page,pageRecords);
+    let totalRecords = await (await this.tripService.getTrips()).length;
 
     const result =  {
-      tripList: TripMap.toJSONArray(dataToReturn) as [],
+      tripList: TripMap.toJSONArray(tripDTO) as [],
       totalRecords: totalRecords as number
     };
     
@@ -62,7 +60,7 @@ export default class TripController implements ITripController {
   /**
    * @summary This method searches for a trip from the given registration and date
    * @param registration registration of the truck
-   * @param {Date} date of the trip
+   * @param {Date} * date of the trip
    * @returns {expectedTripJSON} Returns a JSON with the trip information
    */
   @Get("/:registration/:date")
