@@ -8,6 +8,7 @@ export const userStore = defineStore('user', {
   },
   getters: {
     current_user: (state) => state.user,
+    logged_in: (state) => Object.keys(state.user).length !== 0
   },
   actions: {
     update(user: object) {

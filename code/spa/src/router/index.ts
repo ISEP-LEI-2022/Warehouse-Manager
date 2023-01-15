@@ -48,8 +48,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   if (to.meta.requiresAuth) {
-    console.log(userStore().current_user)
-      if (!userStore().current_user) {
+      if (!userStore().logged_in) {
       return {
           path: '/login',
           query: {
