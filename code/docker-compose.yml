@@ -18,6 +18,10 @@ services:
       - logistics_net
     ports:
       - 8081:8081
+    depends_on:
+      - logistics-api
+      - storage-api
+      - pythonapi
 
   logistics-api:
     container_name: logistics-api
