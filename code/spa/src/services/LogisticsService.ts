@@ -7,6 +7,7 @@ import RouteMap from "@/services/mappers/RouteMap";
 
 import type TripDTO from "./dtos/TripDTO";
 import TripMap from "./mappers/TripMap";
+import type Trip from "@/models/trip";
 
 export default class LogisticsService {
   public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
@@ -123,7 +124,7 @@ export default class LogisticsService {
     getErros: Function = (errors: Array<any>) => {}
   ) {
     const requestOptions = {
-      method: "POST",
+      method: "PATCH",
       headers: {'Content-Type': 'application/json'},
     };
     const response = await fetch(
@@ -150,5 +151,42 @@ export default class LogisticsService {
         return null;
       });
     return await response;
+  }
+
+  public static async optimizeTrip(
+    registration: string,
+    date: Date,
+    getErros: Function = (errors: Array<any>) => {}
+  ): Promise<Trip[]>{
+    const formatted_date = date.toISOString().slice(0, 10);
+    const requestOptions = {
+      method: "PUT",
+      headers: {'Content-Type': 'application/json'},
+    };
+    const response = await fetch(
+      import.meta.env.VITE_LOGISTICS_API + "trips" + "/optimize/" + registration + "/" + formatted_date,
+      requestOptions
+    )
+      .then(async (response) => {
+        const json = await response.json();
+        var data: TripDTO = json;
+        if (!response.ok) {
+          getErros({
+            content: "Unknow error",
+            severity: "error",
+          });
+          return TripMap.empty();
+        }
+        console.log(data);
+        return TripMap.fromDTO(data);
+      })
+      .catch((error) => {
+          getErros({
+            content: error,
+            severity: "error",
+          });
+          return TripMap.empty();
+      });
+    return await [response];
   }
 }

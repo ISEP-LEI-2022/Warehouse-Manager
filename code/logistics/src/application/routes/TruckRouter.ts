@@ -66,7 +66,7 @@ router.put("/", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/status/:registration", async (req: Request, res: Response) => {
+router.patch("/status/:registration", async (req: Request, res: Response) => {
   try {
     const updateTruckInstance = <ITruckController>(
       container.get(config.controllers.TruckController.name)

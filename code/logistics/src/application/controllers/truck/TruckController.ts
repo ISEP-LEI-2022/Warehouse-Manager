@@ -10,7 +10,7 @@ import {
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import TruckDTO from "../../../domain/dto/TruckDTO";
 import TruckMap from "../../../infrastructure/mappers/TruckMap";
-import { Get, Route, Tags, Post, Body, Path, Put } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Put, Patch } from "tsoa";
 
 @Route("/trucks")
 @Tags("Trucks")
@@ -102,7 +102,7 @@ export default class TruckController implements ITruckController {
    * @param registration - The registration of the truck
    * @returns Returns a JSON with the updated truck
    */
-  @Post("/status/:registration")
+  @Patch("/status/:registration")
   async changeActiveStatus(
     @Path() registration: string
   ): Promise<expectedTruckJSON> {

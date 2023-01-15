@@ -19,6 +19,16 @@ export default class TripMap {
     return tripsList;
   }
 
+  public static fromDTO(trip: TripDTO): Trip {
+    return new Trip(
+      trip.idTrip,
+      trip.registration,
+      trip.date,
+      trip.routes,
+      trip.deliveries
+    );
+  }
+
   public static empty(): Trip {
     return new Trip("", "", new Date(), [], []);
   }

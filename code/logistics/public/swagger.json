@@ -738,7 +738,7 @@
 			}
 		},
 		"/trucks/status/{registration}": {
-			"post": {
+			"patch": {
 				"operationId": "ChangeActiveStatus",
 				"responses": {
 					"200": {
