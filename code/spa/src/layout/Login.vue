@@ -6,10 +6,10 @@
     <div class="grid justify-content-center p-2 lg:p-0" style="min-width: 80%">
       <div class="col-12 mt-5 xl:mt-0 text-center">
         <img
-          :src="'layout/images/logo-white.svg'"
-          alt="Sakai logo"
+          :src="logoUrl"
+          alt="logo"
           class="mb-5"
-          style="width: 81px; height: 60px"
+          style="width: 80px; height: 80px"
         />
       </div>
       <div
@@ -105,13 +105,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../auth/UserAuth";
 import { userStore } from "@/stores/user";
 import { GoogleAuthProvider } from "firebase/auth";
 import { useToast } from "primevue/usetoast";
+import { useLayout } from "@/layout/composables/layout";
 
 const email = ref("");
 const password = ref("");
@@ -121,6 +122,12 @@ const error = ref(null);
 const router = useRouter();
 const store = userStore();
 const toast = useToast();
+
+const { contextPath } = useLayout();
+
+const logoUrl = computed(() => {
+  return `${contextPath}layout/images/logo.png`;
+});
 
 const Login = async () => {
   try {
