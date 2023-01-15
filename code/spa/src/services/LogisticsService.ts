@@ -12,7 +12,7 @@ export default class LogisticsService {
 
   public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
 
-    return fetch("http://localhost:3000/" + "trucks")
+    return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
         const json = await response.json();
         var data: Array<TruckDTO> = json;
@@ -41,7 +41,7 @@ export default class LogisticsService {
       body: TruckMap.toJson(truck),
     };
     const response = await fetch(
-      "http://localhost:3000/" + "trucks",
+      import.meta.env.VITE_LOGISTICS_API + "trucks",
       requestOptions
     );
     return await response.json();
@@ -49,7 +49,7 @@ export default class LogisticsService {
 
 
   public static getRoutes(getErros: Function = (errors: Array<any>) => {}) {
-    return fetch("http://localhost:3000/" + "routes")
+    return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
       .then(async (response) => {
         const json = await response.json();
         var data: Array<RouteDTO> = json;
@@ -74,7 +74,7 @@ export default class LogisticsService {
 
 
   public static getRoutesPagination(page: number,perPage: number,getErros: Function = (errors: Array<any>) => {}) {
-    return fetch("http://localhost:3000/" + "routes/pag/ination?page=" + page + "&pageRecords=" + perPage)
+    return fetch(import.meta.env.VITE_LOGISTICS_API + "routes/pag/ination?page=" + page + "&pageRecords=" + perPage)
       .then(async (response) => {
         const json = await response.json();
         var data: Array<RouteDTO> = json.routesList;
@@ -105,7 +105,7 @@ export default class LogisticsService {
       body: RouteMap.toJson(route),
     };
     const response = await fetch(
-      "http://localhost:3000/" + "routes",
+      import.meta.env.VITE_LOGISTICS_API + "routes",
       requestOptions
     );
     return await response.json();
@@ -118,7 +118,7 @@ export default class LogisticsService {
   ) {
     const formatted_date = date.toISOString().slice(0,10);
     return fetch(
-      "http://localhost:3000/" + "trips/" + registration + "/" + formatted_date
+      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + formatted_date
     )
       .then(async (response) => {
         const json = await response.json();
@@ -153,7 +153,7 @@ export default class LogisticsService {
   ) {
     const formatted_date = date.toISOString().slice(0,10);
     return fetch(
-      "http://localhost:3000/" + "trips/" + registration + "/" + formatted_date
+      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + formatted_date
     )
       .then(async (response) => {
         const json = await response.json();
