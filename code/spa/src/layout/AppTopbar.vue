@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useLayout } from "@/layout/composables/layout";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
-import { auth } from "../auth/UserAuth";
+import { auth } from "../auth/firebase";
 import { userStore } from "@/stores/user";
 import { useToast } from "primevue/usetoast";
 
@@ -76,7 +76,7 @@ const LogOut = async () => {
 const ShowUser = async () => {
   toast.add({
       severity: "info",
-      summary: userStore().current_user.displayName,
+      summary: `${userStore().current_user.displayName} [${userStore().current_role}]`,
       detail: userStore().current_user.email,
       life: 3000,
     });

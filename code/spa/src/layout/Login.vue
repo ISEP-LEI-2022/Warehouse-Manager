@@ -108,7 +108,7 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../auth/UserAuth";
+import { auth, provider } from "../auth/firebase";
 import { userStore } from "@/stores/user";
 import { GoogleAuthProvider } from "firebase/auth";
 import { useToast } from "primevue/usetoast";
@@ -146,6 +146,7 @@ const Login = async () => {
         throw new Error("login failed");
       }
   } catch (error) {
+
     switch (error.code) {
       case "auth/invalid-email":
         user_class.value = "p-invalid";
@@ -166,7 +167,6 @@ const Login = async () => {
 const GoogleLogin = () => {
   signInWithPopup(auth, provider)
     .then((response) => {
-      console.log(response);
       store.update(response.user);
       router.push("/dashboard");
     })
