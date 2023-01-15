@@ -70,7 +70,7 @@ const isOutsideClicked = (event) => {
 };
 const LogOut = async () => {
   await signOut(auth);
-  userStore().update(null);
+  userStore().clear();
   router.push("/login");
 };
 const ShowUser = async () => {
