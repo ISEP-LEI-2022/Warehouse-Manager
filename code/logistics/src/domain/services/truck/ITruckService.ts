@@ -6,4 +6,5 @@ export default interface ITruckService {
   getTrucks(): Promise<TruckDTO[]>;
   getTrucksWithPagination(page:number, numberRecords:number): Promise<TruckDTO[]>;
   updateTruckByRegistration(truck: TruckDTO): Promise<TruckDTO>;
+  changeActiveStatus(id: string): Promise<TruckDTO>;
 }

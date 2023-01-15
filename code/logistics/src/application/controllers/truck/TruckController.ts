@@ -10,8 +10,7 @@ import {
 import { badRequestErrorFactory } from "../../../domain/utils/Err";
 import TruckDTO from "../../../domain/dto/TruckDTO";
 import TruckMap from "../../../infrastructure/mappers/TruckMap";
-import { Get, Route, Tags, Post, Body, Path, Put, Query } from "tsoa";
-
+import { Get, Route, Tags, Post, Body, Path, Put, Query, Patch } from "tsoa";
 
 @Route("/trucks")
 @Tags("Trucks")
@@ -76,7 +75,7 @@ export default class TruckController implements ITruckController {
         "tare",
         "capacity",
         "autonomy",
-      ])
+      ],["active"])
     ) {
       const error = badRequestErrorFactory();
       error.addError("Invalid request body");
@@ -101,7 +100,7 @@ export default class TruckController implements ITruckController {
       !validateRequestParams(
         body,
         ["registration"],
-        ["tare", "capacity", "autonomy"]
+        ["tare", "capacity", "autonomy","active"]
       )
     ) {
 
@@ -112,4 +111,17 @@ export default class TruckController implements ITruckController {
     const truckDTO = await this.truckService.updateTruckByRegistration(body as TruckDTO);
     return TruckMap.toJSON(truckDTO);
   }
+
+  /**
+   * @summary Changes the active status of a truck
+   * @param registration - The registration of the truck
+   * @returns Returns a JSON with the updated truck
+   */
+  @Patch("/status/:registration")
+  async changeActiveStatus(
+    @Path() registration: string
+  ): Promise<expectedTruckJSON> {
+    const truckDTO = await this.truckService.changeActiveStatus(registration);
+    return TruckMap.toJSON(truckDTO);
+  } 
 }

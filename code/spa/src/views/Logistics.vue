@@ -17,6 +17,7 @@ const truck_Errors = ref([] as any[]);
 const route_Errors = ref([] as any[]);
 const trip_Errors = ref([] as any[]);
 const expandedRows = ref([]);
+const optimizedTrip = ref([] as Trip[]);
 
 const selectedDate = ref(null);
 const selectedTruck = ref(null);
@@ -32,23 +33,27 @@ const help_route_fields = ref({
 });
 
 var pageRoutes = 1;
-const perPageRoutes = 2
-const totalRecordsRoutes = ref(0)
+const perPageRoutes = 2;
+const totalRecordsRoutes = ref(0);
 
 var pageTrips = 1;
-const perPageTrips = 2
-const totalRecordsTrips = ref(0)
+const perPageTrips = 2;
+const totalRecordsTrips = ref(0);
 
 onBeforeMount(() => {
   LogisticsService.getTrucks((errors: Array<any>) => {
     truck_Errors.value.push(errors);
   }).then((data) => (trucks.value = data));
-  LogisticsService.getRoutesPagination(pageRoutes,perPageRoutes,(errors: Array<any>) => {
-    route_Errors.value.push(errors);
-  }).then((data) => {
-    routes.value = data.routesList,
-    totalRecordsRoutes.value = data.totalRecords
-  })
+  LogisticsService.getRoutesPagination(
+    pageRoutes,
+    perPageRoutes,
+    (errors: Array<any>) => {
+      route_Errors.value.push(errors);
+    }
+  ).then((data) => {
+    (routes.value = data.routesList),
+      (totalRecordsRoutes.value = data.totalRecords);
+  });
 });
 
 const addTruck = (truck: Array<any>) => {
@@ -56,7 +61,7 @@ const addTruck = (truck: Array<any>) => {
   LogisticsService.createTruck(new_truck).then((response) =>
     processResponse(response, "Create Truck", () => {
       trucks.value.push(new_truck);
-      totalRecordsRoutes.value += 1
+      totalRecordsRoutes.value += 1;
     })
   );
 };
@@ -123,38 +128,123 @@ const processResponse = (
 };
 const searchTrip = () => {
   loading.value = true;
-  LogisticsService.getTripsPagination(selectedTruck.value?.Registration,selectedDate?.value,pageTrips,perPageTrips,(errors: Array<any>) => {
+  LogisticsService.getTrips(
+    selectedTruck.value?.Registration,
+    selectedDate?.value,
+    (errors: Array<any>) => {
+      trip_Errors.value.push(errors);
+    }
+  ).then((data) => (trips.value = data));
+  setTimeout(() => (loading.value = false), 500);
+};
+
+// Não relevante aplicar pois cada truck apenas faz uma viagem por dia
+// const searchTrip = () => {
+//   loading.value = true;
+//   LogisticsService.getTripsPagination(
+//     selectedTruck.value?.Registration,
+//     selectedDate?.value,
+//     pageTrips,
+//     perPageTrips,
+//     (errors: Array<any>) => {
+//       trip_Errors.value.push(errors);
+//     }
+//   ).then((data) => {
+//     (trips.value = data.tripsList),
+//       (totalRecordsTrips.value = data.totalRecords);
+//   });
+//   setTimeout(() => (loading.value = false), 500);
+// };
+
+const asyncsearchTrip = function searchTrip(
+  registration: string | null,
+  date: Date | null
+) {
+  if (registration == null || date == null) {
+    return;
+  }
+  loading.value = true;
+  LogisticsService.getTrips(registration, date, (errors: Array<any>) => {
     trip_Errors.value.push(errors);
   }).then((data) => {
-    trips.value = data.tripsList,
-    totalRecordsTrips.value = data.totalRecords
+    (trips.value = data.tripsList),
+      (totalRecordsTrips.value = data.totalRecords);
   });
   setTimeout(() => (loading.value = false), 500);
 };
 
-
-
 const onPageRoutes = (event) => {
   pageRoutes = event.page + 1;
-  LogisticsService.getRoutesPagination(pageRoutes,perPageRoutes,(errors: Array<any>) => {
-    route_Errors.value.push(errors);
-  }).then((data) => {
-    routes.value = data.routesList,
-    totalRecordsRoutes.value = data.totalRecords
-  })
-}
+  LogisticsService.getRoutesPagination(
+    pageRoutes,
+    perPageRoutes,
+    (errors: Array<any>) => {
+      route_Errors.value.push(errors);
+    }
+  ).then((data) => {
+    (routes.value = data.routesList),
+      (totalRecordsRoutes.value = data.totalRecords);
+  });
+};
 
 const onPageTrips = (event) => {
   pageTrips = event.page + 1;
-  LogisticsService.getTripsPagination(selectedTruck.value?.Registration,selectedDate?.value,pageTrips,perPageTrips,(errors: Array<any>) => {
-    route_Errors.value.push(errors);
-  }).then((data) => {
-    trips.value = data.tripsList,
-    totalRecordsTrips.value = data.totalRecords
+  LogisticsService.getTripsPagination(
+    selectedTruck.value?.Registration,
+    selectedDate?.value,
+    pageTrips,
+    perPageTrips,
+    (errors: Array<any>) => {
+      route_Errors.value.push(errors);
+    }
+  ).then((data) => {
+    (trips.value = data.tripsList),
+      (totalRecordsTrips.value = data.totalRecords);
+  });
+};
+
+const asyncUpdateActiveStatus = function updateStatus(
+  registration: string,
+  self: Truck
+) {
+  loading.value = true;
+  LogisticsService.updateActiveStatus(registration, (errors: Array<any>) => {
+    trip_Errors.value.push(errors);
   })
-}
+    .then((data) => (self.Active = !!data?.Active))
+    .catch((error) => {
+      toast.add({
+        severity: "error",
+        summary: "Not possible to update active status",
+        detail: error,
+        life: 3000,
+      });
+    });
+  loading.value = false;
+};
 
-
+const asyncOptimizeTrip = function optimizeRoute(
+  registration: string | null,
+  date: Date | null
+) {
+  loading.value = true;
+  if (registration == null || date == null) {
+    return;
+  }
+  LogisticsService.optimizeTrip(registration, date, (errors: Array<any>) => {
+    trip_Errors.value.push(errors);
+  })
+    .then((data) => (optimizedTrip.value = data))
+    .catch((error) => {
+      toast.add({
+        severity: "error",
+        summary: "Not possible to optimize route",
+        detail: error,
+        life: 3000,
+      });
+    });
+  loading.value = false;
+};
 </script>
 
 <template>
@@ -184,12 +274,8 @@ const onPageTrips = (event) => {
           :paginator="true"
           responsiveLayout="scroll"
         >
-        <template #empty>
-                No truck found.
-            </template>
-            <template #loading>
-                Loading truck data. Please wait.
-            </template>
+          <template #empty> No truck found. </template>
+          <template #loading> Loading truck data. Please wait. </template>
           <Column
             field="Registration"
             header="Registration"
@@ -205,7 +291,7 @@ const onPageTrips = (event) => {
             field="Capacity"
             header="Capacity [kg]"
             :sortable="true"
-            style="width: 30%"
+            style="width: 20%"
           ></Column>
           <Column
             field="Tare"
@@ -213,6 +299,42 @@ const onPageTrips = (event) => {
             :sortable="true"
             style="width: 20%"
           ></Column>
+          <Column
+            field="active"
+            header="Status"
+            dataType="boolean"
+            style="width: 10%"
+          >
+            <template #body="{ data }">
+              <span class="p-column-title">Active Status</span>
+              <span
+                v-on:mouseover=""
+                class="p-column-body"
+                v-on:click="
+                  asyncUpdateActiveStatus(data.Registration, data as Truck)
+                "
+              >
+                <span
+                  class="p-tag"
+                  :class="{
+                    'p-tag-success': data.Active,
+                    'p-tag-danger': !data.Active,
+                  }"
+                >
+                  <i
+                    v-if="data.Active"
+                    class="pi pi-check cursor-pointer"
+                    style="font-size: 1rem"
+                  ></i>
+                  <i
+                    v-else
+                    class="pi pi-times cursor-pointer"
+                    style="font-size: 1rem"
+                  ></i>
+                </span>
+              </span>
+            </template>
+          </Column>
           <Column headerStyle="width:4rem">
             <template #body="slotProps">
               <CrudDialog
@@ -244,17 +366,9 @@ const onPageTrips = (event) => {
           :key="msg.content"
           >{{ msg.content }}</Message
         >
-        <DataTable
-          :value="routes"
-          :rows="10"
-          responsiveLayout="scroll"
-        >
-        <template #empty>
-                No routes found.
-            </template>
-            <template #loading>
-                Loading routes data. Please wait.
-            </template>
+        <DataTable :value="routes" :rows="10" responsiveLayout="scroll">
+          <template #empty> No routes found. </template>
+          <template #loading> Loading routes data. Please wait. </template>
           <Column field="Route" header="Route" style="width: 15%" />
           <Column
             field="Start"
@@ -305,9 +419,12 @@ const onPageTrips = (event) => {
           </Column>
         </DataTable>
         <div v-if="totalRecordsRoutes > 0">
-          <Paginator :rows="perPageRoutes" :totalRecords="totalRecordsRoutes" @page="onPageRoutes($event)"></Paginator>
+          <Paginator
+            :rows="perPageRoutes"
+            :totalRecords="totalRecordsRoutes"
+            @page="onPageRoutes($event)"
+          ></Paginator>
         </div>
-        
       </div>
     </TabPanel>
     <TabPanel id="trips-panel" header="Trips">
@@ -346,12 +463,8 @@ const onPageTrips = (event) => {
           dataKey="idTrip"
           responsiveLayout="scroll"
         >
-        <template #empty>
-                No trips found.
-            </template>
-            <template #loading>
-                Loading trips data. Please wait.
-            </template>
+          <template #empty> No trips found. </template>
+          <template #loading> Loading trips data. Please wait. </template>
           <Column :expander="true" headerStyle="width: 3rem" />
           <Column field="date" header="Date" :sortable="true">
             <template #body="slotProps">
@@ -403,7 +516,114 @@ const onPageTrips = (event) => {
           </template>
         </DataTable>
         <div v-if="totalRecordsTrips > 0">
-          <Paginator :rows="perPageTrips" :totalRecords="totalRecordsTrips" @page="onPageTrips($event)"></Paginator>
+          <Paginator
+            :rows="perPageTrips"
+            :totalRecords="totalRecordsTrips"
+            @page="onPageTrips($event)"
+          ></Paginator>
+        </div>
+      </div>
+    </TabPanel>
+    <TabPanel id="optimization-panel" header="Optimization">
+      <div class="card w-12">
+        <AutoComplete
+          placeholder="Search"
+          id="dd"
+          :dropdown="true"
+          :multiple="false"
+          v-model="selectedTruck"
+          :suggestions="autoFilteredValue"
+          @complete="searchTruck($event)"
+          field="Registration"
+          style="margin-right: 1rem"
+        />
+        <Calendar
+          :showIcon="true"
+          :showButtonBar="true"
+          v-model="selectedDate"
+          style="margin-right: 1rem"
+        />
+        <Button
+          type="button"
+          label="Search"
+          icon="pi pi-search"
+          :loading="loading"
+          @click="asyncsearchTrip(selectedTruck?.Registration, selectedDate)"
+        />
+      </div>
+      <div class="w-12 flex card-container card">
+        <div class="w-5">
+          <DataTable
+            :value="trips"
+            :rows="10"
+            :paginator="true"
+            v-model:expandedRows="expandedRows"
+            dataKey="idTrip"
+            responsiveLayout="scroll"
+          >
+            <template #empty> No trips found. </template>
+            <template #loading> Loading trips data. Please wait. </template>
+            <Column field="Routes" header="Routes" :sortable="false">
+              <template #body="slotProps">
+                <DataTable
+                  :value="slotProps.data.routes"
+                  responsiveLayout="scroll"
+                >
+                  <Column field="idStart" header="Start" :sortable="true">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idStart }}
+                    </template>
+                  </Column>
+                  <Column field="idEnd" header="End" :sortable="true">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idEnd }}
+                    </template>
+                  </Column>
+                </DataTable>
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+        <Button
+          type="button"
+          label="Optimize"
+          id="optimize"
+          icon="pi pi-step-forward"
+          class="w-1"
+          :loading="loading"
+          @click="asyncOptimizeTrip(selectedTruck?.Registration, selectedDate)"
+        />
+        <div class="w-5">
+          <DataTable
+            :value="optimizedTrip"
+            :rows="10"
+            :paginator="true"
+            v-model:expandedRows="expandedRows"
+            dataKey="idTrip"
+            responsiveLayout="scroll"
+          >
+            <template #empty> Not yet optimized. </template>
+            <template #loading> Loading trips data. Please wait. </template>
+            <Column field="Routes" header="Routes" :sortable="false">
+              <template #body="slotProps">
+                <DataTable
+                  :value="slotProps.data.routes"
+                  responsiveLayout="scroll"
+                >
+                  <Column field="idStart" header="Start" :sortable="true">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idStart }}
+                    </template>
+                  </Column>
+                  <Column field="idEnd" header="End" :sortable="true">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idEnd }}
+                    </template>
+                  </Column>
+                </DataTable>
+              </template>
+            </Column>
+          </DataTable>
         </div>
       </div>
     </TabPanel>

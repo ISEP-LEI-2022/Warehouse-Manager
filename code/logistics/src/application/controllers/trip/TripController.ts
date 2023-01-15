@@ -72,7 +72,6 @@ export default class TripController implements ITripController {
     return TripMap.toJSON(tripDTO);
   }
 
-
   /**
    * @summary Creates a new trip from the given body and returns the created trip
    * @returns {expectedBodyTrip} Returns a JSON with the created trip
@@ -118,6 +117,15 @@ export default class TripController implements ITripController {
       throw error;
     }
     const tripDTO = await this.tripService.updateTripById(body as TripDTO);
+    return TripMap.toJSON(tripDTO);
+  }
+
+  @Put("/optimize/:registration/:date")
+  async optimizeTrip(
+    @Path() registration: string,
+    @Path() date: Date
+  ): Promise<expectedBodyTrip> {
+    const tripDTO = await this.tripService.getTripByRegDate(registration, date);
     return TripMap.toJSON(tripDTO);
   }
 }

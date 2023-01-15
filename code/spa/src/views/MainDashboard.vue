@@ -8,15 +8,13 @@ import type Route from "@/models/route";
 import type Storage from "@/models/storage";
 import type Delivery from "@/models/delivery";
 
-
 const trucks = ref([] as Truck[]);
 const routes = ref([] as Route[]);
 const deliveries = ref([] as Delivery[]);
 const storages = ref([] as Storage[]);
 
 const truck_Errors = ref([] as any[]);
-const route_Errors =  ref([] as any[]);
-
+const route_Errors = ref([] as any[]);
 
 const storageService = new StorageService();
 
@@ -25,8 +23,12 @@ const formatDate = (value: string) => {
 };
 
 onMounted(() => {
-  LogisticsService.getTrucks((errors: Array<any>)=>{truck_Errors.value.push(errors)}).then((data) => (trucks.value = data));
-  LogisticsService.getRoutes((errors: Array<any>)=>{route_Errors.value.push(errors)}).then((data) => (routes.value = data));
+  LogisticsService.getTrucks((errors: Array<any>) => {
+    truck_Errors.value.push(errors);
+  }).then((data) => (trucks.value = data));
+  LogisticsService.getRoutes((errors: Array<any>) => {
+    route_Errors.value.push(errors);
+  }).then((data) => (routes.value = data));
   storageService.getDeliveries().then((data) => (deliveries.value = data));
   storageService.getStorages().then((data) => (storages.value = data));
 });
@@ -54,12 +56,8 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="trucks-table"
         >
-        <template #empty>
-                No truck found.
-            </template>
-            <template #loading>
-                Loading truck data. Please wait.
-            </template>
+          <template #empty> No truck found. </template>
+          <template #loading> Loading truck data. Please wait. </template>
           <Column
             field="Registration"
             header="Registration"
@@ -83,6 +81,36 @@ onMounted(() => {
             :sortable="true"
             style="width: 20%"
           ></Column>
+          <Column
+            field="Active"
+            header="Status"
+            dataType="boolean"
+            style="width: 10%"
+          >
+            <template #body="{ data }">
+              <span class="p-column-title">Active Status</span>
+              <span class="p-column-body">
+                <span
+                  class="p-tag"
+                  :class="{
+                    'p-tag-success': data.Active,
+                    'p-tag-danger': !data.Active,
+                  }"
+                >
+                  <i
+                    v-if="data.Active"
+                    class="pi pi-check"
+                    style="font-size: 1rem"
+                  ></i>
+                  <i
+                    v-else
+                    class="pi pi-times"
+                    style="font-size: 1rem"
+                  ></i>
+                </span>
+              </span>
+            </template>
+          </Column>
         </DataTable>
       </div>
       <div class="card">
@@ -100,12 +128,8 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="routes-table"
         >
-        <template #empty>
-                No route found.
-            </template>
-            <template #loading>
-                Loading route data. Please wait.
-            </template>
+          <template #empty> No route found. </template>
+          <template #loading> Loading route data. Please wait. </template>
           <Column field="Route" header="Route" style="width: 15%" />
           <Column
             field="Start"
@@ -144,12 +168,8 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="deliveries-table"
         >
-        <template #empty>
-                No deliveries found.
-            </template>
-            <template #loading>
-                Loading deliveries data. Please wait.
-            </template>
+          <template #empty> No deliveries found. </template>
+          <template #loading> Loading deliveries data. Please wait. </template>
           <Column header="Date">
             <template #body="{ data }">
               {{ formatDate(data.DeliveryDate) }}
@@ -184,12 +204,8 @@ onMounted(() => {
           responsiveLayout="scroll"
           id="storages-table"
         >
-        <template #empty>
-                No storages found.
-            </template>
-            <template #loading>
-                Loading storages data. Please wait.
-            </template>
+          <template #empty> No storages found. </template>
+          <template #loading> Loading storages data. Please wait. </template>
           <Column
             field="Designation"
             header="Designation"
@@ -207,7 +223,7 @@ onMounted(() => {
             :sortable="true"
             style="width: 35%"
           >
-          <template #body="slotProps">
+            <template #body="slotProps">
               {{ `(${slotProps.data.Chargingsystems.length})` }}
             </template>
           </Column>

@@ -1,3 +1,3 @@
 // Vitest Snapshot v1
 
-exports[`CrudDialog > renders properly 1`] = `"Registration *Capacity *Autonomy *Tare *"`;
+exports[`CrudDialog > renders properly 1`] = `"Registration *Capacity *Autonomy *Tare *Active *"`;

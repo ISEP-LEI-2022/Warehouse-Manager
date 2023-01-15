@@ -7,11 +7,10 @@ import RouteMap from "@/services/mappers/RouteMap";
 
 import type TripDTO from "./dtos/TripDTO";
 import TripMap from "./mappers/TripMap";
+import type Trip from "@/models/trip";
 
 export default class LogisticsService {
-
   public static getTrucks(getErros: Function = (errors: Array<any>) => {}) {
-
     return fetch(import.meta.env.VITE_LOGISTICS_API + "trucks")
       .then(async (response) => {
         const json = await response.json();
@@ -47,7 +46,6 @@ export default class LogisticsService {
     return await response.json();
   }
 
-
   public static getRoutes(getErros: Function = (errors: Array<any>) => {}) {
     return fetch(import.meta.env.VITE_LOGISTICS_API + "routes")
       .then(async (response) => {
@@ -72,9 +70,18 @@ export default class LogisticsService {
       });
   }
 
-
-  public static getRoutesPagination(page: number,perPage: number,getErros: Function = (errors: Array<any>) => {}) {
-    return fetch(import.meta.env.VITE_LOGISTICS_API + "routes/pag/ination?page=" + page + "&pageRecords=" + perPage)
+  public static getRoutesPagination(
+    page: number,
+    perPage: number,
+    getErros: Function = (errors: Array<any>) => {}
+  ) {
+    return fetch(
+      import.meta.env.VITE_LOGISTICS_API +
+        "routes/pag/ination?page=" +
+        page +
+        "&pageRecords=" +
+        perPage
+    )
       .then(async (response) => {
         const json = await response.json();
         var data: Array<RouteDTO> = json.routesList;
@@ -84,19 +91,24 @@ export default class LogisticsService {
             content: response.statusText,
             severity: "error",
           });
-          return {routesList: RouteMap.fromDTOArray([]), totalRecords: totalRecords};
+          return {
+            routesList: RouteMap.fromDTOArray([]),
+            totalRecords: totalRecords,
+          };
         }
-        return {routesList: RouteMap.fromDTOArray(data), totalRecords: totalRecords};
+        return {
+          routesList: RouteMap.fromDTOArray(data),
+          totalRecords: totalRecords,
+        };
       })
       .catch((error) => {
         getErros({
           content: error,
           severity: "error",
         });
-        return {routesList: RouteMap.fromDTOArray([]), totalRecords: 0};
+        return { routesList: RouteMap.fromDTOArray([]), totalRecords: 0 };
       });
   }
-
 
   public static async createRoute(route: Route) {
     const requestOptions = {
@@ -116,13 +128,17 @@ export default class LogisticsService {
     date: Date,
     getErros: Function = (errors: Array<any>) => {}
   ) {
-    const formatted_date = date.toISOString().slice(0,10);
+    const formatted_date = date.toISOString().slice(0, 10);
     return fetch(
-      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + formatted_date
+      import.meta.env.VITE_LOGISTICS_API +
+        "trips/" +
+        registration +
+        "/" +
+        formatted_date
     )
       .then(async (response) => {
         const json = await response.json();
-        console.log(json)
+        console.log(json);
         var data: Array<TripDTO> = json;
         if (!response.ok) {
           getErros({
@@ -143,6 +159,83 @@ export default class LogisticsService {
       });
   }
 
+  public static async updateActiveStatus(
+    registration: string,
+    getErros: Function = (errors: Array<any>) => {}
+  ) {
+    const requestOptions = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    };
+    const response = await fetch(
+      import.meta.env.VITE_LOGISTICS_API + "trucks" + "/status/" + registration,
+      requestOptions
+    )
+      .then(async (response) => {
+        const json = await response.json();
+        var data: TruckDTO = json;
+        if (!response.ok) {
+          getErros({
+            content: response.statusText,
+            severity: "error",
+          });
+
+          return null;
+        }
+        return TruckMap.fromDTO(data);
+      })
+      .catch((error) => {
+        getErros({
+          content: error,
+          severity: "error",
+        });
+
+        return null;
+      });
+    return await response;
+  }
+
+  public static async optimizeTrip(
+    registration: string,
+    date: Date,
+    getErros: Function = (errors: Array<any>) => {}
+  ): Promise<Trip[]> {
+    const formatted_date = date.toISOString().slice(0, 10);
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    };
+    const response = await fetch(
+      import.meta.env.VITE_LOGISTICS_API +
+        "trips" +
+        "/optimize/" +
+        registration +
+        "/" +
+        formatted_date,
+      requestOptions
+    )
+      .then(async (response) => {
+        const json = await response.json();
+        var data: TripDTO = json;
+        if (!response.ok) {
+          getErros({
+            content: "Unknow error",
+            severity: "error",
+          });
+          return TripMap.empty();
+        }
+        console.log(data);
+        return TripMap.fromDTO(data);
+      })
+      .catch((error) => {
+        getErros({
+          content: error,
+          severity: "error",
+        });
+        return TripMap.empty();
+      });
+    return await [response];
+  }
 
   public static async getTripsPagination(
     registration: string,
@@ -151,33 +244,40 @@ export default class LogisticsService {
     perpage: number,
     getErros: Function = (errors: Array<any>) => {}
   ) {
-    const formatted_date = date.toISOString().slice(0,10);
+    const formatted_date = date.toISOString().slice(0, 10);
     return fetch(
-      import.meta.env.VITE_LOGISTICS_API + "trips/" + registration + "/" + formatted_date
+      import.meta.env.VITE_LOGISTICS_API +
+        "trips/" +
+        registration +
+        "/" +
+        formatted_date
     )
       .then(async (response) => {
         const json = await response.json();
-        console.log(json)
+        console.log(json);
         var data: Array<TripDTO> = json;
         var totalRecords = json.totalRecords;
         if (!response.ok) {
           getErros({
             content: response.statusText,
+
             severity: "error",
           });
+
           return { tripsList: TripMap.fromDTOArray([]), totalRecords: 0 };
         }
-
-        return { tripsList: TripMap.fromDTOArray(data), totalRecords: totalRecords };
+        return {
+          tripsList: TripMap.fromDTOArray(data),
+          totalRecords: totalRecords,
+        };
       })
       .catch((error) => {
         getErros({
           content: error,
+
           severity: "error",
         });
         return { tripsList: TripMap.fromDTOArray([]), totalRecords: 0 };
       });
   }
-
-
 }

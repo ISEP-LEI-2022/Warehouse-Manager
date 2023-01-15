@@ -3,4 +3,5 @@ export default interface TruckDTO {
     tare: number;
     capacity: number;
     autonomy: number;
+    active: boolean;
 }

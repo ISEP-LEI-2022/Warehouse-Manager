@@ -31,21 +31,21 @@ router.get("/:registration?", async (req: Request, res: Response) => {
     );
 
     if (req.params.registration !== undefined) {
-        const truck = await getTruckInstance.getTruckByRegistration(
-            req.params.registration as string
-          );
-          res.status(200).json(truck);
-      } else {
-        const listTrucks = await getTruckInstance.getTrucks();
-        res.status(200).json(listTrucks);
-      }
-    } catch (err) {
-      if (err instanceof Err) {
-        res.status(err.code).send(err.object());
-      } else {
-        res.status(500).send("Unexpected Error" + err);
-      }
+      const truck = await getTruckInstance.getTruckByRegistration(
+        req.params.registration as string
+      );
+      res.status(200).json(truck);
+    } else {
+      const listTrucks = await getTruckInstance.getTrucks();
+      res.status(200).json(listTrucks);
     }
+  } catch (err) {
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
 });
 
 router.put("/", async (req: Request, res: Response) => {
@@ -66,24 +66,43 @@ router.put("/", async (req: Request, res: Response) => {
   }
 });
 
-
-router.get("/pag/ination", async (req: Request, res: Response) => {
-  
-  try{
-    
-    const getTruckInstance = <ITruckController>(
+router.patch("/status/:registration", async (req: Request, res: Response) => {
+  try {
+    const updateTruckInstance = <ITruckController>(
       container.get(config.controllers.TruckController.name)
     );
-
-    const listTrucks = await getTruckInstance.getTrucksByPagination(Number(req.query.page), Number(req.query.pageRecords));
-    res.status(200).json(listTrucks);
-  }catch(err){
+    const updated = await updateTruckInstance.changeActiveStatus(
+      req.params.registration as string
+    );
+    res.status(200).json(updated);
+  } catch (err) {
     if (err instanceof Err) {
       res.status(err.code).send(err.object());
     } else {
       res.status(500).send("Unexpected Error" + err);
     }
   }
-    });
+});
+
+router.get("/pag/ination", async (req: Request, res: Response) => {
+  try {
+    const getTruckInstance = <ITruckController>(
+      container.get(config.controllers.TruckController.name)
+    );
+
+    const listTrucks = await getTruckInstance.getTrucksByPagination(
+      Number(req.query.page),
+      Number(req.query.pageRecords)
+    );
+
+    res.status(200).json(listTrucks);
+  } catch (err) {
+    if (err instanceof Err) {
+      res.status(err.code).send(err.object());
+    } else {
+      res.status(500).send("Unexpected Error" + err);
+    }
+  }
+});
 
 export default router;

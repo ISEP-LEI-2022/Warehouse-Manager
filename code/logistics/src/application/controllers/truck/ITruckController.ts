@@ -3,6 +3,7 @@ export type expectedBodyTruck = {
     tare: number;
     capacity: number;
     autonomy: number;
+    active: boolean;
 }
 
 export type expectedTruckJSON = {
@@ -10,6 +11,7 @@ export type expectedTruckJSON = {
     tare: number;
     capacity: number;
     autonomy: number;
+    active: boolean;
 }
 
 export interface ITruckController {
@@ -18,4 +20,5 @@ export interface ITruckController {
     getTrucks(): Promise<expectedTruckJSON[]>;
     getTrucksByPagination(page:number, pageRecords:number): Promise<{trucksList: expectedTruckJSON[], totalRecords: number}>;
     updateTruckByRegistration( req: expectedBodyTruck): Promise<expectedTruckJSON>;
+    changeActiveStatus(registration: string): Promise<expectedTruckJSON>;
 }

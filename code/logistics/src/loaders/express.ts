@@ -11,7 +11,7 @@ function expressLoader(app: express.Application) {
 
   app.use(
     cors({
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST","PATCH","PUT"],
       credentials: true,
     })
   );

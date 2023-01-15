@@ -92,6 +92,30 @@ export default class TruckService implements ITruckService {
       throw error;
     }
   }
+
+  async changeActiveStatus(id: string): Promise<TruckDTO> {
+    const error = persistanceErrorFactory();
+
+    try {
+      const truck = (await this.truckRepository.getDataById(
+        id
+      )) as Truck;
+      const truckObj = TruckMap.toDTO(truck);
+      truckObj.active = !truckObj.active;
+      const updated = await this.truckRepository.updateDataById(
+        id,
+        truckObj
+      );
+      return TruckMap.toDTO(updated as Truck);
+    } catch (err) {
+      if (err instanceof Error){
+        error.addError(err.message);
+      }else{
+      error.addError("Error Changing Active Status");
+      }
+      throw error;
+    }
+  }
 }
 
 function convertToObjDTO(truckList: Truck[]): TruckDTO[] {
