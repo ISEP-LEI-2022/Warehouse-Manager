@@ -42,7 +42,6 @@
               class="mb-3"
             />
             <div class="text-900 text-3xl font-medium mb-3">Welcome!</div>
-            <GoogleLogin :callback="callback" prompt />
           </div>
 
           <div class="w-full md:w-10 mx-auto">
@@ -78,6 +77,17 @@
               @click="Login"
               class="w-full p-3 text-xl"
             ></Button>
+            <div class="login-choice"><span>or Sign In with</span></div>
+            <Button @click="GoogleLogin" type="button" class="w-full p-3 text-xl google">
+              <span
+                class="flex align-items-center px-2 bg-purple-700 text-white"
+              >
+                <i className="pi pi-google"></i>
+              </span>
+              <span className="px-3 py-2 flex align-items-center text-white"
+                >Google</span
+              >
+            </Button>
           </div>
         </div>
       </div>
@@ -85,51 +95,58 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../auth/UserAuth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../auth/UserAuth";
 import { userStore } from "@/stores/user";
+import { GoogleAuthProvider } from "firebase/auth";
 
-export default {
-  name: "LoginComponent",
-  setup() {
-    const email = ref("");
-    const password = ref("");
-    const error = ref(null);
-    const router = useRouter();
-    const store = userStore();
+const email = ref("");
+const password = ref("");
+const error = ref(null);
+const router = useRouter();
+const store = userStore();
 
-    const Login = async () => {
-      try {
-        const response = await signInWithEmailAndPassword(
-          auth,
-          email.value,
-          password.value
-        );
-        if (response) {
-          store.update(response.user);
-          router.push("/dashboard");
-        } else {
-          throw new Error("login failed");
-        }
-      } catch (err) {
-        error.value = err.message;
-      }
-    };
-    const callback = (response) => {
-      // This callback will be triggered when the user selects or login to
-      // his Google account from the popup
-      console.log("Handle the response", response);
-    };
-
-    return { Login, email, password, error };
-  },
+const Login = async () => {
+  try {
+    const response = await signInWithEmailAndPassword(
+      auth,
+      email.value,
+      password.value
+    );
+    if (response) {
+      store.update(response.user);
+      router.push("/dashboard");
+    } else {
+      throw new Error("login failed");
+    }
+  } catch (err) {
+    error.value = err.message;
+  }
+};
+const GoogleLogin = () => {
+  signInWithPopup(auth, provider)
+    .then((response) => {
+      console.log(response)
+      store.update(response.user);
+      router.push("/dashboard");
+    })
+    .catch((error) => {
+      console.log(error)
+      error.value = error.message;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
+};
+const callback = (response) => {
+  console.log(response);
+  store.update(response);
+  router.push("/dashboard");
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .pi-eye {
   transform: scale(1.6);
   margin-right: 1rem;
@@ -138,5 +155,53 @@ export default {
 .pi-eye-slash {
   transform: scale(1.6);
   margin-right: 1rem;
+}
+
+.login-choice span {
+  color: #5b6987;
+  display: -ms-grid;
+  display: grid;
+  font-size: 16px;
+  width: 100%;
+  line-height: 40px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+  -ms-grid-columns: minmax(20px, 1fr) auto minmax(20px, 1fr);
+  grid-template-columns: minmax(20px, 1fr) auto minmax(20px, 1fr);
+  grid-gap: 19px;
+}
+.login-choice span:after,
+.login-choice span:before {
+  content: "";
+  border-top: 1px solid #e5e8ed;
+}
+.google {
+  background: linear-gradient(
+    to left,
+    var(--purple-600) 50%,
+    var(--purple-700) 50%
+  );
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: background-position 0.5s ease-out;
+  border-color: var(--purple-700);
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  &:enabled:hover {
+    background: linear-gradient(
+      to left,
+      var(--purple-600) 50%,
+      var(--purple-700) 50%
+    );
+    background-size: 200% 100%;
+    background-position: left bottom;
+    border-color: var(--purple-700);
+  }
+  &:focus {
+    box-shadow: 0 0 0 1px var(--purple-400);
+  }
 }
 </style>
