@@ -100,5 +100,31 @@ namespace EletricGo.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
+
+        // PATCH: api/Storages/5
+        [HttpPatch("updateStatus/{id}")]
+        public async Task<ActionResult<StorageDto>> UpdateStatus(Guid id)
+        {
+            /*if (id == new Guid(""))
+            {
+                return BadRequest();
+            }*/
+
+            try
+            {
+                var storage = await _service.UpdateStorageStatusAsync(id);
+
+                if (storage == null)
+                {
+                    return NotFound();
+                }
+                return Ok("Storage Status Updated");
+            }
+            catch (BusinessRuleValidationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
 }

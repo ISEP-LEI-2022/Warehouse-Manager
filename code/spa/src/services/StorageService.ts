@@ -153,8 +153,27 @@ export default class StorageService {
     return await response.json();
   }
 
-
   async updateStorageStatus(storageId: string) {
+    const requestOptions = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" }
+    };
+    const response = await fetch(
+      "https://localhost:7067/" + "api/Storages/updateStatus/" + storageId,
+      requestOptions
+    );
+    if (!response.ok) {
+      this.Storage_Errors.push({
+        content: response.statusText,
+        severity: "error",
+      });
+      return null;
+    }
+    return true;
+  }
+
+
+  /*async updateStorageStatus(storageId: string) {
     fetch("https://localhost:7067/" + "api/Storages/" + storageId)
       .then(async (response) => {
         const json = await response.json();
@@ -177,7 +196,7 @@ export default class StorageService {
         });
         return null;
       });
-  }
+  }*/
 
   async updateDelivery(delivery: Delivery) {
     const requestOptions = {

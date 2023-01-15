@@ -82,5 +82,20 @@ namespace EletricGo.Domain.Storages
 
             return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active);
         }
+
+        public async Task<StorageDto> UpdateStorageStatusAsync(Guid id)
+        {
+            var queryResult = await this._repo.GetByIdAsync(new StorageId(id));
+            var storage = queryResult;
+
+            if (storage == null)
+                return null;
+
+            // change Status
+            storage.changeActive(!storage.Active);
+            await this._unitOfWork.CommitAsync();
+
+            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active);
+        }
     }
 }

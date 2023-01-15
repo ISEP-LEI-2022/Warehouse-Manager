@@ -193,21 +193,25 @@ const closeNewProduct = () => {
 };
 
 const updateStorageStatus = (StorageId : string) => {
-  const update = storageService.updateStorageStatus(StorageId)
-  toast.add({
-      severity: "success",
-      summary: "Storage Status Updated",
-      detail: "OK",
-      life: 3000,
-  });
-  var index = 0;
-  index = storages.value.findIndex((item) => item.StorageId = StorageId);
-  storageService.getStorageById(StorageId).then((response) => {
-    console.log(response)
-    if(response) {
-    storages.value[index].Active = !storages.value[index].Active;
+  storageService.updateStorageStatus(StorageId).then((response) => {
+    if(response == true){
+      toast.add({
+        severity: "success",
+        summary: "Storage Status Updated",
+        detail: "OK",
+        life: 3000,
+      });
+      storageService.getStoragesPagination(page,perPage).then((data) => { storages.value = data.storageList, totalRecords = data.totalRecords; console.log(storages.value)} );
+    }else{
+      toast.add({
+        severity: "error",
+        summary: "Error On Storage Status Update",
+        detail: "Error",
+        life: 3000,
+      });
     }
   })
+
 };
 
 var storage = StorageMap.empty();
