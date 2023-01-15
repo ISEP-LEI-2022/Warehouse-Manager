@@ -5,6 +5,7 @@ import config from "../../config";
 import { Err, internetServerErrorFactory } from "../../domain/utils/Err";
 import { ITripController } from "../controllers/trip/ITripController";
 import fetch from "node-fetch";
+import { env } from "node:process";
 
 const router = express.Router();
 
@@ -108,7 +109,7 @@ router.put("/optimize/:registration/:date", async (req: Request, res: Response) 
       body: JSON.stringify(notOptimized),
     };
 
-    const resp = await fetch("http://pythonapi:5151/optimize", options)
+    const resp = await fetch(env.python_api+"/optimize", options)
       .then((response) => {
         if (response.status === 404) {
           error.addError("not found");
