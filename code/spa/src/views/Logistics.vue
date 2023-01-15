@@ -166,10 +166,8 @@ const asyncsearchTrip = function searchTrip(
   loading.value = true;
   LogisticsService.getTrips(registration, date, (errors: Array<any>) => {
     trip_Errors.value.push(errors);
-  }).then((data) => {
-    (trips.value = data.tripsList),
-      (totalRecordsTrips.value = data.totalRecords);
-  });
+  }).then((data) => (trips.value = data));
+  optimizedTrip.value = [];
   setTimeout(() => (loading.value = false), 500);
 };
 
@@ -569,12 +567,12 @@ const asyncOptimizeTrip = function optimizeRoute(
                   :value="slotProps.data.routes"
                   responsiveLayout="scroll"
                 >
-                  <Column field="idStart" header="Start" :sortable="true">
+                  <Column field="idStart" header="Start" :sortable="false">
                     <template #body="slotProps">
                       {{ slotProps.data.idStart }}
                     </template>
                   </Column>
-                  <Column field="idEnd" header="End" :sortable="true">
+                  <Column field="idEnd" header="End" :sortable="false">
                     <template #body="slotProps">
                       {{ slotProps.data.idEnd }}
                     </template>
@@ -610,12 +608,12 @@ const asyncOptimizeTrip = function optimizeRoute(
                   :value="slotProps.data.routes"
                   responsiveLayout="scroll"
                 >
-                  <Column field="idStart" header="Start" :sortable="true">
+                  <Column field="idStart" header="Start" :sortable="false">
                     <template #body="slotProps">
                       {{ slotProps.data.idStart }}
                     </template>
                   </Column>
-                  <Column field="idEnd" header="End" :sortable="true">
+                  <Column field="idEnd" header="End" :sortable="false">
                     <template #body="slotProps">
                       {{ slotProps.data.idEnd }}
                     </template>
