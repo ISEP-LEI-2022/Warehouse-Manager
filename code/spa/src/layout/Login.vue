@@ -61,7 +61,7 @@
                 style="padding: 1rem"
               />
             </div>
-            <div class="field p-fluid">
+            <div style="margin-bottom: 100px;" class="field p-fluid">
               <label
                 for="password1"
                 class="block text-900 font-medium text-xl mb-2"
@@ -140,7 +140,6 @@ const Login = async () => {
         password.value
       );
       if (response) {
-        console.log(response);
         store.update(response.user);
         router.push("/dashboard");
       } else {

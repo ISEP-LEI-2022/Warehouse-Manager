@@ -76,8 +76,8 @@ const LogOut = async () => {
 const ShowUser = async () => {
   toast.add({
       severity: "info",
-      summary: userStore().current_user.email,
-      detail: userStore().current_user.displayName,
+      summary: userStore().current_user.displayName,
+      detail: userStore().current_user.email,
       life: 3000,
     });
 };
