@@ -90,7 +90,6 @@ export default class TruckService implements ITruckService {
       )) as Truck;
       const truckObj = TruckMap.toDTO(truck);
       truckObj.active = !truckObj.active;
-      console.log("1")
       const updated = await this.truckRepository.updateDataById(
         id,
         truckObj

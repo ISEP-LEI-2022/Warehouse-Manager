@@ -8,7 +8,6 @@ import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
 import LogisticsService from "@/services/LogisticsService";
 import type Trip from "@/models/trip";
-import type TruckDTO from "@/services/dtos/TruckDTO";
 
 const toast = useToast();
 const trucks = ref([] as Truck[]);
@@ -18,6 +17,7 @@ const truck_Errors = ref([] as any[]);
 const route_Errors = ref([] as any[]);
 const trip_Errors = ref([] as any[]);
 const expandedRows = ref([]);
+const optimizedTrip = ref([] as Trip[]);
 
 const selectedDate = ref(null);
 const selectedTruck = ref(null);
@@ -121,6 +121,21 @@ const searchTrip = () => {
   ).then((data) => (trips.value = data));
   setTimeout(() => (loading.value = false), 500);
 };
+
+const asyncsearchTrip = function searchTrip(
+  registration: string | null,
+  date: Date | null
+) {
+  if (registration == null || date == null) {
+    return;
+  }
+  loading.value = true;
+  LogisticsService.getTrips(registration, date, (errors: Array<any>) => {
+    trip_Errors.value.push(errors);
+  }).then((data) => (trips.value = data));
+  setTimeout(() => (loading.value = false), 500);
+};
+
 const asyncUpdateActiveStatus = function updateStatus(
   registration: string,
   self: Truck
@@ -138,6 +153,30 @@ const asyncUpdateActiveStatus = function updateStatus(
         life: 3000,
       });
     });
+  loading.value = false;
+};
+
+const asyncOptimizeTrip = function optimizeRoute(
+  registration: string | null,
+  date: Date | null
+) {
+  loading.value = true;
+  if (registration == null || date == null) {
+    return;
+  }
+  LogisticsService.optimizeTrip(registration, date, (errors: Array<any>) => {
+    trip_Errors.value.push(errors);
+  })
+    .then((data) => (optimizedTrip.value = data))
+    .catch((error) => {
+      toast.add({
+        severity: "error",
+        summary: "Not possible to optimize route",
+        detail: error,
+        life: 3000,
+      });
+    });
+  loading.value = false;
 };
 </script>
 
@@ -410,7 +449,7 @@ const asyncUpdateActiveStatus = function updateStatus(
       </div>
     </TabPanel>
     <TabPanel id="optimization-panel" header="Optimization">
-      <div class="card">
+      <div class="card w-12">
         <AutoComplete
           placeholder="Search"
           id="dd"
@@ -433,36 +472,84 @@ const asyncUpdateActiveStatus = function updateStatus(
           label="Search"
           icon="pi pi-search"
           :loading="loading"
-          @click="searchTrip"
+          @click="asyncsearchTrip(selectedTruck?.Registration, selectedDate)"
         />
-        <DataTable
-          :value="trips"
-          :rows="10"
-          :paginator="true"
-          v-model:expandedRows="expandedRows"
-          dataKey="idTrip"
-          responsiveLayout="scroll"
-        >
-          <template #empty> No trips found. </template>
-          <template #loading> Loading trips data. Please wait. </template>
-            <div class="p-3">
-              <h5>Routes</h5>
-              <DataTable :value="trips" dataKey="idTrip">
-                <Column field="idStart" header="Start" :sortable="true">
-                  <template #body="slotProps">
-                    {{ slotProps.data.idStart }}
-                  </template>
-                </Column>
-                <Column field="idEnd" header="End" :sortable="true">
-                  <template #body="slotProps">
-                    {{ slotProps.data.idEnd }}
-                  </template>
-                </Column>
-              </DataTable>
-            </div>
-        </DataTable>
       </div>
-      <div class="card"></div>
+      <div class="w-12 flex card-container card">
+        <div class="w-5">
+          <DataTable
+            :value="trips"
+            :rows="10"
+            :paginator="true"
+            v-model:expandedRows="expandedRows"
+            dataKey="idTrip"
+            responsiveLayout="scroll"
+          >
+            <template #empty> No trips found. </template>
+            <template #loading> Loading trips data. Please wait. </template>
+            <Column field="Routes" header="Routes" :sortable="false">
+              <template #body="slotProps">
+                  <DataTable
+                    :value="slotProps.data.routes"
+                    responsiveLayout="scroll"
+                  >
+                    <Column field="idStart" header="Start" :sortable="true">
+                      <template #body="slotProps">
+                        {{ slotProps.data.idStart }}
+                      </template>
+                    </Column>
+                    <Column field="idEnd" header="End" :sortable="true">
+                      <template #body="slotProps">
+                        {{ slotProps.data.idEnd }}
+                      </template>
+                    </Column>
+                  </DataTable>
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+        <Button
+          type="button"
+          label="Optimize"
+          id="optimize"
+          icon="pi pi-step-forward"
+          class="w-1"
+          :loading="loading"
+          @click="asyncOptimizeTrip(selectedTruck?.Registration, selectedDate)"
+        />
+        <div class="w-5">
+          <DataTable
+            :value="optimizedTrip"
+            :rows="10"
+            :paginator="true"
+            v-model:expandedRows="expandedRows"
+            dataKey="idTrip"
+            responsiveLayout="scroll"
+          >
+            <template #empty> Not yet optimized. </template>
+            <template #loading> Loading trips data. Please wait. </template>
+            <Column field="Routes" header="Routes" :sortable="false">
+              <template #body="slotProps">
+                  <DataTable
+                    :value="slotProps.data.routes"
+                    responsiveLayout="scroll"
+                  >
+                    <Column field="idStart" header="Start" :sortable="true">
+                      <template #body="slotProps">
+                        {{ slotProps.data.idStart }}
+                      </template>
+                    </Column>
+                    <Column field="idEnd" header="End" :sortable="true">
+                      <template #body="slotProps">
+                        {{ slotProps.data.idEnd }}
+                      </template>
+                    </Column>
+                  </DataTable>
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+      </div>
     </TabPanel>
   </TabView>
 </template>
