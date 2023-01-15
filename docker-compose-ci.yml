@@ -18,6 +18,7 @@ services:
     depends_on:
       - logistics-api
       - storage-api
+      - python-api
 
   logistics-api:
     container_name: logistics-api
@@ -29,6 +30,7 @@ services:
       target: dev
     environment:
       - database=mongodb://mongodb:27017/logistics
+      - python_api=http://python-api:5151
     networks:
       - logistics_net
     ports:
@@ -104,6 +106,17 @@ services:
     ports:
       - 1433:1433
 
+  python-api:
+    container_name: 1180910/python-api:latest
+    hostname: python-api
+    build:
+      context: ./code/pythonapi
+      dockerfile: Dockerfile
+    networks:
+      - storage_net
+      - logistics_net
+    ports:
+      - 5151:5151
 
 networks:
   logistics_net:

@@ -15,6 +15,7 @@ services:
     depends_on:
       - logistics-api
       - storage-api
+      - python-api
     restart: unless-stopped
 
   logistics-api:
@@ -22,12 +23,14 @@ services:
     image: 1180910/logistics-api:latest
     environment:
       - database=mongodb://mongodb:27017/logistics
+      - python_api=https://python.fhsan.com/
     networks:
       - logistics_net
     ports:
       - 3000:3000
     depends_on:
       - mongodb
+      - python-api
     restart: unless-stopped
 
   storage-api:
@@ -71,6 +74,14 @@ services:
       - 1433:1433
     restart: unless-stopped
 
+  python-api:
+    container_name: 1180910/python-api:latest
+    hostname: python-api
+    networks:
+      - storage_net
+      - logistics_net
+    ports:
+      - 5151:5151
 networks:
   logistics_net:
   storage_net:
