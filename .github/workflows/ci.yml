@@ -36,5 +36,7 @@ jobs:
         run: docker push 1180910/local-sql-server:latest
       - name: Docker Push Storage API Latest Image
         run: docker push 1180910/storage-api:latest
+      - name: Docker Push PythonAPI Latest Image
+        run: docker push 1180910/python-api:latest
       - name: Docker Push SPA Latest Image
         run: docker push 1180910/spa:latest
