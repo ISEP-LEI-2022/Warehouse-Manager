@@ -95,10 +95,7 @@ const LogOut = async () => {
     </button>
 
     <div class="layout-topbar-menu" :class="topbarMenuClasses">
-      <button @click="LogOut" class="p-link layout-topbar-button">
-        <i class="pi pi-user"></i>
-        <span>Profile</span>
-      </button>
+      <Button @click="LogOut" icon="pi pi-sign-out" class="p-button-rounded p-button-danger mr-2 mb-2" />
     </div>
   </div>
 </template>

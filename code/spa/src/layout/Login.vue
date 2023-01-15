@@ -1,4 +1,5 @@
 <template>
+  <Toast />
   <div
     class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
   >
@@ -45,40 +46,48 @@
           </div>
 
           <div class="w-full md:w-10 mx-auto">
-            <label for="email1" class="block text-900 text-xl font-medium mb-2"
-              >Email</label
-            >
-            <InputText
-              id="email1"
-              v-model="email"
-              type="text"
-              class="w-full mb-3"
-              placeholder="Email"
-              style="padding: 1rem"
-            />
-
-            <label
-              for="password1"
-              class="block text-900 font-medium text-xl mb-2"
-              >Password</label
-            >
-            <Password
-              id="password1"
-              v-model="password"
-              placeholder="Password"
-              :toggleMask="true"
-              class="w-full mb-3"
-              inputClass="w-full"
-              inputStyle="padding:1rem"
-            ></Password>
-
+            <div class="field p-fluid">
+              <label
+                for="email1"
+                class="block text-900 text-xl font-medium mb-2"
+                >Email</label
+              >
+              <InputText
+                id="email1"
+                v-model="email"
+                type="text"
+                :class="user_class"
+                placeholder="Email"
+                style="padding: 1rem"
+              />
+            </div>
+            <div class="field p-fluid">
+              <label
+                for="password1"
+                class="block text-900 font-medium text-xl mb-2"
+                >Password</label
+              >
+              <Password
+                id="password1"
+                v-model="password"
+                placeholder="Password"
+                :toggleMask="true"
+                :class="pass_class"
+                inputClass="w-full"
+                inputStyle="padding:1rem"
+              ></Password>
+            </div>
             <Button
               label="Sign In"
               @click="Login"
               class="w-full p-3 text-xl"
             ></Button>
             <div class="login-choice"><span>or Sign In with</span></div>
-            <Button @click="GoogleLogin" type="button" class="w-full p-3 text-xl google">
+            <Button
+              @click="GoogleLogin"
+              type="button"
+              class="w-full p-3 text-xl google"
+            >
               <span
                 class="flex align-items-center px-2 bg-purple-700 text-white"
               >
@@ -102,45 +111,72 @@ import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../auth/UserAuth";
 import { userStore } from "@/stores/user";
 import { GoogleAuthProvider } from "firebase/auth";
+import { useToast } from "primevue/usetoast";
 
 const email = ref("");
 const password = ref("");
+const user_class = ref("p-valid");
+const pass_class = ref("p-valid");
 const error = ref(null);
 const router = useRouter();
 const store = userStore();
+const toast = useToast();
 
 const Login = async () => {
   try {
+    user_class.value = "p-valid";
+    pass_class.value = "p-valid";
+
     const response = await signInWithEmailAndPassword(
-      auth,
-      email.value,
-      password.value
-    );
-    if (response) {
-      store.update(response.user);
-      router.push("/dashboard");
-    } else {
-      throw new Error("login failed");
+        auth,
+        email.value,
+        password.value
+      );
+      if (response) {
+        store.update(response.user);
+        router.push("/dashboard");
+      } else {
+        throw new Error("login failed");
+      }
+  } catch (error) {
+    console.log(error.code)
+    switch (error.code) {
+      case "auth/invalid-email":
+        user_class.value = "p-invalid";
+        break;
+      case "auth/internal-error":
+      case "auth/wrong-password":
+        pass_class.value = "p-invalid";
+        break;
     }
-  } catch (err) {
-    error.value = err.message;
+    console.log(error.code)
+
+    toast.add({
+      severity: "error",
+      summary: error.name,
+      detail: error.message,
+      life: 3000,
+    });
   }
 };
 const GoogleLogin = () => {
   signInWithPopup(auth, provider)
     .then((response) => {
-      console.log(response)
+      console.log(response);
       store.update(response.user);
       router.push("/dashboard");
     })
     .catch((error) => {
-      console.log(error)
-      error.value = error.message;
-      const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log(error);
+      toast.add({
+      severity: "error",
+      summary: error.name,
+      detail: error.message,
+      life: 3000,
+    });
     });
 };
 const callback = (response) => {
-  console.log(response);
   store.update(response);
   router.push("/dashboard");
 };
