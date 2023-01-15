@@ -31,15 +31,12 @@ namespace EletricGo.Controllers
                 return NotFound();
 
             var totalRecords = _service.GetAllAsync().Result.Count();
+            var storages = _service.GetAllAsyncByPagination(page, pageResults).Result;
 
             //var pageResults = 3f;
             //var pageCount = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
-           
-            var storages = _service.GetAllAsync().Result
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
 
+           
             var result = new {
                 Storage = storages,
                 TotalRecords = totalRecords

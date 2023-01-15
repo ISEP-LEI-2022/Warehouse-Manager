@@ -2,6 +2,7 @@
 using EletricGo.Domain.Deliveries;
 using EletricGo.Domain.Storages;
 using EletricGo.Infrastructure.Shared;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -21,6 +22,18 @@ namespace EletricGo.Infrastructure.Deliveries
             //query.Include(storage => storage._idFinalStorage).ToList();
             query.Include(products => products.Products).ToList();
             return await query.ToListAsync();
+        }
+
+        public async Task<List<Delivery>> GetAllAsyncByPagination(int page, int pageRecords) {
+            var query = _context.Set<Delivery>();
+
+            var deliveries = query
+                .Skip((page - 1) * (int)pageRecords)
+                .Take((int)pageRecords)
+                .ToList();
+
+            //query.Include(products => products.Products).ToList();
+            return deliveries;
         }
 
         public async Task<Delivery> GetByIdAsync(DeliveryId id)

@@ -24,6 +24,15 @@ namespace EletricGo.Domain.Deliveries
             return DeliverieslistDto;
         }
 
+        public async Task<List<DeliveryDto>> GetAllAsyncByPagination(int page, int pageRecords) {
+            var list = await this._repo.GetAllAsyncByPagination(page,pageRecords);
+
+            List<DeliveryDto> DeliverieslistDto = list.ConvertAll<DeliveryDto>(delivery =>
+                new DeliveryDto(delivery.Id.AsGuid(), delivery.DeliveryDate, delivery.DeliveryWeight, delivery.FinalStorageId.AsGuid(), delivery.TimeToLoad, delivery.TimeToUnload, delivery.Products.ConvertAll<ProductDto>(product => new ProductDto(product.Id.AsGuid(), product.Name, product.Weight, product.LevelOfPolution))));
+
+            return DeliverieslistDto;
+        }
+
         public async Task<DeliveryDto> GetByIdAsync(DeliveryId id)
         {
             var delivery = await this._repo.GetByIdAsync(id);

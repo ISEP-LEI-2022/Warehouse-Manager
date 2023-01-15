@@ -29,14 +29,14 @@ namespace EletricGo.Controllers
                 return NotFound();
 
             var totalRecords = _service.GetAllAsync().Result.Count();
+            var deliveries = _service.GetAllAsyncByPagination(page, pageResults).Result;
+            ////var pageResults = 3f;
+            //var pageCount = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
 
-            //var pageResults = 3f;
-            var pageCount = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
-
-            var deliveries = _service.GetAllAsync().Result
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
+            //var deliveries = _service.GetAllAsync().Result
+            //    .Skip((page - 1) * (int)pageResults)
+            //    .Take((int)pageResults)
+            //    .ToList();
 
             var result = new {
                 Delivery = deliveries,

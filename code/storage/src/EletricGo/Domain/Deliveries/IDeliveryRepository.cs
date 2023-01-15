@@ -9,5 +9,6 @@ namespace EletricGo.Domain.Deliveries
     {
         //Task<List<Delivery>> GetAll();
         //Task<List<Delivery>> GetById(DeliveryId deliveryId);
+        Task<List<Delivery>> GetAllAsyncByPagination(int page, int pageRecords);
     }
 }

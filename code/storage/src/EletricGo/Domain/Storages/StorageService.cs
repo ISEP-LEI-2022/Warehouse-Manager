@@ -24,6 +24,15 @@ namespace EletricGo.Domain.Storages
             return StorageslistDto;
         }
 
+        public async Task<List<StorageDto>> GetAllAsyncByPagination(int page, int pageRecords) {
+            var list = await this._repo.GetAllAsyncByPagination(page,pageRecords);
+
+            List<StorageDto> StorageslistDto = list.ConvertAll<StorageDto>(storage =>
+                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active));
+
+            return StorageslistDto;
+        }
+
         public async Task<StorageDto> GetByIdAsync(StorageId id)
         {
             var storage = await this._repo.GetByIdAsync(id);

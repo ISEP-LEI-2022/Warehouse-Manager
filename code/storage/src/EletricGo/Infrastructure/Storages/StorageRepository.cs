@@ -24,6 +24,20 @@ namespace EletricGo.Infrastructure.Storages
             return await query.ToListAsync();
         }
 
+        public async Task<List<Storage>> GetAllAsyncByPagination(int page, int pageRecords) {
+            var query = _context.Set<Storage>();
+
+            query.Include(storage => storage.Location).ThenInclude(location => location.Address).ThenInclude(address => address.City).ToList();
+            query.Include(storage => storage.ChargingSystems).ToList();
+
+            var storages = query
+                .Skip((page - 1) * (int)pageRecords)
+                .Take((int)pageRecords)
+                .ToList();
+
+            return storages;
+        }
+
 
 
         //public async Task<List<Storage>> GetAll()
