@@ -3,6 +3,9 @@ import { ref } from "vue";
 import { userStore } from '@/stores/user'
 import AppMenuItem from "./AppMenuItem.vue";
 
+
+const store = userStore();
+
 const model = ref([
   {
     label: "Home",
@@ -10,19 +13,19 @@ const model = ref([
   },
   {
     label: "Management",
-    visible: userStore().current_role=='logistics' || userStore().current_role=='admin' || userStore().current_role=='storage',
+    visible: store.has_management_access,
     items: [
       {
         label: "Logistics",
         icon: "pi pi-fw pi-car",
         to: "/logistics",
-        visible: userStore().current_role=='logistics' || userStore().current_role=='admin'
+        visible: store.has_logistics_access
       },
       {
         label: "Storage",
         icon: "pi pi-fw pi-box",
         to: "/storage",
-        visible: userStore().current_role=='storage' || userStore().current_role=='admin'
+        visible: store.has_storage_access
       },
     ],
   },
