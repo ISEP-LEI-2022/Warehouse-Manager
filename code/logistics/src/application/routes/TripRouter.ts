@@ -111,7 +111,7 @@ router.put(
         body: JSON.stringify(notOptimized),
       };
 
-      const resp = await fetch(`http://${env.python_api}/optimize`, options)
+      const resp = await fetch(`${env.python_api}/optimize`, options)
         .then((response) => {
           if (response.status === 404) {
             error.addError("not found");
