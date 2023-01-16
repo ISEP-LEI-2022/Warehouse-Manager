@@ -28,6 +28,8 @@ export const userStore = defineStore('user', {
     clear() {
       this.user = {},
       this.role = 'viewer'
+      localStorage.setItem('user', JSON.stringify(this.user))
+      localStorage.setItem('role', JSON.stringify(this.role))
     },
   },
 })
