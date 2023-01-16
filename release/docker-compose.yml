@@ -23,7 +23,7 @@ services:
     image: 1180910/logistics-api:latest
     environment:
       - database=mongodb://mongodb:27017/logistics
-      - python_api=https://python.fhsan.com/
+      - python_api=https://python.fhsan.com
     networks:
       - logistics_net
     ports:
