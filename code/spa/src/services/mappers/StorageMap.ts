@@ -23,7 +23,8 @@ export default class StorageMap {
             storage.location.address.postalCode,
             storage.location.address.city.number,
             storage.location.address.city.name,
-            storage.chargingSystems
+            storage.chargingSystems,
+            storage.active
           )
         );
       }
@@ -45,7 +46,8 @@ export default class StorageMap {
       storageDTO.location.address.postalCode,
       storageDTO.location.address.city.number,
       storageDTO.location.address.city.name,
-      storageDTO.chargingSystems
+      storageDTO.chargingSystems,
+      storageDTO.active
     )
   }
 
@@ -65,7 +67,8 @@ export default class StorageMap {
               obj.PostalCode,
               obj.Number,
               obj.Name,
-              obj.ChargingSystems);
+              obj.ChargingSystems,
+              obj.Active);
   }
 
 
@@ -95,14 +98,15 @@ export default class StorageMap {
           }
         }
       },
-      chargingSystems: storage.Chargingsystems
+      chargingSystems: storage.Chargingsystems,
+      active: storage.Active
 
     }, null, "\t");
   }
 
   public static empty(): Storage {
     var chargingSystems: ChargingSystems[] = [];
-    return new Storage("","","","","","","","","",1,"",chargingSystems);
+    return new Storage("","","","","","","","","",0,"",chargingSystems, true);
   }
 
   public static emptyChargingSystem(): ChargingSystems {

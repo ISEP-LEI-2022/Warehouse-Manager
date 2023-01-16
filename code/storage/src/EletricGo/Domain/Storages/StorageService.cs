@@ -19,7 +19,16 @@ namespace EletricGo.Domain.Storages
             var list = await this._repo.GetAllAsync();
 
             List<StorageDto> StorageslistDto = list.ConvertAll<StorageDto>(storage =>
-                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems));
+                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active));
+
+            return StorageslistDto;
+        }
+
+        public async Task<List<StorageDto>> GetAllAsyncByPagination(int page, int pageRecords) {
+            var list = await this._repo.GetAllAsyncByPagination(page,pageRecords);
+
+            List<StorageDto> StorageslistDto = list.ConvertAll<StorageDto>(storage =>
+                new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active));
 
             return StorageslistDto;
         }
@@ -34,7 +43,7 @@ namespace EletricGo.Domain.Storages
             }
             else
             {
-                return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems);
+                return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active);
 
             }
         }
@@ -52,7 +61,7 @@ namespace EletricGo.Domain.Storages
 
              await this._unitOfWork.CommitAsync();
 
-            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems);
+            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active);
         }
 
         public async Task<StorageDto> UpdateAsync(StorageDto dto)
@@ -67,10 +76,26 @@ namespace EletricGo.Domain.Storages
             storage.changeDesignation(dto.Designation);
             storage.changeLocation(dto.Location);
             storage.changeChargingSystems(dto.ChargingSystems);
+            storage.changeActive(dto.Active);
 
             await this._unitOfWork.CommitAsync();
 
-            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems);
+            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active);
+        }
+
+        public async Task<StorageDto> UpdateStorageStatusAsync(Guid id)
+        {
+            var queryResult = await this._repo.GetByIdAsync(new StorageId(id));
+            var storage = queryResult;
+
+            if (storage == null)
+                return null;
+
+            // change Status
+            storage.changeActive(!storage.Active);
+            await this._unitOfWork.CommitAsync();
+
+            return new StorageDto(storage.Id.AsGuid(), storage.Designation, storage.Location, storage.ChargingSystems, storage.Active);
         }
     }
 }

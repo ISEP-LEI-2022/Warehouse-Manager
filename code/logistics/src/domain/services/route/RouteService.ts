@@ -63,6 +63,18 @@ export default class RouteService implements IRouteService {
     }
   }
 
+  async getRoutesByPagination(page:number, pageRecords:number): Promise<RouteDTO[]> {
+    const error = getDataErrorFactory();
+
+    try {
+      const route = (await this.routeRepository.getDataByPagination(page,pageRecords)) as Route[];
+      return convertToObjDTO(route);
+    } catch (err) {
+      error.addError("Error getting routes");
+      throw error;
+    }
+  }
+
   async updateRouteById(id: string, routeDTO: RouteDTO): Promise<RouteDTO> {
     const error = persistanceErrorFactory();
 

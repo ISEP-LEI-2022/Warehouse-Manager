@@ -332,6 +332,63 @@
 				}
 			}
 		},
+		"/routes/pag/ination": {
+			"get": {
+				"operationId": "GetRoutesByPagination",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"totalRecords": {
+											"type": "number",
+											"format": "double"
+										},
+										"routesList": {
+											"items": {
+												"$ref": "#/components/schemas/expectedRouteJSON"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalRecords",
+										"routesList"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Routes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageRecords",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/routes/{idRoute}": {
 			"get": {
 				"operationId": "GetRouteById",
@@ -498,6 +555,63 @@
 				}
 			}
 		},
+		"/trips/records/pagination/data": {
+			"get": {
+				"operationId": "GetTripsByPagination",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"totalRecords": {
+											"type": "number",
+											"format": "double"
+										},
+										"tripList": {
+											"items": {
+												"$ref": "#/components/schemas/expectedTripJSON"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalRecords",
+										"tripList"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Trips"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageRecords",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/trips/{idTrip}": {
 			"get": {
 				"operationId": "GetTripById",
@@ -562,7 +676,6 @@
 						}
 					},
 					{
-						"description": "of the trip",
 						"in": "path",
 						"name": "date",
 						"required": true,
@@ -702,6 +815,63 @@
 						}
 					}
 				}
+			}
+		},
+		"/trucks/pag/ination": {
+			"get": {
+				"operationId": "GetTrucksByPagination",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"totalRecords": {
+											"type": "number",
+											"format": "double"
+										},
+										"trucksList": {
+											"items": {
+												"$ref": "#/components/schemas/expectedTruckJSON"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalRecords",
+										"trucksList"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Trucks"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageRecords",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/trucks/{registration}": {

@@ -18,11 +18,12 @@ export default class Storage {
     Number: number;
     Name: string;
     Chargingsystems: Array<ChargingSystems>;
+    Active: boolean
 
 
 
 
-    constructor(storageId: string, designation: string, latitude: string, longitude: string, altitude: string, street:string, door: string, floor: string, postalCode: string, number: number, name: string, chargingSystems: Array<ChargingSystems>) {
+    constructor(storageId: string, designation: string, latitude: string, longitude: string, altitude: string, street:string, door: string, floor: string, postalCode: string, number: number, name: string, chargingSystems: Array<ChargingSystems>, active: boolean) {
         this.StorageId = storageId;
         this.Designation = designation;
         this.Latitude = latitude;
@@ -35,6 +36,7 @@ export default class Storage {
         this.Number = number,
         this.Name = name;
         this.Chargingsystems = chargingSystems;
+        this.Active = active;
     }
 }
   

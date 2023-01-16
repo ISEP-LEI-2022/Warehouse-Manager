@@ -31,5 +31,6 @@ export interface IRouteController {
     createRoute(req: expectedBodyRoute): Promise<expectedBodyRoute>;
     getRouteById(idRoute: string): Promise<expectedRouteJSON>;
     getRoutes(): Promise<expectedRouteJSON[]>;
+    getRoutesByPagination(page:number, pageRecords:number): Promise<{routesList: expectedRouteJSON[], totalRecords: number}>;
     updateRouteById(idRoute:string, req: expectedBodyRoute): Promise<expectedRouteJSON>;
 }

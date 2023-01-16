@@ -5,5 +5,6 @@ export default interface ITripService {
     getTripById(id: string): Promise<TripDTO>;
     getTripByRegDate(registration: string, date: Date): Promise<TripDTO>;
     getTrips(): Promise<TripDTO[]>;
+    getTripsByPagination(page:number, pageRecords:number): Promise<TripDTO[]>;
     updateTripById(trip: TripDTO): Promise<TripDTO>;
 }

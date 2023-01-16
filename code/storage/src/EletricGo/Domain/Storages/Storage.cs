@@ -41,6 +41,11 @@ namespace EletricGo.Domain.Storages
         {
             this.Designation = designation;
         }
+
+        public void changeActive(bool active)
+        {
+            this.Active = active;
+        }
         public void changeLocation(Location location)
         {
             Location.changeLatitude(location.Latitude);

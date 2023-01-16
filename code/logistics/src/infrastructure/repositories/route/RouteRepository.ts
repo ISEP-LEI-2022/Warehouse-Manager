@@ -69,6 +69,18 @@ export default class RouteRepository implements IRepository<string> {
     }
   }
 
+  async getDataByPagination(page:number, pageRecords:number): Promise<Entity<string>[]> {
+    const error = getDataErrorFactory();
+    let data: mongoose.Document[] = [];
+    try {
+      data = await RouteMongoose.find().skip((page-1)*pageRecords).limit(pageRecords).session(this.session);
+      return convertToObject(data);
+    } catch (err) {
+      error.addError("Error searching data");
+      throw error;
+    }
+  }
+
   async getDataById(identifier: string): Promise<Entity<string>> {
     const error = getDataErrorFactory();
     try {

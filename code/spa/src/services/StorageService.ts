@@ -1,4 +1,4 @@
-import type Storage from "@/models/storage";
+import Storage from "@/models/storage";
 import type StorageDTO from "@/services/dtos/StorageDTO";
 import StorageMap from "@/services/mappers/StorageMap";
 import type DeliveryDTO from "@/services/dtos/DeliveryDTO";
@@ -44,13 +44,13 @@ export default class StorageService {
     return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages")
       .then(async (response) => {
         const json = await response.json();
-        console.log(json)
         var data: Array<StorageDTO> = json;
         if (!response.ok) {
           this.Storage_Errors.push({
             content: response.statusText,
             severity: "error",
           });
+          
           return StorageMap.fromDTOArray([]);
         }
         return StorageMap.fromDTOArray(data);
@@ -61,6 +61,32 @@ export default class StorageService {
           severity: "error",
         });
         return StorageMap.fromDTOArray([]);
+      });
+  }
+
+  getStoragesPagination(page: number, perpage: number) {
+    return fetch(import.meta.env.VITE_STORAGE_API + "api/Storages/pagination?page=" + page + "&pageResults=" + perpage)
+      .then(async (response) => {
+        
+        const json = await response.json();
+        var data: Array<StorageDTO> = json.storage;
+        var totalRecords = json.totalRecords;
+        if (!response.ok) {
+          this.Storage_Errors.push({
+            content: response.statusText,
+            severity: "error",
+          });
+          
+          return { storageList: StorageMap.fromDTOArray([]), totalRecords: 0 };
+        }
+        return { storageList: StorageMap.fromDTOArray(data), totalRecords: totalRecords };
+      })
+      .catch((error) => {
+        this.Storage_Errors.push({
+          content: error,
+          severity: "error",
+        });
+        return { storageList: StorageMap.fromDTOArray([]), totalRecords: 0 };
       });
   }
 
@@ -127,6 +153,51 @@ export default class StorageService {
     return await response.json();
   }
 
+  async updateStorageStatus(storageId: string) {
+    const requestOptions = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" }
+    };
+    const response = await fetch(
+      import.meta.env.VITE_STORAGE_API + "api/Storages/updateStatus/" + storageId,
+      requestOptions
+    );
+    if (!response.ok) {
+      this.Storage_Errors.push({
+        content: response.statusText,
+        severity: "error",
+      });
+      return null;
+    }
+    return true;
+  }
+
+
+  /*async updateStorageStatus(storageId: string) {
+    fetch("https://localhost:7067/" + "api/Storages/" + storageId)
+      .then(async (response) => {
+        const json = await response.json();
+        var data: StorageDTO = json;
+        if (!response.ok) {
+          this.Storage_Errors.push({
+            content: response.statusText,
+            severity: "error",
+          });
+          return null;
+        }
+        const storage = StorageMap.fromDTO(data)
+        storage.Active = !storage.Active
+        this.updateStorage(storage).then(async (response) => {return response})
+      })
+      .catch((error) => {
+        this.Storage_Errors.push({
+          content: error,
+          severity: "error",
+        });
+        return null;
+      });
+  }*/
+
   async updateDelivery(delivery: Delivery) {
     const requestOptions = {
       method: "PUT",
@@ -138,6 +209,31 @@ export default class StorageService {
       requestOptions
     );
     return await response.json();
+  }
+
+
+  async getDeliveryById(id: string) {
+    return fetch(import.meta.env.VITE_STORAGE_API + "api/Deliveries/" + id)
+      .then(async (response) => {
+        const json = await response.json();
+        console.log(json)
+        var data: DeliveryDTO = json;
+        if (!response.ok) {
+          this.Storage_Errors.push({
+            content: response.statusText,
+            severity: "error",
+          });
+          return null;
+        }
+        return DeliveryMap.fromDTO(data);
+      })
+      .catch((error) => {
+        this.Storage_Errors.push({
+          content: error,
+          severity: "error",
+        });
+        return null;
+      });
   }
 
 }

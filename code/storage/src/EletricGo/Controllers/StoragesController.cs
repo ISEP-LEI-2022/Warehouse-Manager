@@ -1,6 +1,7 @@
 ﻿using EletricGo.Domain.Shared;
 using EletricGo.Domain.Storages;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace EletricGo.Controllers
 {
@@ -17,9 +18,31 @@ namespace EletricGo.Controllers
 
         // GET: api/Storages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll()
-        {
+        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll() {
             return await _service.GetAllAsync();
+        }
+
+
+
+        // GET: api/Storages/pagination
+        [HttpGet("pagination")]
+        public async Task<ActionResult<IEnumerable<StorageDto>>> GetAll([FromQuery] int page, [FromQuery]  int pageResults) {
+            if(_service.GetAllAsync == null)
+                return NotFound();
+
+            var totalRecords = _service.GetAllAsync().Result.Count();
+            var storages = _service.GetAllAsyncByPagination(page, pageResults).Result;
+
+            //var pageResults = 3f;
+            //var pageCount = Math.Ceiling(_service.GetAllAsync().Result.Count() / Convert.ToSingle(pageResults));
+
+           
+            var result = new {
+                Storage = storages,
+                TotalRecords = totalRecords
+            };
+
+            return Ok(result);
         }
 
         // GET: api/Storages/5
@@ -71,6 +94,32 @@ namespace EletricGo.Controllers
                     return NotFound();
                 }
                 return Ok(storage);
+            }
+            catch (BusinessRuleValidationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+
+        // PATCH: api/Storages/5
+        [HttpPatch("updateStatus/{id}")]
+        public async Task<ActionResult<StorageDto>> UpdateStatus(Guid id)
+        {
+            /*if (id == new Guid(""))
+            {
+                return BadRequest();
+            }*/
+
+            try
+            {
+                var storage = await _service.UpdateStorageStatusAsync(id);
+
+                if (storage == null)
+                {
+                    return NotFound();
+                }
+                return Ok("Storage Status Updated");
             }
             catch (BusinessRuleValidationException ex)
             {

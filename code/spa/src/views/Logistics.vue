@@ -2,7 +2,7 @@
 import { ref, onBeforeMount } from "vue";
 import CrudDialog from "@/components/CrudDialog.vue";
 import type Truck from "@/models/truck";
-import type Route from "@/models/route";
+import Route from "@/models/route";
 import RouteMap from "@/services/mappers/RouteMap";
 import TruckMap from "@/services/mappers/TruckMap";
 import { useToast } from "primevue/usetoast";
@@ -32,13 +32,28 @@ const help_route_fields = ref({
   ExtraChargingTime: "Bigger than 0",
 });
 
+var pageRoutes = 1;
+const perPageRoutes = 2;
+const totalRecordsRoutes = ref(0);
+
+var pageTrips = 1;
+const perPageTrips = 2;
+const totalRecordsTrips = ref(0);
+
 onBeforeMount(() => {
   LogisticsService.getTrucks((errors: Array<any>) => {
     truck_Errors.value.push(errors);
   }).then((data) => (trucks.value = data));
-  LogisticsService.getRoutes((errors: Array<any>) => {
-    route_Errors.value.push(errors);
-  }).then((data) => (routes.value = data));
+  LogisticsService.getRoutesPagination(
+    pageRoutes,
+    perPageRoutes,
+    (errors: Array<any>) => {
+      route_Errors.value.push(errors);
+    }
+  ).then((data) => {
+    (routes.value = data.routesList),
+      (totalRecordsRoutes.value = data.totalRecords);
+  });
 });
 
 const addTruck = (truck: Array<any>) => {
@@ -46,6 +61,7 @@ const addTruck = (truck: Array<any>) => {
   LogisticsService.createTruck(new_truck).then((response) =>
     processResponse(response, "Create Truck", () => {
       trucks.value.push(new_truck);
+      totalRecordsRoutes.value += 1;
     })
   );
 };
@@ -122,6 +138,24 @@ const searchTrip = () => {
   setTimeout(() => (loading.value = false), 500);
 };
 
+// Não relevante aplicar pois cada truck apenas faz uma viagem por dia
+// const searchTrip = () => {
+//   loading.value = true;
+//   LogisticsService.getTripsPagination(
+//     selectedTruck.value?.Registration,
+//     selectedDate?.value,
+//     pageTrips,
+//     perPageTrips,
+//     (errors: Array<any>) => {
+//       trip_Errors.value.push(errors);
+//     }
+//   ).then((data) => {
+//     (trips.value = data.tripsList),
+//       (totalRecordsTrips.value = data.totalRecords);
+//   });
+//   setTimeout(() => (loading.value = false), 500);
+// };
+
 const asyncsearchTrip = function searchTrip(
   registration: string | null,
   date: Date | null
@@ -133,7 +167,38 @@ const asyncsearchTrip = function searchTrip(
   LogisticsService.getTrips(registration, date, (errors: Array<any>) => {
     trip_Errors.value.push(errors);
   }).then((data) => (trips.value = data));
+  optimizedTrip.value = [];
   setTimeout(() => (loading.value = false), 500);
+};
+
+const onPageRoutes = (event) => {
+  pageRoutes = event.page + 1;
+  LogisticsService.getRoutesPagination(
+    pageRoutes,
+    perPageRoutes,
+    (errors: Array<any>) => {
+      route_Errors.value.push(errors);
+    }
+  ).then((data) => {
+    (routes.value = data.routesList),
+      (totalRecordsRoutes.value = data.totalRecords);
+  });
+};
+
+const onPageTrips = (event) => {
+  pageTrips = event.page + 1;
+  LogisticsService.getTripsPagination(
+    selectedTruck.value?.Registration,
+    selectedDate?.value,
+    pageTrips,
+    perPageTrips,
+    (errors: Array<any>) => {
+      route_Errors.value.push(errors);
+    }
+  ).then((data) => {
+    (trips.value = data.tripsList),
+      (totalRecordsTrips.value = data.totalRecords);
+  });
 };
 
 const asyncUpdateActiveStatus = function updateStatus(
@@ -299,12 +364,7 @@ const asyncOptimizeTrip = function optimizeRoute(
           :key="msg.content"
           >{{ msg.content }}</Message
         >
-        <DataTable
-          :value="routes"
-          :rows="10"
-          :paginator="true"
-          responsiveLayout="scroll"
-        >
+        <DataTable :value="routes" :rows="10" responsiveLayout="scroll">
           <template #empty> No routes found. </template>
           <template #loading> Loading routes data. Please wait. </template>
           <Column field="Route" header="Route" style="width: 15%" />
@@ -356,6 +416,13 @@ const asyncOptimizeTrip = function optimizeRoute(
             </template>
           </Column>
         </DataTable>
+        <div v-if="totalRecordsRoutes > 0">
+          <Paginator
+            :rows="perPageRoutes"
+            :totalRecords="totalRecordsRoutes"
+            @page="onPageRoutes($event)"
+          ></Paginator>
+        </div>
       </div>
     </TabPanel>
     <TabPanel id="trips-panel" header="Trips">
@@ -446,6 +513,13 @@ const asyncOptimizeTrip = function optimizeRoute(
             </div>
           </template>
         </DataTable>
+        <div v-if="totalRecordsTrips > 0">
+          <Paginator
+            :rows="perPageTrips"
+            :totalRecords="totalRecordsTrips"
+            @page="onPageTrips($event)"
+          ></Paginator>
+        </div>
       </div>
     </TabPanel>
     <TabPanel id="optimization-panel" header="Optimization">
@@ -489,21 +563,21 @@ const asyncOptimizeTrip = function optimizeRoute(
             <template #loading> Loading trips data. Please wait. </template>
             <Column field="Routes" header="Routes" :sortable="false">
               <template #body="slotProps">
-                  <DataTable
-                    :value="slotProps.data.routes"
-                    responsiveLayout="scroll"
-                  >
-                    <Column field="idStart" header="Start" :sortable="true">
-                      <template #body="slotProps">
-                        {{ slotProps.data.idStart }}
-                      </template>
-                    </Column>
-                    <Column field="idEnd" header="End" :sortable="true">
-                      <template #body="slotProps">
-                        {{ slotProps.data.idEnd }}
-                      </template>
-                    </Column>
-                  </DataTable>
+                <DataTable
+                  :value="slotProps.data.routes"
+                  responsiveLayout="scroll"
+                >
+                  <Column field="idStart" header="Start" :sortable="false">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idStart }}
+                    </template>
+                  </Column>
+                  <Column field="idEnd" header="End" :sortable="false">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idEnd }}
+                    </template>
+                  </Column>
+                </DataTable>
               </template>
             </Column>
           </DataTable>
@@ -530,21 +604,21 @@ const asyncOptimizeTrip = function optimizeRoute(
             <template #loading> Loading trips data. Please wait. </template>
             <Column field="Routes" header="Routes" :sortable="false">
               <template #body="slotProps">
-                  <DataTable
-                    :value="slotProps.data.routes"
-                    responsiveLayout="scroll"
-                  >
-                    <Column field="idStart" header="Start" :sortable="true">
-                      <template #body="slotProps">
-                        {{ slotProps.data.idStart }}
-                      </template>
-                    </Column>
-                    <Column field="idEnd" header="End" :sortable="true">
-                      <template #body="slotProps">
-                        {{ slotProps.data.idEnd }}
-                      </template>
-                    </Column>
-                  </DataTable>
+                <DataTable
+                  :value="slotProps.data.routes"
+                  responsiveLayout="scroll"
+                >
+                  <Column field="idStart" header="Start" :sortable="false">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idStart }}
+                    </template>
+                  </Column>
+                  <Column field="idEnd" header="End" :sortable="false">
+                    <template #body="slotProps">
+                      {{ slotProps.data.idEnd }}
+                    </template>
+                  </Column>
+                </DataTable>
               </template>
             </Column>
           </DataTable>

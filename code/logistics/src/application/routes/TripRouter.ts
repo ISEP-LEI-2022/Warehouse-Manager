@@ -87,44 +87,68 @@ router.put("/", async (req: Request, res: Response) => {
   }
 });
 
-router.put("/optimize/:registration/:date", async (req: Request, res: Response) => {
-  const error = internetServerErrorFactory();
+router.put(
+  "/optimize/:registration/:date",
+  async (req: Request, res: Response) => {
+    const error = internetServerErrorFactory();
 
+    try {
+      const optimizeTripInstance = <ITripController>(
+        container.get(config.controllers.TripController.name)
+      );
+
+      const notOptimized = await optimizeTripInstance.getTripByRegDate(
+        req.params.registration as string,
+        new Date(req.params.date)
+      );
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify(notOptimized),
+      };
+
+      const resp = await fetch("http://env.python_api+"/optimize", options)
+        .then((response) => {
+          if (response.status === 404) {
+            error.addError("not found");
+            throw error;
+          }
+          return response.json();
+        })
+        .then((data) => {
+          return data;
+        })
+        .catch((err) => {
+          error.addError("Unexpected error" + err);
+          throw error;
+        });
+      res.status(200).json(resp as TripDTO);
+    } catch (err) {
+      if (err instanceof Err) {
+        res.status(err.code).send(err.object());
+      } else {
+        res.status(500).send("Unexpected Error" + err);
+      }
+    }
+  }
+);
+
+router.get("/records/pagination/data/", async (req: Request, res: Response) => {
   try {
-    const optimizeTripInstance = <ITripController>(
+    const getTripInstance = <ITripController>(
       container.get(config.controllers.TripController.name)
     );
 
-    const notOptimized = await optimizeTripInstance.getTripByRegDate(
-      req.params.registration as string,
-      new Date(req.params.date)
+    const listTrips = await getTripInstance.getTripsByPagination(
+      Number(req.query.page),
+      Number(req.query.pageRecords)
     );
-
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(notOptimized),
-    };
-
-    const resp = await fetch(env.python_api+"/optimize", options)
-      .then((response) => {
-        if (response.status === 404) {
-          error.addError("not found");
-          throw error;
-        }
-        return response.json();
-      })
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        error.addError("Unexpected error" + err);
-        throw error;
-      });
-    res.status(200).json(resp as TripDTO);
+    
+    res.status(200).json(listTrips);
   } catch (err) {
     if (err instanceof Err) {
       res.status(err.code).send(err.object());

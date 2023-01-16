@@ -67,6 +67,19 @@ export default class TruckRepository implements IRepository<string> {
     }
   }
 
+  public async getDataByPagination(page:number,pageRecords:number): Promise<Entity<string>[]> {
+    const error = getDataErrorFactory();
+    let data: mongoose.Document[] = [];
+    try {
+      data = await TruckMongoose.find().skip((page-1)*pageRecords).limit(pageRecords).session(this.session);
+
+      return convertToObject(data);
+    } catch (err) {
+      error.addError("Error searching data");
+      throw error;
+    }
+  }
+
   async getDataById(registration: string): Promise<Entity<string>> {
     const error = getDataErrorFactory();
     try {

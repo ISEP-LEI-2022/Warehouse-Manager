@@ -39,9 +39,22 @@ export default class DeliveryMap {
     }, null, "\t");
   }
 
+  public static fromDTO(deliveryDTO: DeliveryDTO): Delivery {
+    return new Delivery(
+      deliveryDTO.id,
+      deliveryDTO.deliveryDate,
+      deliveryDTO.deliveryWeight,
+      deliveryDTO.finalStorageId,
+      deliveryDTO.timeToLoad,
+      deliveryDTO.timeToUnload,
+      deliveryDTO.products
+    )
+  }
+
+
   public static empty(): Delivery {
     var products: Product[] = [];
-    return new Delivery("","",1,"",1,1,products);
+    return new Delivery("","",0,"",0,0,products);
   }
 
   public static emptyProduct(): Product {
