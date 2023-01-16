@@ -1,4 +1,4 @@
-FROM node:16-slim as dev
+FROM node:18-slim as dev
 
 WORKDIR /spa
 COPY package*.json ./
