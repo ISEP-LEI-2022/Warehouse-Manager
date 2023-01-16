@@ -3,9 +3,8 @@ import { defineStore } from 'pinia'
 export const userStore = defineStore('user', {
   state: () => {
     return {
-      user: {},
-      role: 'viewer',
-      uid: ''
+      user: JSON.parse(localStorage.getItem('user')) || {},
+      role: localStorage.getItem('role') || 'viewer',
     }
   },
   getters: {
@@ -20,14 +19,15 @@ export const userStore = defineStore('user', {
   actions: {
     update(user: object) {
       this.user = user
+      localStorage.setItem('user', JSON.stringify(user))
     },
     update_role(role: string) {
       this.role = role
+      localStorage.setItem('role', role)
     },
     clear() {
       this.user = {},
-      this.role = 'viewer',
-      this.uid = ''
+      this.role = 'viewer'
     },
   },
 })
