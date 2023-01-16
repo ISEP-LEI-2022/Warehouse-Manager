@@ -13,6 +13,9 @@ export const userStore = defineStore('user', {
     logged_in: (state) => Object.keys(state.user).length !== 0,
     current_role: (state) => state.role,
     current_uid: (state) => state.user.uid,
+    has_management_access: (state) => state.role=='logistics' || state.role=='admin' || state.role=='storage',
+    has_logistics_access: (state) => state.role=='logistics' || state.role=='admin',
+    has_storage_access: (state) => state.role=='admin' || state.role=='storage'
   },
   actions: {
     update(user: object) {
