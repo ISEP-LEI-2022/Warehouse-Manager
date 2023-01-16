@@ -21,5 +21,10 @@ export const userStore = defineStore('user', {
     update_role(role: string) {
       this.role = role
     },
+    clear() {
+      this.user = {},
+      this.role = 'viewer',
+      this.uid = ''
+    },
   },
 })
