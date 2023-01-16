@@ -1,0 +1,358 @@
+{
+	"info": {
+		"_postman_id": "b236fe58-b555-4e90-8b3e-a84c0cb890f2",
+		"name": "Populate real",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19573261"
+	},
+	"item": [
+		{
+			"name": "Populate Routes 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extraChargingTime\": 1,\r\n  \"energyConsumed\": 2,\r\n  \"timeRequired\": 3,\r\n  \"distance\": 4,\r\n  \"idEnd\": \"Armazem Gondomar\",\r\n  \"idStart\": \"Armazem Maia\",\r\n  \"idRoute\": \"Maia Gondomar\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/routes",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Routes 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extraChargingTime\": 1,\r\n  \"energyConsumed\": 3,\r\n  \"timeRequired\": 6,\r\n  \"distance\": 8,\r\n  \"idEnd\": \"Armazem Matosinhos\",\r\n  \"idStart\": \"Armazem Gondomar\",\r\n  \"idRoute\": \"Gondomar Matosinhos\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/routes",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Routes 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extraChargingTime\": 2,\r\n  \"energyConsumed\": 3,\r\n  \"timeRequired\": 7,\r\n  \"distance\": 10,\r\n  \"idEnd\": \"Armazem Viana\",\r\n  \"idStart\": \"Armazem Matosinhos\",\r\n  \"idRoute\": \"Matosinhos Viana\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/routes",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Routes 4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extraChargingTime\": 2,\r\n  \"energyConsumed\": 4,\r\n  \"timeRequired\": 8,\r\n  \"distance\": 12,\r\n  \"idEnd\": \"Armazem Vila Nova de Gaia\",\r\n  \"idStart\": \"Armazem Viana\",\r\n  \"idRoute\": \"Viana Vila Nova de Gaia\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/routes",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Routes 5",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extraChargingTime\": 2,\r\n  \"energyConsumed\": 4,\r\n  \"timeRequired\": 8,\r\n  \"distance\": 12,\r\n  \"idEnd\": \"Armazem Coimbra\",\r\n  \"idStart\": \"Armazem Vila Nova de Gaia\",\r\n  \"idRoute\": \"Vila Nova de Gaia Coimbra\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/routes",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Truck 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"autonomy\": 40,\r\n  \"capacity\": 50,\r\n  \"tare\": 10,\r\n  \"registration\": \"AA-11-AA\",\r\n  \"active\":true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/trucks",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"trucks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Truck 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"autonomy\": 40,\r\n  \"capacity\": 50,\r\n  \"tare\": 10,\r\n  \"registration\": \"BB-22-AA\",\r\n  \"active\":true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/trucks",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"trucks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Truck 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"autonomy\": 40,\r\n  \"capacity\": 50,\r\n  \"tare\": 20,\r\n  \"registration\": \"CA-14-BA\",\r\n  \"active\":false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/trucks",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"trucks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Truck 4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"autonomy\": 40,\r\n  \"capacity\": 50,\r\n  \"tare\": 20,\r\n  \"registration\": \"CA-14-CA\",\r\n  \"active\":true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/trucks",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"trucks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Trip 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveries\": [\r\n        \"2022/00001\",\r\n        \"2022/00002\",\r\n        \"2022/00003\"\r\n    ],\r\n    \"routes\": [\r\n        {\r\n            \"idEnd\": \"Armazem Gondomar\",\r\n            \"idStart\": \"Armazem Maia\"\r\n        },\r\n        {\r\n            \"idStart\": \"Armazem Gondomar\",\r\n            \"idEnd\": \"Armazem Matosinhos\"\r\n        }\r\n    ],\r\n    \"date\": \"2022-12-18\",\r\n    \"registration\": \"AA-11-AA\",\r\n    \"idTrip\": \"Viagem 1 18/12\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/trips",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"trips"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Trip 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveries\": [\r\n        \"2022/00003\"\r\n    ],\r\n    \"routes\": [\r\n        {\r\n            \"idStart\": \"Armazem Gondomar\",\r\n            \"idEnd\": \"Armazem Matosinhos\"\r\n        },\r\n        {\r\n            \"idStart\": \"Armazem Matosinhos\",\r\n            \"idEnd\": \"Armazem Viana\"\r\n        }\r\n    ],\r\n    \"date\": \"2022-12-18\",\r\n    \"registration\": \"BB-22-AA\",\r\n    \"idTrip\": \"Viagem 2 18/12\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/trips",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"trips"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Populate Trip 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveries\": [\r\n        \"2022/00005\"\r\n    ],\r\n    \"routes\": [\r\n        {\r\n            \"idStart\": \"Armazem Gondomar\",\r\n            \"idEnd\": \"Armazem Matosinhos\"\r\n        },\r\n        {\r\n            \"idStart\": \"Armazem Matosinhos\",\r\n            \"idEnd\": \"Armazem Viana\"\r\n        },\r\n        {  \r\n            \"idEnd\": \"Armazem Viana\",\r\n            \"idStart\": \"Armazem Matosinhos\"\r\n        },\r\n        {\r\n            \"idEnd\": \"Armazem Vila Nova de Gaia\",\r\n            \"idStart\": \"Armazem Viana\"\r\n        }\r\n    ],\r\n    \"date\": \"2023-01-16\",\r\n    \"registration\": \"AA-11-AA\",\r\n    \"idTrip\": \"Viagem 1 16/01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://node.fhsan.com/trips",
+					"protocol": "https",
+					"host": [
+						"node",
+						"fhsan",
+						"com"
+					],
+					"path": [
+						"trips"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

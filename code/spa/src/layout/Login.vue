@@ -61,7 +61,7 @@
                 style="padding: 1rem"
               />
             </div>
-            <div class="field p-fluid">
+            <div style="margin-bottom: 100px;" class="field p-fluid">
               <label
                 for="password1"
                 class="block text-900 font-medium text-xl mb-2"
@@ -108,7 +108,7 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../auth/UserAuth";
+import { auth, provider } from "../auth/firebase";
 import { userStore } from "@/stores/user";
 import { GoogleAuthProvider } from "firebase/auth";
 import { useToast } from "primevue/usetoast";
@@ -146,7 +146,7 @@ const Login = async () => {
         throw new Error("login failed");
       }
   } catch (error) {
-    console.log(error.code)
+
     switch (error.code) {
       case "auth/invalid-email":
         user_class.value = "p-invalid";
@@ -156,8 +156,6 @@ const Login = async () => {
         pass_class.value = "p-invalid";
         break;
     }
-    console.log(error.code)
-
     toast.add({
       severity: "error",
       summary: error.name,
@@ -169,12 +167,10 @@ const Login = async () => {
 const GoogleLogin = () => {
   signInWithPopup(auth, provider)
     .then((response) => {
-      console.log(response);
       store.update(response.user);
       router.push("/dashboard");
     })
     .catch((error) => {
-      console.log(error);
       toast.add({
       severity: "error",
       summary: error.name,

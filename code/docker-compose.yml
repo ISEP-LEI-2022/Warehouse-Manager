@@ -18,6 +18,10 @@ services:
       - logistics_net
     ports:
       - 8081:8081
+    depends_on:
+      - logistics-api
+      - storage-api
+      - python-api
 
   logistics-api:
     container_name: logistics-api
@@ -31,13 +35,14 @@ services:
       - ./logistics:/logistics
     environment:
       - database=mongodb://mongodb:27017/logistics
+      - python_api=http://python-api:5151
     networks:
       - logistics_net
     ports:
       - 3000:3000
     depends_on:
       - mongodb
-      - pythonapi
+      - python-api
 
   mongodb:
     image: mongo
@@ -79,9 +84,9 @@ services:
     ports:
       - 1433:1433
 
-  pythonapi:
-    container_name: pythonapi
-    hostname: pythonapi
+  python-api:
+    container_name: python-api
+    hostname: python-api
     build:
       context: ./pythonapi
       dockerfile: Dockerfile

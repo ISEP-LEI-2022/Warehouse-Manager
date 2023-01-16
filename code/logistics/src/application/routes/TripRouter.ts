@@ -5,6 +5,7 @@ import config from "../../config";
 import { Err, internetServerErrorFactory } from "../../domain/utils/Err";
 import { ITripController } from "../controllers/trip/ITripController";
 import fetch from "node-fetch";
+import { env } from "node:process";
 
 const router = express.Router();
 
@@ -110,7 +111,7 @@ router.put(
         body: JSON.stringify(notOptimized),
       };
 
-      const resp = await fetch("http://pythonapi:5151/optimize", options)
+      const resp = await fetch("http://env.python_api+"/optimize", options)
         .then((response) => {
           if (response.status === 404) {
             error.addError("not found");
@@ -146,7 +147,7 @@ router.get("/records/pagination/data/", async (req: Request, res: Response) => {
       Number(req.query.page),
       Number(req.query.pageRecords)
     );
-
+    
     res.status(200).json(listTrips);
   } catch (err) {
     if (err instanceof Err) {
